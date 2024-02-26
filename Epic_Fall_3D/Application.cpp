@@ -1,38 +1,45 @@
-#include <SDL.h>
 #include <iostream>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <SDL.h>
+#include <glad/glad.h>
+
+#include "Window.h"
+
 int main(int argc, char* args[]) {
-    // Initialize SDL
-    if( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
-        std::cout << "SDL could not initialize! SDL_Error: %s\n"<< SDL_GetError()<<"\n";
-        return -1;
-    }
 
-    // Create a window
-    SDL_Window* window = SDL_CreateWindow("SDL Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
-    if( window == NULL ) {
-        std::cout << "Window could not be created! SDL_Error: %s\n"<< SDL_GetError()<<"\n";
-        return -1;
-    }
+	if( !Window::initSDL() ) return -1;
+	SDL_Window* window{ Window::createWindow() };
+	SDL_GLContext glContext{ Window::createGLContext(window) };
+	if ( !Window::loadGLFunctionPointers()) return -1;
+	Window::setGLVersion();
 
-    // Run the event loop
-    bool quit = false;
-    SDL_Event e;
-    while( !quit ) {
-        while( SDL_PollEvent(&e) != 0 ) {
-            if( e.type == SDL_QUIT ) {
-                quit = true;
-            }
-        }
+	// configure global opengl state
+	// -----------------------------
+	glEnable(GL_DEPTH_TEST);
 
-        // Render here
+	// Run the event loop
+	bool quit = false;
+	SDL_Event e;
+	while( !quit ) {
+		while( SDL_PollEvent(&e) != 0 ) {
+			if( e.type == SDL_QUIT ) {
+				quit = true;
+			}
 
-        // Update the screen
-        SDL_GL_SwapWindow(window);
-    }
+		}
+		// Render here
 
-    // Destroy window and quit SDL
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+		// Update the screen
+		SDL_GL_SwapWindow(window);
+	}
 
-    return 0;
+	// Destroy window and quit SDL
+	SDL_GL_DeleteContext(glContext);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+
+	return 0;
 }
