@@ -17,10 +17,10 @@ bool Window::initSDL()
 	return true;
 }
 
-SDL_Window* Window::createWindow()
+SDL_Window* Window::createGLWindow(const std::string& windowName, const int& x, const int& y, const int& w, const int& h)
 {
 	// Create a window
-	SDL_Window* window = SDL_CreateWindow("SDL Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+	SDL_Window* window = SDL_CreateWindow("SDL Window", x, y, w, h, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 	if( !window ) {
 		std::cerr << "Window could not be created! SDL_Error: %s\n" << SDL_GetError() << "\n";
 	}
@@ -47,9 +47,16 @@ bool Window::loadGLFunctionPointers()
 	return true;
 }
 
-void Window::setGLVersion()
+void Window::setGLVersion(const int& version)
 {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, version);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, version);
+}
+
+void Window::destroyWindow(SDL_GLContext& glContext, SDL_Window*& window)
+{
+	SDL_GL_DeleteContext(glContext);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
 }

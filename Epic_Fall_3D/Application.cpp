@@ -11,10 +11,13 @@
 int main(int argc, char* args[]) {
 
 	if( !Window::initSDL() ) return -1;
-	SDL_Window* window{ Window::createWindow() };
+
+	SDL_Window* window{ Window::createGLWindow
+	("Epic Fall 3D", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600)};
+
 	SDL_GLContext glContext{ Window::createGLContext(window) };
 	if ( !Window::loadGLFunctionPointers()) return -1;
-	Window::setGLVersion();
+	Window::setGLVersion(3);
 
 	// configure global opengl state
 	// -----------------------------
@@ -36,9 +39,7 @@ int main(int argc, char* args[]) {
 	}
 
 	// Destroy window and quit SDL
-	SDL_GL_DeleteContext(glContext);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
+	Window::destroyWindow(glContext, window);
 
 	return 0;
 }
