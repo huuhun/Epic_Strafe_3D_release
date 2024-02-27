@@ -8,7 +8,7 @@
 
 #include "Window.h"
 
-int main(int argc, char* args[]) {
+int main(int argc, char* args[]) {	
 
 	if( !Window::initSDL() ) return -1;
 
@@ -17,7 +17,8 @@ int main(int argc, char* args[]) {
 
 	SDL_GLContext glContext{ Window::createGLContext(window) };
 	if ( !Window::loadGLFunctionPointers()) return -1;
-	Window::setGLVersion(3);
+	Window::setGLVersion(4);
+	Window::getGLVersion();
 
 	// configure global opengl state
 	// -----------------------------
@@ -28,9 +29,9 @@ int main(int argc, char* args[]) {
 	SDL_Event e;
 	while( !quit ) {
 		while( SDL_PollEvent(&e) != 0 ) {
-			if( e.type == SDL_QUIT ) {
+			if( e.type == SDL_QUIT ) 
 				quit = true;
-			}
+			
 		}
 		// Render here
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

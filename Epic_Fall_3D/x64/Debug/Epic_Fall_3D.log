@@ -1,4 +1,3 @@
-﻿  Application.cpp
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(11,26): warning C4100: 'args': unreferenced formal parameter
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(11,14): warning C4100: 'argc': unreferenced formal parameter
+﻿  Window.cpp
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Window.cpp(20,55): warning C4100: 'windowName': unreferenced formal parameter
   Epic_Fall_3D.vcxproj -> D:\projects\epic_fall\Epic_Fall_3D\x64\Debug\Epic_Fall_3D.exe

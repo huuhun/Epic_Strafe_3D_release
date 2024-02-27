@@ -51,7 +51,17 @@ void Window::setGLVersion(const int& version)
 {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, version);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, version);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+}
+
+void Window::getGLVersion() {
+	const GLubyte* version = glGetString(GL_VERSION);
+
+	if( version ) 
+		std::cout << "OpenGL Version: " << version << std::endl;
+	else 
+		std::cerr << "Failed to retrieve OpenGL version information." << std::endl;
+	
 }
 
 void Window::destroyWindow(SDL_GLContext& glContext, SDL_Window*& window)

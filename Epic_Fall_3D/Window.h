@@ -8,6 +8,10 @@ public:
 	static SDL_GLContext createGLContext(SDL_Window*& window);
 	static bool loadGLFunctionPointers();
 	static void setGLVersion(const int& version);
+
+	// Get OpenGL version information
+	static void getGLVersion();
+
 	static void destroyWindow(SDL_GLContext& glContext, SDL_Window*& window);
 
 private:
