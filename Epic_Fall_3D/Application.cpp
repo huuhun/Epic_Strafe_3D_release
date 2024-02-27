@@ -8,6 +8,9 @@
 
 #include "Window.h"
 #include "Settings.h"
+#include "Shader.h"
+#include "VertexBuffer.h"
+#include "VertexArray.h"
 
 int main(int argc, char* args[]) {	
 
@@ -22,10 +25,25 @@ int main(int argc, char* args[]) {
 	Window::getGLVersion();
 
 	// configure global opengl state
-	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
 
-	// Run the event loop
+	// build and compile our shader program
+	Shader gameShader("shaders/shader460.vshader", "shaders/shader460.fshader");
+
+	float vertices[] = {
+	   -0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		0.0f,  0.5f, 0.0f
+	};
+
+	// Generate VBO,VAO
+	VertexBuffer vbo;
+	VertexArray  vao;
+
+	vbo.BufferData(vertices, sizeof(vertices));
+	vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), nullptr);
+
+	// run the event loop
 	bool quit = false;
 	SDL_Event e;
 	while( !quit ) {
@@ -34,15 +52,15 @@ int main(int argc, char* args[]) {
 				quit = true;
 			
 		}
-		// Render here
+		// render here
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Update the screen
+		// update the screen
 		SDL_GL_SwapWindow(window);
 	}
 
-	// Destroy window and quit SDL
+	// destroy window and quit SDL
 	Window::destroyWindow(glContext, window);
 
 	return 0;

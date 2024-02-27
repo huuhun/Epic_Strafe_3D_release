@@ -27,7 +27,10 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VertextBuffer.cpp">
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,8 +50,11 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VertextBuffer.h">
+    <ClInclude Include="VertexBuffer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexArray.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

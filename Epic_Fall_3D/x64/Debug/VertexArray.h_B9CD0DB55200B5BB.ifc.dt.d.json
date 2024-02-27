@@ -1,0 +1,14 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\projects\\epic_fall\\epic_fall_3d\\epic_fall_3d\\vertexarray.h",
+        "ProvidedModule": "",
+        "Includes": [
+            "d:\\projects\\epic_fall\\epic_fall_3d\\dependencies\\glad\\include\\glad\\glad.h",
+            "d:\\projects\\epic_fall\\epic_fall_3d\\dependencies\\glad\\include\\khr\\khrplatform.h",
+            "d:\\projects\\epic_fall\\epic_fall_3d\\epic_fall_3d\\vertexbuffer.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
