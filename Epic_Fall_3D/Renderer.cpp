@@ -1,15 +1,16 @@
 #include <glad/glad.h>
+#include "Debugger.h"
 #include "Renderer.h"
 
 void Renderer::setClearColor()
 {
 	// Set clear color to light green
-	glClearColor(0.5f, 1.0f, 0.5f, 1.0f);
+	GLCall(glClearColor(0.5f, 1.0f, 0.5f, 1.0f));
 }
 
 void Renderer::Clear()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	GLCall(glClear(GL_COLOR_BUFFER_BIT));
 }
 
 void Renderer::Draw(const VertexArray& VAO) const {
@@ -29,5 +30,5 @@ void Renderer::Draw(const VertexArray& VAO) const {
 
 	//glDrawElements just says hey u know using that index buffer access the vertex buffer and call the shader program
 	//on all those vertices indivially to actually get it to draw and rasterize our object onto the screens
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 }

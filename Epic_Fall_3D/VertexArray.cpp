@@ -1,37 +1,34 @@
 #include "VertexArray.h"
-
+#include "Debugger.h"
 VertexArray::VertexArray()
     :m_ID(0)
 {
-    glGenVertexArrays(1, &m_ID);
+    GLCall(glGenVertexArrays(1, &m_ID));
 }
 
 VertexArray::~VertexArray()
 {
-    glDeleteVertexArrays(1, &m_ID);
+    GLCall(glDeleteVertexArrays(1, &m_ID));
 }
 
 // Bind the VertexArray
 void VertexArray::Bind() const {
-    glBindVertexArray(m_ID);
+    GLCall(glBindVertexArray(m_ID));
 }
 
 // Unbind the VertexArray
 void VertexArray::Unbind() const {
-    glBindVertexArray(0);
+    GLCall(glBindVertexArray(0));
 }
 
 // Link a VBO to the VertexArray and set the vertex attribute pointers
-void VertexArray::LinkAttrib(const VertexBuffer& vbo, GLuint layout, GLint numComponents, GLenum type, GLsizei stride, const void* offset) const {
-    Bind();
-    vbo.Bind();
-    glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
-    glEnableVertexAttribArray(layout);
-    vbo.Unbind();
-    Unbind();
+void VertexArray::LinkAttrib(GLuint layout, GLint numComponents, GLenum type, GLsizei stride, const void* offset) const {
+
+    GLCall(glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset));
+    GLCall(glEnableVertexAttribArray(layout));
 }
 
 // Delete the VertexArray
 void VertexArray::Delete() const {
-    glDeleteVertexArrays(1, &m_ID);
+    GLCall(glDeleteVertexArrays(1, &m_ID));
 }

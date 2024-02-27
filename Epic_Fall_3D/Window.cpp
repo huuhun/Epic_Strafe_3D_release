@@ -28,7 +28,7 @@ SDL_Window* Window::createGLWindow(const std::string& windowName, const int& x, 
 	return window;
 }
 
-SDL_GLContext Window::createGLContext(SDL_Window*& window) {
+SDL_GLContext Window::createGLContext(SDL_Window* window) {
 
 	SDL_GLContext glContext = SDL_GL_CreateContext(window);
 	if( !glContext ) {

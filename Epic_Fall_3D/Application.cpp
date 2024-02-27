@@ -12,6 +12,7 @@
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 #include "Renderer.h"
+#include "Debugger.h"
 
 int main(int argc, char* args[]) {	
 
@@ -26,7 +27,7 @@ int main(int argc, char* args[]) {
 	Window::getGLVersion();
 
 	// configure global opengl state
-	glEnable(GL_DEPTH_TEST);
+	GLCall(glEnable(GL_DEPTH_TEST));
 
 	// build and compile our shader program
 	Shader shader("res/shaders/shader460.vert", "res/shaders/shader460.frag");
@@ -41,15 +42,19 @@ int main(int argc, char* args[]) {
 	VertexBuffer vbo;
 	VertexArray  vao;
 
-	vbo.BufferData(vertices, sizeof(vertices));
-	vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), nullptr);
 
-	vao.Unbind();
+	vbo.Bind();
+	vbo.BufferData(vertices, sizeof(vertices));
+
+	vao.Bind();
+	vao.LinkAttrib(0, 3, GL_FLOAT, 3 * sizeof(float), nullptr);
+
 	vbo.Unbind();
+	vao.Unbind();
 
 	// run the event loop
 	Renderer renderer;
-	renderer.setClearColor();
+	//renderer.setClearColor();
 	bool quit = false;
 	SDL_Event e;
 	while( !quit ) {
