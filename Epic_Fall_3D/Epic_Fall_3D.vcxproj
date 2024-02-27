@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Dependencies\SDL2\include;$(SolutionDir)Dependencies\GLAD\include;vendors;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\SDL2\include;$(SolutionDir)Dependencies\GLAD\include;vendors;utils;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Dependencies\SDL2\include;$(SolutionDir)Dependencies\GLAD\include;vendors;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\SDL2\include;$(SolutionDir)Dependencies\GLAD\include;vendors;utils;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +155,7 @@
     <None Include="SDL2_ttf.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="utils\Settings.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

@@ -7,13 +7,14 @@
 #include <glad/glad.h>
 
 #include "Window.h"
+#include "Settings.h"
 
 int main(int argc, char* args[]) {	
 
 	if( !Window::initSDL() ) return -1;
 
 	SDL_Window* window{ Window::createGLWindow
-	("Epic Fall 3D", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN)};
+	("Epic Fall 3D", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WindowSettings::SCREEN_WIDTH, WindowSettings::SCREEN_HEIGHT, SDL_WINDOW_SHOWN)};
 
 	SDL_GLContext glContext{ Window::createGLContext(window) };
 	if ( !Window::loadGLFunctionPointers()) return -1;
