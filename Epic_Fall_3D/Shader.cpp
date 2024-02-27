@@ -20,8 +20,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 		vertexShaderFile.open(vertexPath);
 		fragmentShaderFile.open(fragmentPath);
 
-		std::stringstream vertexShaderStream;
-		std::stringstream fragmentShaderStream;
+		std::stringstream vertexShaderStream, fragmentShaderStream;
 
 		// read file's buffer contents into streams
 		vertexShaderStream << vertexShaderFile.rdbuf();
@@ -64,7 +63,11 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	glDeleteShader(fragment);
 }
 
-void Shader::use() const
+Shader::~Shader() {
+	glDeleteProgram(m_ID);
+}
+
+void Shader::Use() const
 {
 	glUseProgram(m_ID);
 }

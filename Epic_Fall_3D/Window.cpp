@@ -19,6 +19,9 @@ bool Window::initSDL()
 
 SDL_Window* Window::createGLWindow(const std::string& windowName, const int& x, const int& y, const int& w, const int& h, const Uint32& flag)
 {
+	// WARNING: comment this line in a release build! 
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+	
 	// Create a window
 	SDL_Window* window = SDL_CreateWindow("SDL Window", x, y, w, h, flag | SDL_WINDOW_OPENGL);
 	if( !window ) {
@@ -52,6 +55,10 @@ void Window::setGLVersion(const int& version)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, version);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+
+#ifdef __APPLE__
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); 
+#endif
 }
 
 void Window::getGLVersion() {
