@@ -17,10 +17,10 @@ bool Window::initSDL()
 	return true;
 }
 
-SDL_Window* Window::createGLWindow(const std::string& windowName, const int& x, const int& y, const int& w, const int& h)
+SDL_Window* Window::createGLWindow(const std::string& windowName, const int& x, const int& y, const int& w, const int& h, const Uint32& flag)
 {
 	// Create a window
-	SDL_Window* window = SDL_CreateWindow("SDL Window", x, y, w, h, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+	SDL_Window* window = SDL_CreateWindow("SDL Window", x, y, w, h, flag | SDL_WINDOW_OPENGL);
 	if( !window ) {
 		std::cerr << "Window could not be created! SDL_Error: %s\n" << SDL_GetError() << "\n";
 	}

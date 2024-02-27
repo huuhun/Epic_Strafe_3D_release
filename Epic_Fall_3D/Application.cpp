@@ -13,7 +13,7 @@ int main(int argc, char* args[]) {
 	if( !Window::initSDL() ) return -1;
 
 	SDL_Window* window{ Window::createGLWindow
-	("Epic Fall 3D", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600)};
+	("Epic Fall 3D", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN)};
 
 	SDL_GLContext glContext{ Window::createGLContext(window) };
 	if ( !Window::loadGLFunctionPointers()) return -1;
@@ -33,6 +33,8 @@ int main(int argc, char* args[]) {
 			}
 		}
 		// Render here
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Update the screen
 		SDL_GL_SwapWindow(window);
