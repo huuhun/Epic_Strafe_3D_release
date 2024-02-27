@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glad/glad.h>
 #include "VertexBuffer.h"
 
@@ -7,6 +9,8 @@ class VertexArray {
 public:
     VertexArray();
 
+    ~VertexArray();
+
     // Bind the VAO
     void Bind() const;
 
@@ -14,7 +18,7 @@ public:
     void Unbind() const;
 
     // Link a VBO to the VAO and set the vertex attribute pointers
-    void LinkAttrib(const VertexBuffer& vbo, GLuint layout, GLuint numComponents, GLenum type, GLsizei stride, const void* offset) const;
+    void LinkAttrib(const VertexBuffer& vbo, GLuint layout, GLint numComponents, GLenum type, GLsizei stride, const void* offset) const;
 
     // Delete the VAO
     void Delete() const;

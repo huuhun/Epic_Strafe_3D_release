@@ -1,7 +1,8 @@
 #include <glad/glad.h>
 #include "VertexBuffer.h"
 
-VertexBuffer::VertexBuffer()
+VertexBuffer::VertexBuffer() 
+	: m_ID(0)
 {
 	glGenBuffers(1, &m_ID);
 }
@@ -24,6 +25,6 @@ void VertexBuffer::Unbind() const
 // Fill the VBO with data
 void VertexBuffer::BufferData(const void* data, GLsizei size) const {
     Bind();
-    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
     Unbind();
 }

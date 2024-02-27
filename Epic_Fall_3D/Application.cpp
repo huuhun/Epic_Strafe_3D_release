@@ -11,6 +11,7 @@
 #include "Shader.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
+#include "Renderer.h"
 
 int main(int argc, char* args[]) {	
 
@@ -28,7 +29,7 @@ int main(int argc, char* args[]) {
 	glEnable(GL_DEPTH_TEST);
 
 	// build and compile our shader program
-	Shader gameShader("shaders/shader460.vshader", "shaders/shader460.fshader");
+	Shader shader("res/shaders/shader460.vert", "res/shaders/shader460.frag");
 
 	float vertices[] = {
 	   -0.5f, -0.5f, 0.0f,
@@ -43,18 +44,27 @@ int main(int argc, char* args[]) {
 	vbo.BufferData(vertices, sizeof(vertices));
 	vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), nullptr);
 
+	vao.Unbind();
+	vbo.Unbind();
+
 	// run the event loop
+	Renderer renderer;
+	renderer.setClearColor();
 	bool quit = false;
 	SDL_Event e;
 	while( !quit ) {
 		while( SDL_PollEvent(&e) != 0 ) {
 			if( e.type == SDL_QUIT ) 
 				quit = true;
-			
 		}
+
 		// render here
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// Use the shader program
+		renderer.Clear();
+		shader.use();
+		vao.Bind();
+		renderer.Draw(vao);
+		vao.Unbind();
 
 		// update the screen
 		SDL_GL_SwapWindow(window);

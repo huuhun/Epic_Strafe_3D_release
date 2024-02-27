@@ -1,7 +1,14 @@
 #include "VertexArray.h"
 
-VertexArray::VertexArray() {
+VertexArray::VertexArray()
+    :m_ID(0)
+{
     glGenVertexArrays(1, &m_ID);
+}
+
+VertexArray::~VertexArray()
+{
+    glDeleteVertexArrays(1, &m_ID);
 }
 
 // Bind the VertexArray
@@ -15,7 +22,7 @@ void VertexArray::Unbind() const {
 }
 
 // Link a VBO to the VertexArray and set the vertex attribute pointers
-void VertexArray::LinkAttrib(const VertexBuffer& vbo, GLuint layout, GLuint numComponents, GLenum type, GLsizei stride, const void* offset) const {
+void VertexArray::LinkAttrib(const VertexBuffer& vbo, GLuint layout, GLint numComponents, GLenum type, GLsizei stride, const void* offset) const {
     Bind();
     vbo.Bind();
     glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
