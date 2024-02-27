@@ -146,6 +146,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="VertextBuffer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +158,7 @@
   <ItemGroup>
     <ClInclude Include="Shader.h" />
     <ClInclude Include="utils\Settings.h" />
+    <ClInclude Include="VertextBuffer.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
