@@ -1,8 +1,16 @@
 #include <iostream>
+#include <unordered_set>
 #include "Debugger.h"
 
-void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, const char* message, const void* userParam)
+std::unordered_set<GLuint> reportedErrors;
+
+void GLAPIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, const char* message, const void* userParam)
 {
+	// Check if the error ID has been reported before
+	if( reportedErrors.find(id) != reportedErrors.end() ) {
+		return;  // Skip already reported errors
+	}
+
 	// ignore non-significant error/warning codes
 	if( id == 131169 || id == 131185 || id == 131218 || id == 131204 ) return;
 
@@ -40,17 +48,20 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum 
 	case GL_DEBUG_SEVERITY_NOTIFICATION: std::cout << "Severity: notification"; break;
 	} std::cout << std::endl;
 	std::cout << std::endl;
+
+	// Add the error ID to the set of reported errors
+	reportedErrors.insert(id);
 }
 
 void enableGLDebugContext()
 {
-	int flags; glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
-	if( flags & GL_CONTEXT_FLAG_DEBUG_BIT )
-	{
+	//int flags; glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+	/*if( flags & GL_CONTEXT_FLAG_DEBUG_BIT )
+	{*/
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // makes sure errors are displayed synchronously
 		glDebugMessageCallback(glDebugOutput, nullptr);
-		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
-	}
+		//glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+	/*}*/
 }
 

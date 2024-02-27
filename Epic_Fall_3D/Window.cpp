@@ -71,7 +71,7 @@ void Window::getGLVersion() {
 	
 }
 
-void Window::destroyWindow(SDL_GLContext& glContext, SDL_Window*& window)
+void Window::destroyWindow(SDL_GLContext& glContext, SDL_Window* window)
 {
 	SDL_GL_DeleteContext(glContext);
 	SDL_DestroyWindow(window);

@@ -12,6 +12,6 @@ public:
 	//Call setClearColor first
 	void Clear();
 
-	void Draw(const VertexArray& VAO) const;
+	void Draw() const;
 
 };

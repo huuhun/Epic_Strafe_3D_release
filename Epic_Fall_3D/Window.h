@@ -12,7 +12,7 @@ public:
 	// Get OpenGL version information
 	static void getGLVersion();
 
-	static void destroyWindow(SDL_GLContext& glContext, SDL_Window*& window);
+	static void destroyWindow(SDL_GLContext& glContext, SDL_Window* window);
 
 private:
 

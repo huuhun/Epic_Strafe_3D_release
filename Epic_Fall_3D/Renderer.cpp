@@ -13,7 +13,7 @@ void Renderer::Clear()
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::Draw(const VertexArray& VAO) const {
+void Renderer::Draw() const {
 
 	//shader.Bind(); //giving instructions to GPU as to whatever we're trying to draw what we draw
 
