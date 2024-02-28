@@ -23,7 +23,7 @@ void VertexArray::Unbind() const {
 }
 
 // Link a VBO to the VertexArray and set the vertex attribute pointers
-void VertexArray::LinkAttrib(GLuint layout, GLint numComponents, GLenum type, GLsizei stride, const void* offset) const {
+void VertexArray::LinkAttrib(GLuint layout, GLint numComponents, GLenum type, GLsizei stride, const void* offset){
 
     glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
     glEnableVertexAttribArray(layout);

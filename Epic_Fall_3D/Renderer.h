@@ -12,6 +12,8 @@ public:
 	//Call setClearColor first
 	void Clear();
 
-	void Draw() const;
+	void DrawArrays() const;
+
+	void DrawElements();
 
 };

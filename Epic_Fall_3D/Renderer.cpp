@@ -13,7 +13,7 @@ void Renderer::Clear()
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::Draw() const {
+void Renderer::DrawArrays() const {
 
 	//shader.Bind(); //giving instructions to GPU as to whatever we're trying to draw what we draw
 
@@ -31,4 +31,8 @@ void Renderer::Draw() const {
 	//glDrawElements just says hey u know using that index buffer access the vertex buffer and call the shader program
 	//on all those vertices indivially to actually get it to draw and rasterize our object onto the screens
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+void Renderer::DrawElements() {
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }

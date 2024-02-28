@@ -13,6 +13,8 @@
 #include "VertexArray.h"
 #include "Renderer.h"
 #include "Debugger.h"
+#include "IndexBuffer.h"
+#include "Texture.h"
 
 int main(int argc, char* args[]) {
 
@@ -26,51 +28,90 @@ int main(int argc, char* args[]) {
     //glEnable(GL_DEPTH_TEST); //this cause the 2D triangle can't be drawn
 
     // Compile Vertex Shader, Fragment Shader, link Shaders into a Program
-    Shader shader("res/shaders/shader460.vert", "res/shaders/shader460.frag");
+
+    //Texture texture1("res/textures/brick-wall.jpg");
 
     // Set up vertex data
+    //float vertices[] = {
+    //    // positions          // colors           // texture coords
+    //     0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+    //     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+    //    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+    //    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+    //};
+
+    //float vertices[] = {
+    //    // positions         
+    //     0.5f,  0.5f, 0.0f, 
+    //     0.5f, -0.5f, 0.0f, 
+    //    -0.5f, -0.5f, 0.0f, 
+    //    -0.5f,  0.5f, 0.0f, 
+    //};
+
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f,  // Vertex 1 (bottom-left)
-         0.5f, -0.5f, 0.0f,  // Vertex 2 (bottom-right)
-         0.0f,  0.5f, 0.0f   // Vertex 3 (top)
+        // positions         
+         0.5f,  0.5f,
+         0.5f, -0.5f,
+        -0.5f, -0.5f,
+        -0.5f,  0.5f,
     };
 
-    // Create Vertex Array Object (VAO) and Vertex Buffer Object (VBO)
-    VertexArray  vao;
+    unsigned int indices[] = {
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+    };
+
+    // Generate vao, vbo, ebo
+    //VertexArray  vao;
     VertexBuffer vbo;
-    vao.Bind();
 
-    // Bind the VBO and set the vertex data
+    //vao.Bind();
     vbo.Bind();
-    vbo.BufferData(sizeof(vertices), vertices);
+    vbo.BufferData(vertices);
 
-    // Set the vertex attribute pointers
-    vao.LinkAttrib(0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+    // position attribute
+    VertexArray::LinkAttrib(0, 2, GL_FLOAT, 2 * sizeof(float), (void*)0);
+   
+    // color attribute
+    //VertexArray::LinkAttrib(1, 3, GL_FLOAT, 8 * sizeof(float), (void*)( 3 * sizeof(float) ));
+    
+    // texture coord attribute
+    //VertexArray::LinkAttrib(2, 2, GL_FLOAT, 8 * sizeof(float), (void*)( 6 * sizeof(float) ));
+
+    IndexBuffer ebo;
+    ebo.Bind();
+    ebo.BufferData(indices);
+    Shader shader("res/shaders/shader460.vert", "res/shaders/shader460.frag");
 
     // Unbind the VAO and VBO
-    vbo.Unbind();
-    vao.Unbind();
+    //vbo.Unbind();
+    //vao.Unbind();
 
-    //Enable errors checker
-    enableGLDebugContext();
+    //enableGLDebugContext();
 
+    // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
+    shader.Use();
+    //shader.setInt("texture1", 0);
     // Main rendering loop
     Renderer renderer;
     renderer.setClearColor();
+    SDL_Event event;
     while( true ) {
-        // Process events
-        SDL_Event event;
         while( SDL_PollEvent(&event) ) {
             if( event.type == SDL_QUIT )
                 goto cleanup;
-        }
-
+        }        
         //Render here
         renderer.Clear();
+
+        // bind textures on corresponding texture units
+       /* glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1.getID());*/
+
         shader.Use();
-        vao.Bind();
-        renderer.Draw();
-        vao.Unbind();
+        //vao.Bind();
+        renderer.DrawElements();
+        //vao.Unbind();
 
         // Swap buffers
         SDL_GL_SwapWindow(window);

@@ -25,8 +25,8 @@ void VertexBuffer::Unbind() const
 }
 
 // Fill the VBO with data
-void VertexBuffer::BufferData(GLsizei size, const void* data) const {
+void VertexBuffer::BufferData(const void* data) const {
     //Bind();
-	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
     //Unbind();
 }

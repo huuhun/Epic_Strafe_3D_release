@@ -28,6 +28,8 @@ public:
     void setMat3(const std::string& name, const glm::mat3& mat) const;
     void setMat4(const std::string& name, const glm::mat4& mat) const;
 
+    inline unsigned int getID() const { return m_ID; }
+
 private:
 	unsigned int m_ID;
     void checkCompileErrors(GLuint shader, std::string type);

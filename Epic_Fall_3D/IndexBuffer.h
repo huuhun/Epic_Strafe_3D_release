@@ -1,14 +1,13 @@
 #pragma once
-class VertexBuffer {
+class IndexBuffer {
 
+private:
+	unsigned int m_ID;
 public:
-	VertexBuffer();
-	~VertexBuffer();
+	IndexBuffer();
+	~IndexBuffer();
 
 	void Bind() const;
 	void Unbind() const;
-
 	void BufferData(const void* data) const;
-
-	unsigned int m_ID;
 };
