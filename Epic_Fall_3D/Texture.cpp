@@ -34,3 +34,8 @@ Texture::~Texture()
 {
     glDeleteTextures(1, &m_ID);
 }
+
+void Texture::Bind()
+{
+    glBindTexture(GL_TEXTURE_2D, m_ID);
+}

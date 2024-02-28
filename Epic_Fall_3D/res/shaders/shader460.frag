@@ -1,8 +1,14 @@
-#version 330 core
+#version 460 core
 
-layout(location = 0) out vec4 color;
+out vec4 FragColor;
+
+in vec3 ourColor;
+in vec2 TexCoord;
+
+// texture sampler
+uniform sampler2D brickWallBlockTexture;
 
 void main()
 {
-    color = vec4(0.2, 0.3, 0.8, 1.0);
-};
+	FragColor = texture(brickWallBlockTexture, TexCoord);
+}
