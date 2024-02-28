@@ -14,6 +14,6 @@ public:
 
 	void DrawArrays() const;
 
-	void DrawElements();
+	void DrawElements(const int& indicesAmount);
 
 };

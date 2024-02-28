@@ -1,7 +1,6 @@
 #include <iostream>
 #include "VertexArray.h"
 VertexArray::VertexArray()
-    :m_ID(0)
 {
    glGenVertexArrays(1, &m_ID);
 }

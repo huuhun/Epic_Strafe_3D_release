@@ -62,16 +62,16 @@ int main(int argc, char* args[]) {
     };
 
     // Generate vao, vbo, ebo
-    //VertexArray  vao;
-    VertexBuffer vbo;
+    VertexArray vao;
+    vao.Bind();
 
-    //vao.Bind();
+    VertexBuffer vbo;
     vbo.Bind();
-    vbo.BufferData(vertices);
+    vbo.BufferData(vertices, sizeof(float));
 
     // position attribute
-    VertexArray::LinkAttrib(0, 2, GL_FLOAT, 2 * sizeof(float), (void*)0);
-   
+    vao.LinkAttrib(0, 2, GL_FLOAT, 2 * sizeof(float), (void*)0);
+
     // color attribute
     //VertexArray::LinkAttrib(1, 3, GL_FLOAT, 8 * sizeof(float), (void*)( 3 * sizeof(float) ));
     
@@ -80,14 +80,15 @@ int main(int argc, char* args[]) {
 
     IndexBuffer ebo;
     ebo.Bind();
-    ebo.BufferData(indices);
+    ebo.BufferData(indices, sizeof(unsigned int));
+
     Shader shader("res/shaders/shader460.vert", "res/shaders/shader460.frag");
 
     // Unbind the VAO and VBO
-    //vbo.Unbind();
-    //vao.Unbind();
+    vbo.Unbind();
+    vao.Unbind();
 
-    //enableGLDebugContext();
+    enableGLDebugContext();
 
     // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
     shader.Use();
@@ -103,15 +104,15 @@ int main(int argc, char* args[]) {
         }        
         //Render here
         renderer.Clear();
-
         // bind textures on corresponding texture units
        /* glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1.getID());*/
 
-        shader.Use();
-        //vao.Bind();
-        renderer.DrawElements();
-        //vao.Unbind();
+        //shader.Use();
+        vao.Bind();
+        //renderer.DrawElements();
+        renderer.DrawElements(6); //6 is the num of indices
+        vao.Unbind();
 
         // Swap buffers
         SDL_GL_SwapWindow(window);
