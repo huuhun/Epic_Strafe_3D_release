@@ -9,5 +9,5 @@ public:
 
 	void Bind() const;
 	void Unbind() const;
-	void BufferData(const void* data, const GLuint& dataTypeSize) const;
+	void BufferData(const void* data, const GLuint& numElements) const;
 };

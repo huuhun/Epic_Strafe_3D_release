@@ -67,7 +67,7 @@ int main(int argc, char* args[]) {
 
     VertexBuffer vbo;
     vbo.Bind();
-    vbo.BufferData(vertices, sizeof(float));
+    vbo.BufferData(vertices, sizeof(vertices) / sizeof(vertices[0]));
 
     // position attribute
     vao.LinkAttrib(0, 2, GL_FLOAT, 2 * sizeof(float), (void*)0);
@@ -80,7 +80,7 @@ int main(int argc, char* args[]) {
 
     IndexBuffer ebo;
     ebo.Bind();
-    ebo.BufferData(indices, sizeof(unsigned int));
+    ebo.BufferData(indices, sizeof(indices)/sizeof(indices[0]));
 
     Shader shader("res/shaders/shader460.vert", "res/shaders/shader460.frag");
 

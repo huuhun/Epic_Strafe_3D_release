@@ -26,9 +26,9 @@ void VertexBuffer::Unbind() const
 }
 
 // Fill the VBO with data
-void VertexBuffer::BufferData(const void* data, const GLuint& dataTypeSize) const {
+void VertexBuffer::BufferData(const void* data, const GLuint& numElements) const {
     //Bind();
-	glBufferData(GL_ARRAY_BUFFER, dataTypeSize * sizeof(data), data, GL_STATIC_DRAW);\
-		std::cout << data << " sizeof(vertices): " << dataTypeSize * sizeof(data) << "\n";
+	glBufferData(GL_ARRAY_BUFFER, numElements * sizeof(data), data, GL_STATIC_DRAW);
+	std::cout << data << " sizeof(vertices): " << numElements * sizeof(data) << " " << sizeof(data) << "\n";
     //Unbind();
 }

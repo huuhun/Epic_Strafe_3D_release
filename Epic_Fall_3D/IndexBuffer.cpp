@@ -21,6 +21,6 @@ void IndexBuffer::Unbind() const {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void IndexBuffer::BufferData(const void* data, const GLuint& dataTypeSize) const {
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, dataTypeSize * sizeof(data), data, GL_STATIC_DRAW);
+void IndexBuffer::BufferData(const void* data, const GLuint& numElements) const {
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numElements * sizeof(data), data, GL_STATIC_DRAW);
 }
