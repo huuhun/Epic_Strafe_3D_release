@@ -27,15 +27,19 @@ int main(int argc, char* args[]) {
 	Window::setGLVersion(4);
 	Window::getGLVersion();
 
-	float vertices[] = {
-		// positions          // colors           // texture coords
-	   0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-	   0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-	  -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-	  -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
-	};
+	// configure global opengl state
+	// -----------------------------
+	glEnable(GL_DEPTH_TEST); // REMOVE THIS IF DRAW 2D ONLY
 
-	/*float vertices[] = {
+	//float vertices[] = {
+	//	// positions          // colors           // texture coords
+	//   0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+	//   0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+	//  -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+	//  -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+	//};
+
+	float vertices[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
 	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -77,16 +81,16 @@ int main(int argc, char* args[]) {
 	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};*/
+	};
 
-	unsigned indices[] = {
+	/*unsigned indices[] = {
 		0, 1, 3,
 		1, 2, 3
-	};
+	};*/
 
 	VertexArray vao;
 	VertexBuffer vbo;
-	IndexBuffer ebo;
+	//IndexBuffer ebo;
 
 	vao.Bind();
 
@@ -94,14 +98,16 @@ int main(int argc, char* args[]) {
 	vbo.BufferData(vertices, sizeof(vertices) / sizeof(vertices[ 0 ]));
 
 	// position attribute
-	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
 	// color attribute
-	VertexArray::LinkAttrib(1, 3, GL_FLOAT, 8 * sizeof(float), (void*)( 3 * sizeof(float) ));
+	//VertexArray::LinkAttrib(1, 3, GL_FLOAT, 8 * sizeof(float), (void*)( 3 * sizeof(float) ));
 	// texture coord attribute
-	VertexArray::LinkAttrib(2, 2, GL_FLOAT, 8 * sizeof(float), (void*)( 6 * sizeof(float) ));
+	//VertexArray::LinkAttrib(2, 2, GL_FLOAT, 8 * sizeof(float), (void*)( 6 * sizeof(float) ));
+	// texture coord attribute
+	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
 
-	ebo.Bind();
-	ebo.BufferData(indices, sizeof(indices) / sizeof(indices[ 0 ]));
+	//ebo.Bind();
+	//ebo.BufferData(indices, sizeof(indices) / sizeof(indices[ 0 ]));
 
 	vbo.Unbind();
 	vao.Unbind();
@@ -122,6 +128,8 @@ int main(int argc, char* args[]) {
 
 	Transform transformation;
 	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+	transformation.setProjection();
+	shader.setMat4("projection", transformation.getProjection());
 
 	SDL_Event e;
 	Uint32 frameStart;
@@ -136,16 +144,13 @@ int main(int argc, char* args[]) {
 		// create transformations
 		transformation.resetView();
 		transformation.resetModel();
-		transformation.resetProjection();
 
 		transformation.setView();
-		transformation.setModel(/*(float)SDL_GetTicks64()*/);
-		transformation.setProjection();
+		transformation.setModel(0.001f);
 
 		// retrieve the matrix uniform locations and send MVP to uniforms
 		shader.setMat4("view", transformation.getView());
 		shader.setMat4("model", transformation.getModel());
-		shader.setMat4("projection", transformation.getProjection());
 
 		//Render here
 		renderer.Clear();
@@ -156,8 +161,8 @@ int main(int argc, char* args[]) {
 
 		//Render container
 		vao.Bind();
-		renderer.DrawElements(sizeof(indices) / sizeof(indices[ 0 ])); // pass in the num of indices
-		//renderer.DrawArrays(sizeof(vertices) / sizeof(vertices[ 0 ]));
+		//renderer.DrawElements(sizeof(indices) / sizeof(indices[ 0 ])); // pass in the num of indices
+		renderer.DrawArrays(sizeof(vertices) / sizeof(vertices[ 0 ]));
 		vao.Unbind();
 
 		Window::capFramerate(frameStart, WindowSettings::MAX_FPS);

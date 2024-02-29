@@ -10,7 +10,9 @@ void Renderer::setClearColor()
 
 void Renderer::Clear()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
+
 }
 
 void Renderer::DrawArrays(const GLuint& elementsAmount) const {

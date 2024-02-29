@@ -11,6 +11,6 @@ uniform sampler2D faceTexture;
 
 void main()
 {
-	FragColor = mix(texture(brickWallTexture, TexCoord), texture(faceTexture, TexCoord), 0.6);
+	FragColor = mix(texture(brickWallTexture, TexCoord), texture(faceTexture, TexCoord), 0.4);
 	//FragColor = texture(faceTexture, TexCoord);
 }

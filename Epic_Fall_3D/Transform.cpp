@@ -26,7 +26,7 @@ void Transform::setView() {
 }
 
 void Transform::setModel(const float& rotationSpeed) {
-	//glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	m_Model = glm::rotate(m_Model, glm::radians(-55.0f) * rotationSpeed, glm::vec3(1.0, 0.0f, 0.0f));// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
+	//m_Model = glm::rotate(m_Model, glm::radians(-55.0f), glm::vec3(1.0, 0.0f, 0.0f));// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
+	m_Model = glm::rotate(m_Model, (float)SDL_GetTicks() * rotationSpeed, glm::vec3(0.5f, 1.0f, 0.0f));// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
 
 }
