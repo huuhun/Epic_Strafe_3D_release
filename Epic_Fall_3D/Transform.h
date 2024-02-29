@@ -5,8 +5,19 @@
 class Transform
 {
 public:
-	Transform(const float& rotationSpeed);
+	Transform();
+	void setSpinner(const float& rotationSpeed);
+
+	void setProjection();
+	void setView();
+	void setModel();
+
+	void resetModel() { m_Model = glm::mat4(0.1f); };
+	void resetView() { m_View = glm::mat4(0.1f); };
 	inline glm::mat4 getTransform() const { return m_Transform; }
+	inline glm::mat4 getModel() const { return m_Model; }
+	inline glm::mat4 getView() const { return m_View; }
+	inline glm::mat4 getProjection() const { return m_Projection; }
 private:
-	glm::mat4 m_Transform;
+	glm::mat4 m_Transform, m_Model, m_Projection, m_View;
 };

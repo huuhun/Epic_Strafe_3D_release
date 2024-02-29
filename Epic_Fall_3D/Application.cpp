@@ -77,10 +77,15 @@ int main(int argc, char* args[]) {
 
 	Renderer renderer;
 	renderer.setClearColor();
+
 	SDL_Event e;
 	Uint32 frameStart;
+
+	Transform transformation;
+	transformation.setProjection();
+	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 	while( true ) {
-		frameStart = SDL_GetTicks();
+		//frameStart = SDL_GetTicks();
 
 		while( SDL_PollEvent(&e) ) {
 			if( e.type == SDL_QUIT )
@@ -88,21 +93,29 @@ int main(int argc, char* args[]) {
 		}
 		shader.Use();
 		// create transformations
-		//Transform transform(0.001);
-		glm::mat4 model      = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		glm::mat4 view       = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0, 0.0f, 0.0f));// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); //The view matrix is translated along the z-axis by -3 units using 
-		projection = glm::perspective(glm::radians(45.0f), (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f); //// Parameters: Field of view, aspect ratio, near clipping plane, far clipping plane
+		transformation.resetView();
+		transformation.resetModel();
+		//glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+		//glm::mat4 view = glm::mat4(1.0f);
+		//glm::mat4 projection = glm::mat4(1.0f);
+
+		transformation.setView();
+		transformation.setModel();
+		//model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0, 0.0f, 0.0f));// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
+		//transform.setModel();
+		//transform.setProjection();
+		//projection = glm::perspective(glm::radians(45.0f), (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f); //// Parameters: Field of view, aspect ratio, near clipping plane, far clipping plane
+		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); //The view matrix is translated along the z-axis by -3 units using 
 		// retrieve the matrix uniform locations
-		unsigned int modelLoc = glGetUniformLocation(shader.getID(), "model");
-		unsigned int viewLoc = glGetUniformLocation(shader.getID(), "view");
+		//unsigned int modelLoc = glGetUniformLocation(shader.getID(), "model");
+		//unsigned int viewLoc = glGetUniformLocation(shader.getID(), "view");
 		// pass them to the shaders (3 different ways)
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[ 0 ][ 0 ]);
-		// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-		shader.setMat4("projection", projection);
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform.getModel()));
+		shader.setMat4("projection", transformation.getProjection());
+		shader.setMat4("view", transformation.getView());
+		shader.setMat4("model", transformation.getModel());
+
+		//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[ 0 ][ 0 ]);
 
 		//Render here
 		renderer.Clear();
@@ -113,8 +126,10 @@ int main(int argc, char* args[]) {
 
 		// get matrix's uniform location and set matrix
 		//shader.Use();
+		//transform.setSpinner(-0.001f);
+		//2 ways to get shader location and send the data to the location in shader
 		//unsigned int transformLoc = glGetUniformLocation(shader.getID(), "transform");
-		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform.getTransform()));
 		//shader.setMat4("transform", transform.getTransform());
 		//renderer.DrawArrays();
 
@@ -123,7 +138,7 @@ int main(int argc, char* args[]) {
 		renderer.DrawElements(sizeof(indices) / sizeof(indices[ 0 ])); // pass in the num of indices
 		vao.Unbind();
 
-		Window::capFramerate(frameStart, WindowSettings::MAX_FPS);
+		//Window::capFramerate(frameStart, WindowSettings::MAX_FPS);
 
 		SDL_GL_SwapWindow(window);
 	}
