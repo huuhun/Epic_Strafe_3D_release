@@ -76,15 +76,17 @@ int main(int argc, char* args[]) {
 
 	Renderer renderer;
 	renderer.setClearColor();
-	SDL_Event event;
+	SDL_Event e;
+	Uint32 frameStart;
 	while( true ) {
-		while( SDL_PollEvent(&event) ) {
-			if( event.type == SDL_QUIT )
+		frameStart = SDL_GetTicks();
+
+		while( SDL_PollEvent(&e) ) {
+			if( e.type == SDL_QUIT )
 				goto cleanup;
 		}
 
 		// create transformations
-
 		glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 		transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f)); //This line translates (moves) the matrix by a specified vector (glm::vec3(0.5f, -0.5f, 0.0f)). In this case, it translates the matrix by 0.5 units along the x-axis and -0.5 units along the y-axis.
 		const float rotationSpeed{ 0.002f };
@@ -106,6 +108,8 @@ int main(int argc, char* args[]) {
 		vao.Bind();
 		renderer.DrawElements(sizeof(indices) / sizeof(indices[ 0 ])); // pass in the num of indices
 		vao.Unbind();
+
+		Window::capFramerate(frameStart, WindowSettings::MAX_FPS);
 
 		SDL_GL_SwapWindow(window);
 	}

@@ -13,6 +13,7 @@ public:
 	static void getGLVersion();
 
 	static void destroyWindow(SDL_GLContext& glContext, SDL_Window* window);
+	static void capFramerate(const Uint32& frameStart, const int& TARGET_FPS);
 
 private:
 

@@ -1,6 +1,6 @@
 ﻿  Application.cpp
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(101,29): warning C4365: 'initializing': conversion from 'GLint' to 'unsigned int', signed/unsigned mismatch
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(102,22): warning C4365: 'argument': conversion from 'unsigned int' to 'GLint', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(103,29): warning C4365: 'initializing': conversion from 'GLint' to 'unsigned int', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(104,22): warning C4365: 'argument': conversion from 'unsigned int' to 'GLint', signed/unsigned mismatch
 D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(20,26): warning C4100: 'args': unreferenced formal parameter
 D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(20,14): warning C4100: 'argc': unreferenced formal parameter
   Epic_Fall_3D.vcxproj -> D:\projects\epic_fall\Epic_Fall_3D\x64\Debug\Epic_Fall_3D.exe

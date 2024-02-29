@@ -77,3 +77,14 @@ void Window::destroyWindow(SDL_GLContext& glContext, SDL_Window* window)
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
+
+void Window::capFramerate(const Uint32& frameStart, const int& TARGET_FPS)
+{
+	const int frameDelay = 1000 / TARGET_FPS; // Milliseconds per frame
+	Uint32 frameTime = SDL_GetTicks() - frameStart;
+
+	// Cap the frame rate	
+	if( frameDelay > frameTime ) {
+		SDL_Delay(frameDelay - frameTime);
+	}
+}
