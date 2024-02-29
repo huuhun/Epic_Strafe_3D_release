@@ -153,9 +153,11 @@
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="utils\Debugger.h" />
     <ClInclude Include="VertexArray.h" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="utils\Debugger.cpp" />
     <ClCompile Include="vendors\stb_image\stb_image.cpp" />
     <ClCompile Include="VertexArray.cpp" />
