@@ -2,6 +2,7 @@
 #include "IndexBuffer.h"
 
 IndexBuffer::IndexBuffer()
+	:m_ID(0)
 {
 	glGenBuffers(1, &m_ID);
 }
@@ -22,5 +23,5 @@ void IndexBuffer::Unbind() const {
 }
 
 void IndexBuffer::BufferData(const void* data, const GLuint& numElements) const {
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numElements * sizeof(data), data, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numElements * (GLsizeiptr)(sizeof(data)), data, GL_STATIC_DRAW);
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <glad/glad.h>
 class VertexBuffer {
 
 public:
@@ -10,5 +11,5 @@ public:
 
 	void BufferData(const void* data, const GLuint& numElements) const;
 
-	unsigned int m_ID;
+	GLuint m_ID;
 };

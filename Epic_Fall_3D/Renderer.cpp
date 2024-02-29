@@ -33,6 +33,6 @@ void Renderer::DrawArrays() const {
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-void Renderer::DrawElements(const int& indicesAmount) {
+void Renderer::DrawElements(const GLint& indicesAmount) {
 	glDrawElements(GL_TRIANGLES, indicesAmount, GL_UNSIGNED_INT, nullptr);
 }

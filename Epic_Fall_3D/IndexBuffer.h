@@ -1,8 +1,9 @@
 #pragma once
+#include <glad/glad.h>
 class IndexBuffer {
 
 private:
-	unsigned int m_ID;
+	GLuint m_ID;
 public:
 	IndexBuffer();
 	~IndexBuffer();

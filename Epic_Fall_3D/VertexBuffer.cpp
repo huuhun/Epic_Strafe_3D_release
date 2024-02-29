@@ -29,6 +29,6 @@ void VertexBuffer::Unbind() const
 void VertexBuffer::BufferData(const void* data, const GLuint& numElements) const {
     //Bind();
 	glBufferData(GL_ARRAY_BUFFER, numElements * sizeof(data), data, GL_STATIC_DRAW);
-	std::cout << data << " sizeof(vertices): " << numElements * sizeof(data) << " " << sizeof(data) << "\n";
+	//std::cout << data << " sizeof(vertices): " << numElements * sizeof(data) << " " << sizeof(data) << "\n";
     //Unbind();
 }
