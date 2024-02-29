@@ -1,9 +1,6 @@
 ﻿  Application.cpp
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(101,29): warning C4365: 'initializing': conversion from 'GLint' to 'unsigned int', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(102,22): warning C4365: 'argument': conversion from 'unsigned int' to 'GLint', signed/unsigned mismatch
 D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(20,26): warning C4100: 'args': unreferenced formal parameter
 D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(20,14): warning C4100: 'argc': unreferenced formal parameter
-  Texture.cpp
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Texture.cpp(22,23): warning C4365: 'initializing': conversion from 'int' to 'GLenum', signed/unsigned mismatch
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Texture.cpp(24,40): warning C4365: 'argument': conversion from 'GLenum' to 'GLint', signed/unsigned mismatch
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Texture.cpp(48,21): warning C4365: 'argument': conversion from 'const int' to 'GLenum', signed/unsigned mismatch
-  Generating Code...
   Epic_Fall_3D.vcxproj -> D:\projects\epic_fall\Epic_Fall_3D\x64\Debug\Epic_Fall_3D.exe

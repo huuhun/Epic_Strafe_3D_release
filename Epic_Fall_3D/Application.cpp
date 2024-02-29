@@ -28,11 +28,11 @@ int main(int argc, char* args[]) {
 
 
 	float vertices[] = {
-
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
+		// positions          // colors           // texture coords
+	   0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+	   0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+	  -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+	  -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
 	};
 
 	unsigned indices[] = {
@@ -82,6 +82,14 @@ int main(int argc, char* args[]) {
 			if( event.type == SDL_QUIT )
 				goto cleanup;
 		}
+
+		// create transformations
+
+		glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+		transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f)); //This line translates (moves) the matrix by a specified vector (glm::vec3(0.5f, -0.5f, 0.0f)). In this case, it translates the matrix by 0.5 units along the x-axis and -0.5 units along the y-axis.
+		const float rotationSpeed{ 0.002f };
+		transform = glm::rotate(transform, (float)SDL_GetTicks() * rotationSpeed, glm::vec3(0.0f, 0.0f, 1.0f)); //This code is rotating the transformation matrix (transform) around the z-axis. The rotation angle is specified as (float)SDL_GetTicks(), which means it's using the current value of SDL ticks (time) as the angle of rotation.
+
 		//Render here
 		renderer.Clear();
 		brickWallTexture.ActiveTexture(GL_TEXTURE0);
@@ -90,8 +98,12 @@ int main(int argc, char* args[]) {
 		faceTexture.Bind();
 
 		shader.Use();
+		unsigned int transformLoc = glGetUniformLocation(shader.getID(), "transform");
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+		//renderer.DrawArrays();
+
+		//Render container
 		vao.Bind();
-		//renderer.DrawElements();
 		renderer.DrawElements(sizeof(indices) / sizeof(indices[ 0 ])); // pass in the num of indices
 		vao.Unbind();
 
