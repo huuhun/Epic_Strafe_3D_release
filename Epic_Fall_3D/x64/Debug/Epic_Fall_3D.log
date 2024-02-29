@@ -1,2 +1,4 @@
-﻿  LINK : D:\projects\epic_fall\Epic_Fall_3D\x64\Debug\Epic_Fall_3D.exe not found or not built by the last incremental link; performing full link
+﻿  Application.cpp
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(20,26): warning C4100: 'args': unreferenced formal parameter
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(20,14): warning C4100: 'argc': unreferenced formal parameter
   Epic_Fall_3D.vcxproj -> D:\projects\epic_fall\Epic_Fall_3D\x64\Debug\Epic_Fall_3D.exe

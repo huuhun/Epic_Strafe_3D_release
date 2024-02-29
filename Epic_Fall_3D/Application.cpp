@@ -65,37 +65,19 @@ int main(int argc, char* args[]) {
 
     Shader shader("res/shaders/shader460.vert", "res/shaders/shader460.frag");
 
-    unsigned int texture1, texture2;
-    std::string path{ "res/textures/brick-wall.png" };
-  
-    glGenTextures(1, &texture1);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true); 
-    unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-    if( data )
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-
-    path = "res/textures/face.png";
+    Texture texture1("res/textures/brick-wall.png");
+    unsigned int texture2;
+    
+    std::string path = "res/textures/face.png";
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+    // load image, create texture and generate mipmaps
+    int width, height, nrChannels;
+    unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
     if( data )
     {
         // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
@@ -111,8 +93,8 @@ int main(int argc, char* args[]) {
 
     shader.Use();
     
-    glUniform1i(glGetUniformLocation(shader.getID(), "texture1"), 0);
-    glUniform1i(glGetUniformLocation(shader.getID(), "texture2"), 1);
+    shader.setInt("texture1", 0);
+    shader.setInt("texture2", 1);
     std::cout << shader.getID() << "\n";
 
     Renderer renderer;
@@ -126,7 +108,7 @@ int main(int argc, char* args[]) {
         //Render here
         renderer.Clear();
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glBindTexture(GL_TEXTURE_2D, texture1.getID());
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
             

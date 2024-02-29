@@ -27,7 +27,7 @@ Texture::Texture(const std::string& path)
     if( data )
         stbi_image_free(data);
 
-    //glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Texture::~Texture()
