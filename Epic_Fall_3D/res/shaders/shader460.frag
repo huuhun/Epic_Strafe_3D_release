@@ -6,7 +6,6 @@ in vec3 ourColor;
 in vec2 TexCoord;
 
 // texture sampler
-//uniform sampler2D brickWallBlockTexture;
 uniform sampler2D brickWallTexture;
 uniform sampler2D faceTexture;
 
