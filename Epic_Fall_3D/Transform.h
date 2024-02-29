@@ -10,7 +10,7 @@ public:
 
 	void setProjection();
 	void setView();
-	void setModel(const float& rotationSpeed = 0.0f);
+	void setModel(const float& rotationSpeed = 1.0f);
 
 	void resetModel() { m_Model = glm::mat4(0.1f); };
 	void resetView() { m_View = glm::mat4(0.1f); };
