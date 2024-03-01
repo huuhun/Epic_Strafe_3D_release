@@ -7,8 +7,10 @@
 #include <glad/glad.h>
 #include <stb_image/stb_image.h>
 
-#include "Window.h"
 #include "Settings.h"
+#include "Calculator.h"
+
+#include "Window.h"
 #include "Shader.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
@@ -191,7 +193,8 @@ int main(int argc, char* args[]) {
 			float angle {20.0f * (float)i};
 			model.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
 			shader.setMat4("model", model.getModel());
-			renderer.DrawArrays(36);
+			//std::cout << cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5)<<"\n";
+			renderer.DrawArrays(cal::calVertexAmount( sizeof(vertices)/sizeof(vertices[0]), 5 ));
 			model.resetModel();
 		}
 		
