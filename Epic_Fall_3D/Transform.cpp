@@ -4,7 +4,7 @@
 #include "Transform.h"
 
 Transform::Transform()
-	:m_Transform{ glm::mat4(1.0f) }/*, m_Model{ glm::mat4(1.0f) }*/, m_Projection{ glm::mat4(1.0f) }, m_View{ glm::mat4(1.0f) }// make sure to initialize matrix to identity matrix first 
+	: m_Projection{ glm::mat4(1.0f) }, m_View{ glm::mat4(1.0f) }// make sure to initialize matrix to identity matrix first 
 {
 }
 
@@ -25,8 +25,37 @@ void Transform::setView() {
 	m_View = glm::translate(m_View, glm::vec3(0.0f, 0.0f, -3.0f)); //The view matrix is translated along the z-axis by -3 units using 
 }
 
-//void Transform::setModel(const float& rotationSpeed) {
+//void Transform::setSpinModel(const float& rotationSpeed) {
 //	//m_Model = glm::rotate(m_Model, glm::radians(-55.0f), glm::vec3(1.0, 0.0f, 0.0f));// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
 //	m_Model = glm::rotate(m_Model, (float)SDL_GetTicks() * rotationSpeed, glm::vec3(0.5f, 1.0f, 0.0f));// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
 //
+//}
+
+//void Transform::setFixedModel(const float& fixedDegree) {
+//	//m_Model = glm::rotate(m_Model, glm::radians(-55.0f), glm::vec3(1.0, 0.0f, 0.0f));// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
+//	m_Model = glm::rotate(m_Model, fixedDegree, glm::vec3(0.5f, 1.0f, 0.0f));// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
+//}
+
+//void Transform::makeModel(){
+//	m_Model = glm::mat4(1.0f);
+//}
+
+//void Transform::sendModelToShader(Shader& shader) {
+//	shader.setMat4("model", m_Model);
+//}
+
+
+//void Transform::drawFixedModels(const glm::vec3* cubePos, const int& elementAmount, Shader& shader, Renderer& renderer, const int& verticesAmount) {
+//	for( unsigned int i = 0; i < elementAmount; i++ )
+//	{
+//		// calculate the model matrix for each object and pass it to shader before drawing
+//		//makeModel();
+//		//m_Model = glm::translate(m_Model, cubePos[ i ]);
+//		//float angle = 20.0f * i;
+//		//m_Model = glm::rotate(m_Model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+//		
+//		sendModelToShader(shader);
+//
+//		renderer.DrawArrays(verticesAmount);
+//	}
 //}

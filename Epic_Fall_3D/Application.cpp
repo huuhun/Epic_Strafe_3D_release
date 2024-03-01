@@ -17,6 +17,7 @@
 #include "IndexBuffer.h"
 #include "Texture.h"
 #include "Transform.h"
+#include "Model.h"
 
 int main(int argc, char* args[]) {
 
@@ -84,7 +85,7 @@ int main(int argc, char* args[]) {
 	};
 
 	// world space positions of our cubes
-	glm::vec3 cubePositions[] = {
+	glm::vec3 cubePos[] = {
 		glm::vec3(0.0f,  0.0f,  0.0f),
 		glm::vec3(2.0f,  5.0f, -15.0f),
 		glm::vec3(-1.5f, -2.2f, -2.5f),
@@ -171,21 +172,31 @@ int main(int argc, char* args[]) {
 		//transformation.setModel(0.001f);
 
 		vao.Bind();
-		for( unsigned int i = 0; i < 10; i++ )
+		//for( unsigned i = 0; i < sizeof(cubePos) / sizeof(cubePos[0]); i++ )
+		//{
+		//	// calculate the model matrix for each object and pass it to shader before drawing
+		//	glm::mat4 model = glm::mat4(1.0f);
+		//	model = glm::translate(model, cubePos[ i ]);
+		//	float angle = 20.0f * i;
+		//	model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+		//	shader.setMat4("model", model);
+		//	renderer.DrawArrays(sizeof(vertices) / sizeof(vertices[ 0 ]) );
+		//}
+		
+		for( unsigned i = 0; i < ( sizeof(cubePos) / sizeof(cubePos[0]) ); i++ )
 		{
 			// calculate the model matrix for each object and pass it to shader before drawing
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[ i ]);
-			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			shader.setMat4("model", model);
-
+			Model model;
+			model.setTranslation(cubePos[ i ]);
+			float angle {20.0f * (float)i};
+			model.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
+			shader.setMat4("model", model.getModel());
 			renderer.DrawArrays(36);
+			model.resetModel();
 		}
+		
 		// retrieve the matrix uniform locations and send MVP to uniforms
 		//shader.setMat4("model", transformation.getModel());
-
-		
 
 		//Render container
 		//renderer.DrawElements(sizeof(indices) / sizeof(indices[ 0 ])); // pass in the num of indices
