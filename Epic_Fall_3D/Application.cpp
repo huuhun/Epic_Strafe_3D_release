@@ -7,8 +7,9 @@
 #include <glad/glad.h>
 #include <stb_image/stb_image.h>
 
-#include "Settings.h"
-#include "Calculator.h"
+#include "utils/Settings.h"
+#include "utils/Calculator.h"
+#include "utils/Controller.h"
 
 #include "Window.h"
 #include "Shader.h"
@@ -20,6 +21,14 @@
 #include "Texture.h"
 #include "Transform.h"
 #include "Model.h"
+
+float deltaTime = 0.0f; // time between current frame and last frame
+float lastFrame = 0.0f;
+
+// camera
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 int main(int argc, char* args[]) {
 
@@ -144,19 +153,22 @@ int main(int argc, char* args[]) {
 	renderer.setClearColor();
 
 	Transform transformation;
-	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-	transformation.setProjection();
+	transformation.setProjection(45.0f, (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f );	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 	shader.setMat4("projection", transformation.getProjection());
 
 	SDL_Event e;
 	Uint32 frameStart;
-	while( true ) {
-		frameStart = SDL_GetTicks();
+	bool quit = false;
+	while( !quit ) {
+		// per-frame time logic
+		// --------------------
+		float currentFrame = static_cast<float>( SDL_GetTicks() / 1000.0 );
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		//frameStart = SDL_GetTicks();
 
-		while( SDL_PollEvent(&e) ) {
-			if( e.type == SDL_QUIT )
-				goto cleanup;
-		}
+		while( SDL_PollEvent(&e) ) quit = processInput(e, deltaTime, cameraPos, cameraFront, cameraUp);
+		
 		renderer.Clear();
 
 		brickWallTexture.ActiveTexture(GL_TEXTURE0);
@@ -167,51 +179,32 @@ int main(int argc, char* args[]) {
 		shader.Use();
 		// create transformations
 		transformation.resetView();
-		//transformation.resetModel();
+		float radius{ 10.0f };
+		float camX{ static_cast<float>( sin(SDL_GetTicks() * 0.001) * radius ) };
+		float camZ{ static_cast<float>( cos(SDL_GetTicks() * 0.001) * radius ) };
+		transformation.setCameraView( glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) );
 
-		transformation.setView();
 		shader.setMat4("view", transformation.getView());
-		//transformation.setModel(0.001f);
 
 		vao.Bind();
-		//for( unsigned i = 0; i < sizeof(cubePos) / sizeof(cubePos[0]); i++ )
-		//{
-		//	// calculate the model matrix for each object and pass it to shader before drawing
-		//	glm::mat4 model = glm::mat4(1.0f);
-		//	model = glm::translate(model, cubePos[ i ]);
-		//	float angle = 20.0f * i;
-		//	model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-		//	shader.setMat4("model", model);
-		//	renderer.DrawArrays(sizeof(vertices) / sizeof(vertices[ 0 ]) );
-		//}
-		
-		for( unsigned i = 0; i < ( sizeof(cubePos) / sizeof(cubePos[0]) ); i++ )
+		for( unsigned i = 0; i < ( sizeof(cubePos) / sizeof(cubePos[ 0 ]) ); i++ )
 		{
-			// calculate the model matrix for each object and pass it to shader before drawing
 			Model model;
 			model.setTranslation(cubePos[ i ]);
-			float angle {20.0f * (float)i};
+			float angle{ 20.0f * (float)i };
 			model.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
 			shader.setMat4("model", model.getModel());
-			//std::cout << cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5)<<"\n";
-			renderer.DrawArrays(cal::calVertexAmount( sizeof(vertices)/sizeof(vertices[0]), 5 ));
+			renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
 			model.resetModel();
 		}
-		
-		// retrieve the matrix uniform locations and send MVP to uniforms
-		//shader.setMat4("model", transformation.getModel());
-
-		//Render container
-		//renderer.DrawElements(sizeof(indices) / sizeof(indices[ 0 ])); // pass in the num of indices
-		//renderer.DrawArrays(sizeof(vertices) / sizeof(vertices[ 0 ]));
 		vao.Unbind();
 
-		Window::capFramerate(frameStart, WindowSettings::MAX_FPS);
+		//Window::capFramerate(frameStart, WindowSettings::MAX_FPS);
 
 		SDL_GL_SwapWindow(window);
 	}
 
-cleanup:
+//cleanup:
 	Window::destroyWindow(context, window);
 
 	return 0;
