@@ -83,6 +83,20 @@ int main(int argc, char* args[]) {
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
+	// world space positions of our cubes
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
 	/*unsigned indices[] = {
 		0, 1, 3,
 		1, 2, 3
@@ -140,29 +154,42 @@ int main(int argc, char* args[]) {
 			if( e.type == SDL_QUIT )
 				goto cleanup;
 		}
-		shader.Use();
-		// create transformations
-		transformation.resetView();
-		transformation.resetModel();
-
-		transformation.setView();
-		transformation.setModel(0.001f);
-
-		// retrieve the matrix uniform locations and send MVP to uniforms
-		shader.setMat4("view", transformation.getView());
-		shader.setMat4("model", transformation.getModel());
-
-		//Render here
 		renderer.Clear();
+
 		brickWallTexture.ActiveTexture(GL_TEXTURE0);
 		brickWallTexture.Bind();
 		faceTexture.ActiveTexture(GL_TEXTURE1);
 		faceTexture.Bind();
 
-		//Render container
+		shader.Use();
+		// create transformations
+		transformation.resetView();
+		//transformation.resetModel();
+
+		transformation.setView();
+		shader.setMat4("view", transformation.getView());
+		//transformation.setModel(0.001f);
+
 		vao.Bind();
+		for( unsigned int i = 0; i < 10; i++ )
+		{
+			// calculate the model matrix for each object and pass it to shader before drawing
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[ i ]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			shader.setMat4("model", model);
+
+			renderer.DrawArrays(36);
+		}
+		// retrieve the matrix uniform locations and send MVP to uniforms
+		//shader.setMat4("model", transformation.getModel());
+
+		
+
+		//Render container
 		//renderer.DrawElements(sizeof(indices) / sizeof(indices[ 0 ])); // pass in the num of indices
-		renderer.DrawArrays(sizeof(vertices) / sizeof(vertices[ 0 ]));
+		//renderer.DrawArrays(sizeof(vertices) / sizeof(vertices[ 0 ]));
 		vao.Unbind();
 
 		Window::capFramerate(frameStart, WindowSettings::MAX_FPS);

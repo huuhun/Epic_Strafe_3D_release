@@ -158,6 +158,7 @@
     <ClInclude Include="VertexArray.h" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClInclude Include="utils\CustomFuncs.h" />
     <ClCompile Include="utils\Debugger.cpp" />
     <ClCompile Include="vendors\stb_image\stb_image.cpp" />
     <ClCompile Include="VertexArray.cpp" />
