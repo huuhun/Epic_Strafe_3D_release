@@ -1,10 +1,10 @@
 #include <iostream>
+#include <glad/glad.h>
+#include <glfw3.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <SDL.h>
-#include <glad/glad.h>
 #include <stb_image/stb_image.h>
 
 #include "utils/Settings.h"
@@ -32,9 +32,9 @@ glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 int main(int argc, char* args[]) {
 
-	if( !Window::initSDL() ) return -1;
-	SDL_Window* window{ Window::createGLWindow("Epic Fall 3D", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WindowSettings::SCR_WIDTH, WindowSettings::SCR_HEIGHT, SDL_WINDOW_SHOWN) };
-	SDL_GLContext context{ Window::createGLContext(window) };
+	if( !Window::initGLFW() ) return -1;
+	GLFWwindow* window{ Window::createGLWindow("Epic Fall 3D", WindowSettings::SCR_WIDTH, WindowSettings::SCR_HEIGHT) };
+	Window::createGLContext(window);
 	Window::loadGLFunctionPointers();
 	Window::setGLVersion(4);
 	Window::getGLVersion();
@@ -156,18 +156,15 @@ int main(int argc, char* args[]) {
 	transformation.setProjection(45.0f, (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f );	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 	shader.setMat4("projection", transformation.getProjection());
 
-	SDL_Event e;
-	Uint32 frameStart;
-	bool quit = false;
-	while( !quit ) {
+	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
 		// --------------------
-		float currentFrame = static_cast<float>( SDL_GetTicks() / 100.0f );
+		float currentFrame = static_cast<float>( glfwGetTime() );
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		//frameStart = SDL_GetTicks();
 
-		while( SDL_PollEvent(&e) ) quit = processInput(e, deltaTime, cameraPos, cameraFront, cameraUp);
+		processInput(window, deltaTime, cameraPos, cameraFront, cameraUp);
 		
 		renderer.Clear();
 
@@ -196,12 +193,12 @@ int main(int argc, char* args[]) {
 		vao.Unbind();
 
 		//Window::capFramerate(frameStart, WindowSettings::MAX_FPS);
-
-		SDL_GL_SwapWindow(window);
+		glfwPollEvents();
+		glfwSwapBuffers(window);
 	}
 
 //cleanup:
-	Window::destroyWindow(context, window);
+	Window::destroyWindow();
 
 	return 0;
 }

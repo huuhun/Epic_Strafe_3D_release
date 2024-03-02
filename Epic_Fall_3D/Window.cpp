@@ -2,49 +2,41 @@
 #include <glad/glad.h>
 #include "Window.h"
 
-bool Window::initSDL()
+bool Window::initGLFW()
 {
 	// Initialize SDL
-	if( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
-		std::cerr << "SDL could not initialize! SDL_Error: %s\n" << SDL_GetError() << "\n";
+	if( !glfwInit() ) {
+		std::cerr << "glfw could not initialize! SDL_Error: %s\n" << glfwGetError(nullptr) << "\n";
 		return false;
 	}
-
-#ifdef __APPLE__
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
 
 	return true;
 }
 
-SDL_Window* Window::createGLWindow(const std::string& windowName, const int& x, const int& y, const int& w, const int& h, const Uint32& flag)
+GLFWwindow* Window::createGLWindow(const std::string& windowName, const int& w, const int& h)
 {
 	// WARNING: comment this line in a release build! 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
-	
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+
 	// Create a window
-	SDL_Window* window = SDL_CreateWindow("SDL Window", x, y, w, h, flag | SDL_WINDOW_OPENGL);
+	GLFWwindow* window = glfwCreateWindow(w, h, windowName.c_str(), NULL, NULL);
 	if( !window ) {
-		std::cerr << "Window could not be created! SDL_Error: %s\n" << SDL_GetError() << "\n";
+		std::cerr << "Window could not be created! SDL_Error: %s\n" << glfwGetError(nullptr) << "\n";
+		//glfwTerminate();
 	}
 
 	return window;
 }
 
-SDL_GLContext Window::createGLContext(SDL_Window* window) {
+void Window::createGLContext(GLFWwindow* window) {
 
-	SDL_GLContext glContext = SDL_GL_CreateContext(window);
-	if( !glContext ) {
-		std::cerr << "Cannot create context! SDL_Error: %s\n" << SDL_GetError() << "\n";
-	}
-	return glContext;
+	glfwMakeContextCurrent(window);
 }
 
 bool Window::loadGLFunctionPointers()
 {
-	if( !gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress) ) {
+	if( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
 		std::cerr << "Failed to initialize GLAD" << std::endl;
-		std::cout << "SDL_GL_GetProcAddress: " << SDL_GL_GetProcAddress << std::endl;
 		return false;
 	}
 	return true;
@@ -52,39 +44,27 @@ bool Window::loadGLFunctionPointers()
 
 void Window::setGLVersion(const int& version)
 {
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, version);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, version);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 
 #ifdef __APPLE__
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); 
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 #endif
 }
 
 void Window::getGLVersion() {
 	const GLubyte* version = glGetString(GL_VERSION);
 
-	if( version ) 
+	if( version )
 		std::cout << "OpenGL Version: " << version << std::endl;
-	else 
+	else
 		std::cerr << "Failed to retrieve OpenGL version information." << std::endl;
-	
+
 }
 
-void Window::destroyWindow(SDL_GLContext& glContext, SDL_Window* window)
+void Window::destroyWindow()
 {
-	SDL_GL_DeleteContext(glContext);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
-}
-
-void Window::capFramerate(const Uint32& frameStart, const int& TARGET_FPS)
-{
-	const int frameDelay = 1000 / TARGET_FPS; // Milliseconds per frame
-	Uint32 frameTime = SDL_GetTicks() - frameStart;
-
-	// Cap the frame rate	
-	if( frameDelay > frameTime ) {
-		SDL_Delay(frameDelay - frameTime);
-	}
+	glfwTerminate();
 }

@@ -1,4 +1,3 @@
-#include <SDL.h>
 #include "Model.h"
 
 Model::Model()
@@ -15,7 +14,7 @@ void Model::setFixedModelRotation(const float& fixedDegree, const glm::vec3& axi
 void Model::setSpinModelRotation(const float& rotationSpeed, const glm::vec3& axis) {
 
 	//m_Model = glm::rotate(m_Model, glm::radians((float)SDL_GetTicks() * rotationSpeed), glm::vec3(0.5f, 1.0f, 0.0f));// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
-	m_Model = glm::rotate(m_Model, glm::radians((float)SDL_GetTicks() * rotationSpeed), axis);// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
+	m_Model = glm::rotate(m_Model, glm::radians(rotationSpeed), axis);// converting -55 degrees to radians, model matrix is rotated around the x-axis by -55 degrees 
 }
 
 void Model::setTranslation(const glm::vec3& cubePos) { 

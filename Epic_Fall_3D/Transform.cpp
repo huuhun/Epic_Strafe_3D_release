@@ -1,4 +1,3 @@
-#include <SDL.h>
 #include <Settings.h>
 
 #include "Transform.h"

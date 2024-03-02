@@ -13,7 +13,7 @@ public:
 
 	void Bind();
 
-	void ActiveTexture(const int& TEXTURE_UNIT);
+	void ActiveTexture(const GLenum& TEXTURE_UNIT);
 
 	/*void Bind(unsigned int slot = 0) const;
 	void Unbind() const;*/
