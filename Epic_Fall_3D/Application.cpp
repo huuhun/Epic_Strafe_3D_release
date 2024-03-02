@@ -22,6 +22,7 @@
 #include "Transform.h"
 #include "Model.h"
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
@@ -52,11 +53,12 @@ int main(int argc, char* args[]) {
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST); // REMOVE THIS IF DRAW 2D ONLY
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	// tell GLFW to capture our mouse
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //disable mouse here
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
-	
+
 	//float vertices[] = {
 	//	// positions          // colors           // texture coords
 	//   0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
@@ -167,8 +169,6 @@ int main(int argc, char* args[]) {
 	renderer.setClearColor();
 
 	Transform transformation;
-	transformation.setProjection(45.0f, (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f );	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-	shader.setMat4("projection", transformation.getProjection());
 
 	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
@@ -179,7 +179,7 @@ int main(int argc, char* args[]) {
 		//frameStart = SDL_GetTicks();
 
 		processInput(window, deltaTime, cameraPos, cameraFront, cameraUp);
-		
+
 		renderer.Clear();
 
 		brickWallTexture.ActiveTexture(GL_TEXTURE0);
@@ -188,6 +188,8 @@ int main(int argc, char* args[]) {
 		faceTexture.Bind();
 
 		shader.Use();
+		transformation.setProjection(fov, (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+		shader.setMat4("projection", transformation.getProjection());
 		// create transformations
 		//transformation.resetView();
 		transformation.setCameraView(cameraPos, cameraPos + cameraFront, cameraUp);
@@ -211,10 +213,19 @@ int main(int argc, char* args[]) {
 		glfwSwapBuffers(window);
 	}
 
-//cleanup:
+	//cleanup:
 	Window::destroyWindow();
 
 	return 0;
+}
+
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// ---------------------------------------------------------------------------------------------
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
+	glViewport(0, 0, width, height);
 }
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
