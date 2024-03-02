@@ -162,7 +162,7 @@ int main(int argc, char* args[]) {
 	while( !quit ) {
 		// per-frame time logic
 		// --------------------
-		float currentFrame = static_cast<float>( SDL_GetTicks() / 1000.0 );
+		float currentFrame = static_cast<float>( SDL_GetTicks() / 100.0f );
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		//frameStart = SDL_GetTicks();
@@ -178,12 +178,8 @@ int main(int argc, char* args[]) {
 
 		shader.Use();
 		// create transformations
-		transformation.resetView();
-		float radius{ 10.0f };
-		float camX{ static_cast<float>( sin(SDL_GetTicks() * 0.001) * radius ) };
-		float camZ{ static_cast<float>( cos(SDL_GetTicks() * 0.001) * radius ) };
-		transformation.setCameraView( glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) );
-
+		//transformation.resetView();
+		transformation.setCameraView(cameraPos, cameraPos + cameraFront, cameraUp);
 		shader.setMat4("view", transformation.getView());
 
 		vao.Bind();
