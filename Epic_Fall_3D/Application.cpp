@@ -140,7 +140,7 @@ int main(int argc, char* args[]) {
 
 	enableGLDebugContext();
 
-	Shader shader("res/shaders/shader460.vert", "res/shaders/shader460.frag");
+	Shader shader("res/shaders/shader430.vert", "res/shaders/shader430.frag");
 
 	Texture brickWallTexture("res/textures/brick-wall.png");
 	Texture faceTexture("res/textures/face.png");
