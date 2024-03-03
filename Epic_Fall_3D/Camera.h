@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-//#include <glad/glad.h>
+//#include <glad/glad.h> //remove this line if "OpenGL header already included, remove this include, glad already provides "
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
