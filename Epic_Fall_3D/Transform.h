@@ -15,10 +15,10 @@ public:
 	Transform();
 
 	void setProjection();
-	void setProjection(const float& fov, const float& aspectRatio, const float& nearClippingPlane, const float& farClippingPlane);
+	void setProjection(float& fov, const float& aspectRatio, const float& nearClippingPlane, const float& farClippingPlane);
 
 	void setView();
-	void setCameraView(const glm::vec3& cameraPos, const glm::vec3& targetPos, const glm::vec3& upVector);
+	void setCameraView(const glm::mat4& viewMatrix);
 
 	void resetView() { m_View = glm::mat4(0.1f); };
 	void resetProjection() { m_Projection = glm::mat4(0.1f); };

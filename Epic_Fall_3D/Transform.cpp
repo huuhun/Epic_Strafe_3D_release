@@ -19,7 +19,7 @@ void Transform::setProjection() {
 	m_Projection = glm::perspective(glm::radians(45.0f), (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f); //// Parameters: Field of view, aspect ratio, near clipping plane, far clipping plane
 }
 
-void Transform::setProjection(const float& fov, const float& aspectRatio, const float& nearClippingPlane, const float& farClippingPlane) {
+void Transform::setProjection(float& fov, const float& aspectRatio, const float& nearClippingPlane, const float& farClippingPlane) {
 	// create transformations
 	m_Projection = glm::perspective(glm::radians(fov), aspectRatio, nearClippingPlane, farClippingPlane); //// Parameters: Field of view, aspect ratio, near clipping plane, far clipping plane
 }
@@ -30,9 +30,9 @@ void Transform::setView() {
 	m_View = glm::translate(m_View, glm::vec3(0.0f, 0.0f, -3.0f)); //The view matrix is translated along the z-axis by -3 units using 
 }
 
-void Transform::setCameraView(const glm::vec3& cameraPos, const glm::vec3& targetPos, const glm::vec3& upVector) {
+void Transform::setCameraView(const glm::mat4& viewMatrix) {
 	// create transformations
-	m_View = glm::lookAt(cameraPos, targetPos, upVector); //The view matrix is translated along the z-axis by -3 units using 
+	m_View = viewMatrix; //The view matrix is translated along the z-axis by -3 units using 
 }
 
 //void Transform::setSpinModel(const float& rotationSpeed) {
