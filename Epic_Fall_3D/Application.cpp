@@ -107,13 +107,13 @@ int main(int argc, char* args[]) {
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
+	glm::vec3 playerCubePos{ 0.8f,  0.5f,  0.0f }; //ur cube
 	// world space positions of our cubes
 	glm::vec3 cubePos[] = {
-		glm::vec3(0.8f,  0.5f,  0.0f), //ur cube
 		glm::vec3(0.0f,  0.0f,  0.0f),
 		glm::vec3(2.0f,  5.0f, -15.0f),
 		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),	
+		glm::vec3(-3.8f, -2.0f, -12.3f),
 		glm::vec3(2.4f, -0.4f, -3.5f),
 		glm::vec3(-1.7f,  3.0f, -7.5f),
 		glm::vec3(1.3f, -2.0f, -2.5f),
@@ -175,22 +175,20 @@ int main(int argc, char* args[]) {
 		lastFrame = currentFrame;
 		//frameStart = SDL_GetTicks();
 
-		processInput(window, deltaTime ,camera);
-		for( int i = 1; i < sizeof(cubePos)/sizeof(cubePos[0]); ++i ) {
-			if( checkCollision(cubePos[ 0 ], cubePos[ i ]) ) {
-				std::cout << "Collision detected between the 1st cube and cube " << i + 1 << std::endl;
-			}
-		}
+		processInput(window, deltaTime, camera);
+
+		for( int i = 0; i < sizeof(cubePos) / sizeof(cubePos[ 0 ]); ++i ) 
+			if( checkCollision(playerCubePos, cubePos[ i ]) ) 
+				std::cout << "Collision detected between the player cube and cube " << i << std::endl;
+			
 		
 		renderer.Clear();
 
 		brickWallTexture.ActiveTexture(GL_TEXTURE0);
-		brickWallTexture.Bind();
 		faceTexture.ActiveTexture(GL_TEXTURE1);
-		faceTexture.Bind();
 
 		shader.Use();
-		transformation.setProjection(camera.Zoom, 
+		transformation.setProjection(camera.Zoom,
 			(float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 		shader.setMat4("projection", transformation.getProjection());
 		// create transformations
@@ -198,15 +196,26 @@ int main(int argc, char* args[]) {
 		shader.setMat4("view", transformation.getView());
 
 		vao.Bind();
-		for( unsigned i = 0; i < ( sizeof(cubePos) / sizeof(cubePos[ 0 ]) ); i++ )
+
 		{
 			Model model;
-			model.setTranslation(cubePos[ i ]);
-			float angle{ 20.0f * (float)i };
+			model.setTranslation(playerCubePos);
+			float angle{ 20.0f };
 			model.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
 			shader.setMat4("model", model.getModel());
 			renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
+		
+			for( unsigned i = 0; i < ( sizeof(cubePos) / sizeof(cubePos[ 0 ]) ); i++ )
+			{
+				Model model;
+				model.setTranslation(cubePos[ i ]);
+				float angle{ 20.0f * (float)i };
+				model.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
+				shader.setMat4("model", model.getModel());
+				renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
+			}
 		}
+
 		vao.Unbind();
 
 		//Window::capFramerate(frameStart, WindowSettings::MAX_FPS);

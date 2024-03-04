@@ -47,4 +47,5 @@ void Texture::Bind()
 void Texture::ActiveTexture(const GLenum& TEXTURE_UNIT)
 {
 	glActiveTexture(TEXTURE_UNIT);
+	Bind();
 }
