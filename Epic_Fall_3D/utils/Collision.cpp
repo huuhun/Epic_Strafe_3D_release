@@ -6,10 +6,10 @@ bool checkCollision(const glm::vec3& pos1, const glm::vec3& pos2)
     float size = 1.0f;
 
     // Calculate the minimum and maximum coordinates of the bounding boxes
-    glm::vec3 min1 = pos1 - glm::vec3(size / 2.0f);
-    glm::vec3 max1 = pos1 + glm::vec3(size / 2.0f);
-    glm::vec3 min2 = pos2 - glm::vec3(size / 2.0f);
-    glm::vec3 max2 = pos2 + glm::vec3(size / 2.0f);
+    glm::vec3 min1 = pos1 - glm::vec3(size / 2.5f);
+    glm::vec3 max1 = pos1 + glm::vec3(size / 2.5f);
+    glm::vec3 min2 = pos2 - glm::vec3(size / 2.5f);
+    glm::vec3 max2 = pos2 + glm::vec3(size / 2.5f);
 
     // Check for collision along each axis
     bool collisionX = min1.x < max2.x && max1.x > min2.x;

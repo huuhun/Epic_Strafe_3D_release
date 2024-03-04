@@ -178,6 +178,7 @@ int main(int argc, char* args[]) {
 		//frameStart = SDL_GetTicks();
 
 		processInput(window, deltaTime, camera);
+		std::cout << camera.Position.z << "\n";
 
 		for( int i = 0; i < sizeof(cubePos) / sizeof(cubePos[ 0 ]); ++i )
 			if( checkCollision(/*playerCubePos * */camera.Position, cubePos[ i ]) )
@@ -209,12 +210,15 @@ int main(int argc, char* args[]) {
 
 		for( unsigned i = 0; i < ( sizeof(cubePos) / sizeof(cubePos[ 0 ]) ); i++ )
 		{
-			Model cubeModel;
-			cubeModel.setTranslation(cubePos[ i ]);
-			float angle{ 20.0f * (float)i };
-			cubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
-			shader.setMat4("model", cubeModel.getModel());
-			renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
+			if( camera.Position.z > cubePos[ i ].z - 5.0f   )
+			{
+				Model cubeModel;
+				cubeModel.setTranslation(cubePos[ i ]);
+				float angle{ 20.0f * (float)i };
+				cubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
+				shader.setMat4("model", cubeModel.getModel());
+				renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
+			}
 		}
 
 		vao.Unbind();
