@@ -107,10 +107,12 @@ int main(int argc, char* args[]) {
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
-	glm::vec3 playerCubePos{ 0.8f,  0.5f,  0.0f }; //ur cube
+	//glm::vec3 playerCubePos{ 0.8f,  0.5f,  0.0f }; //ur cube
+	glm::vec3 playerCubePos{ 0.0f, 0.0f, 3.0f };
 	// world space positions of our cubes
 	glm::vec3 cubePos[] = {
 		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(0.0f,  0.0f,  1.0f),
 		glm::vec3(2.0f,  5.0f, -15.0f),
 		glm::vec3(-1.5f, -2.2f, -2.5f),
 		glm::vec3(-3.8f, -2.0f, -12.3f),
@@ -177,11 +179,10 @@ int main(int argc, char* args[]) {
 
 		processInput(window, deltaTime, camera);
 
-		for( int i = 0; i < sizeof(cubePos) / sizeof(cubePos[ 0 ]); ++i ) 
-			if( checkCollision(playerCubePos, cubePos[ i ]) ) 
+		for( int i = 0; i < sizeof(cubePos) / sizeof(cubePos[ 0 ]); ++i )
+			if( checkCollision(/*playerCubePos * */camera.Position, cubePos[ i ]) )
 				std::cout << "Collision detected between the player cube and cube " << i << std::endl;
-			
-		
+
 		renderer.Clear();
 
 		brickWallTexture.ActiveTexture(GL_TEXTURE0);
@@ -198,22 +199,22 @@ int main(int argc, char* args[]) {
 		vao.Bind();
 
 		{
-			Model model;
-			model.setTranslation(playerCubePos);
-			float angle{ 20.0f };
-			model.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
-			shader.setMat4("model", model.getModel());
+			Model playerCubeModel;
+			playerCubeModel.setTranslation(/*playerCubePos **/ camera.Position);
+			float angle{ 0.0f };
+			playerCubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
+			shader.setMat4("model", playerCubeModel.getModel());
+			//renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
+		}
+
+		for( unsigned i = 0; i < ( sizeof(cubePos) / sizeof(cubePos[ 0 ]) ); i++ )
+		{
+			Model cubeModel;
+			cubeModel.setTranslation(cubePos[ i ]);
+			float angle{ 20.0f * (float)i };
+			cubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
+			shader.setMat4("model", cubeModel.getModel());
 			renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
-		
-			for( unsigned i = 0; i < ( sizeof(cubePos) / sizeof(cubePos[ 0 ]) ); i++ )
-			{
-				Model model;
-				model.setTranslation(cubePos[ i ]);
-				float angle{ 20.0f * (float)i };
-				model.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
-				shader.setMat4("model", model.getModel());
-				renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
-			}
 		}
 
 		vao.Unbind();
