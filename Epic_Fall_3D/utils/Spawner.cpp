@@ -23,6 +23,10 @@ void spawnObstacles(glm::vec3 cubePos[], const unsigned& cubePosAmount, const un
 			shader.setMat4("model", cubeModel.getModel());
 			renderer.DrawArrays(verticesAmount);
 		}
+		else
+		{
+			cubePos[ i ].z += -40.0f;
+		}
 	}
 
 }
