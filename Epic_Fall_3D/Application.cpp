@@ -22,6 +22,7 @@
 #include "Transform.h"
 #include "Model.h"
 #include "Camera.h"
+#include "Collision.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -108,10 +109,11 @@ int main(int argc, char* args[]) {
 
 	// world space positions of our cubes
 	glm::vec3 cubePos[] = {
+		glm::vec3(0.8f,  0.5f,  0.0f), //ur cube
 		glm::vec3(0.0f,  0.0f,  0.0f),
 		glm::vec3(2.0f,  5.0f, -15.0f),
 		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),	
 		glm::vec3(2.4f, -0.4f, -3.5f),
 		glm::vec3(-1.7f,  3.0f, -7.5f),
 		glm::vec3(1.3f, -2.0f, -2.5f),
@@ -174,7 +176,12 @@ int main(int argc, char* args[]) {
 		//frameStart = SDL_GetTicks();
 
 		processInput(window, deltaTime ,camera);
-
+		for( int i = 1; i < sizeof(cubePos)/sizeof(cubePos[0]); ++i ) {
+			if( checkCollision(cubePos[ 0 ], cubePos[ i ]) ) {
+				std::cout << "Collision detected between the 1st cube and cube " << i + 1 << std::endl;
+			}
+		}
+		
 		renderer.Clear();
 
 		brickWallTexture.ActiveTexture(GL_TEXTURE0);
@@ -187,7 +194,6 @@ int main(int argc, char* args[]) {
 			(float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 		shader.setMat4("projection", transformation.getProjection());
 		// create transformations
-		//transformation.resetView();
 		transformation.setCameraView(camera.GetViewMatrix());
 		shader.setMat4("view", transformation.getView());
 

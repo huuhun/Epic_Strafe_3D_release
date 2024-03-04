@@ -157,6 +157,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="utils\Collision.h" />
     <ClInclude Include="utils\Controller.h" />
     <ClInclude Include="utils\Debugger.h" />
     <ClInclude Include="VertexArray.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Transform.cpp" />
     <ClInclude Include="utils\CustomFuncs.h" />
     <ClInclude Include="utils\Calculator.h" />
+    <ClCompile Include="utils\Collision.cpp" />
     <ClCompile Include="utils\Controller.cpp" />
     <ClCompile Include="utils\Debugger.cpp" />
     <ClCompile Include="vendors\stb_image\stb_image.cpp" />
