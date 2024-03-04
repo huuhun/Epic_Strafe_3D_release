@@ -7,9 +7,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <stb_image/stb_image.h>
 
-#include "utils/Settings.h"
-#include "utils/Calculator.h"
-#include "utils/Controller.h"
+#include "Settings.h"
+#include "Calculator.h"
+#include "Controller.h"
+#include "Spawner.h"
 
 #include "Window.h"
 #include "Shader.h"
@@ -23,6 +24,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Collision.h"
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -199,27 +201,9 @@ int main(int argc, char* args[]) {
 
 		vao.Bind();
 
-		{
-			Model playerCubeModel;
-			playerCubeModel.setTranslation(/*playerCubePos **/ camera.Position);
-			float angle{ 0.0f };
-			playerCubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
-			shader.setMat4("model", playerCubeModel.getModel());
-			//renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
-		}
-
-		for( unsigned i = 0; i < ( sizeof(cubePos) / sizeof(cubePos[ 0 ]) ); i++ )
-		{
-			if( camera.Position.z > cubePos[ i ].z - 5.0f   )
-			{
-				Model cubeModel;
-				cubeModel.setTranslation(cubePos[ i ]);
-				float angle{ 20.0f * (float)i };
-				cubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
-				shader.setMat4("model", cubeModel.getModel());
-				renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
-			}
-		}
+		moveCameraHitbox(camera, shader);
+		spawnObstacles(cubePos, sizeof(cubePos) / sizeof(cubePos[ 0 ]), 
+			cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5), camera, shader, renderer);
 
 		vao.Unbind();
 

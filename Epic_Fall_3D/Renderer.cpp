@@ -32,6 +32,7 @@ void Renderer::DrawArrays(const GLuint& elementsAmount) const {
 
 	//glDrawElements just says hey u know using that index buffer access the vertex buffer and call the shader program
 	//on all those vertices indivially to actually get it to draw and rasterize our object onto the screens
+	//elementsAmount stand for amount of vertices
 	glDrawArrays(GL_TRIANGLES, 0, elementsAmount);
 }
 

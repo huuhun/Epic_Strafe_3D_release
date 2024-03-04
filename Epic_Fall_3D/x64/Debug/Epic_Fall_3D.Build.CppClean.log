@@ -5,7 +5,6 @@ d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\vertexbuffer.obj
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\vertexarray.obj
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\stb_image.obj
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\debugger.obj
-d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\controller.obj
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\transform.obj
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\texture.obj
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\shader.obj
@@ -13,10 +12,13 @@ d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\renderer.obj
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\model.obj
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\indexbuffer.obj
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\application.obj
+d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\controller.obj
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\glad.obj
-d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\epic_fall_3d.ilk
+d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\collision.obj
 d:\projects\epic_fall\epic_fall_3d\x64\debug\epic_fall_3d.exe
+d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\epic_fall_3d.ilk
 d:\projects\epic_fall\epic_fall_3d\x64\debug\epic_fall_3d.pdb
+d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\spawner.obj
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\epic_fall_3d.tlog\cl.command.1.tlog
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\epic_fall_3d.tlog\cl.items.tlog
 d:\projects\epic_fall\epic_fall_3d\epic_fall_3d\x64\debug\epic_fall_3d.tlog\cl.read.1.tlog
