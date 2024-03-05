@@ -17,9 +17,9 @@ std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount)
 	return cubePos;
 }
 
-glm::vec3 spawnBoundary(const unsigned& posAmount, const float& x, const float& y)
+glm::vec3 spawnBoundary(const float& x, const float& y, const float& z)
 {
-	glm::vec3 cubePos = { glm::vec3(x, y, 0.0f), };
+	glm::vec3 cubePos = { glm::vec3(x, y, z), };
 	return cubePos;
 
 }

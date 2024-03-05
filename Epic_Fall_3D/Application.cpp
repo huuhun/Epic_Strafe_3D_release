@@ -111,57 +111,57 @@ int main(int argc, char* args[]) {
 	};
 
 	float boundaryVertices[] = {
-	//Face 5 (right inside):
-	-10.0f, -10.0f, -0.3f,  0.0f, 0.0f,
-	 10.0f, -10.0f, -0.3f,  1.0f, 0.0f,
-	 10.0f,  10.0f, -0.3f,  1.0f, 1.0f,
-	 10.0f,  10.0f, -0.3f,  1.0f, 1.0f,
-	-10.0f,  10.0f, -0.3f,  0.0f, 1.0f,
-	-10.0f, -10.0f, -0.3f,  0.0f, 0.0f,
+		// Front face:
+	-2.0f, -0.5f, -0.5f, 0.0f, 0.0f,
+	 2.0f, -0.5f, -0.5f, 1.0f, 0.0f,
+	 2.0f,  0.5f, -0.5f, 1.0f, 1.0f,
+	 2.0f,  0.5f, -0.5f, 1.0f, 1.0f,
+	-2.0f,  0.5f, -0.5f, 0.0f, 1.0f,
+	-2.0f, -0.5f, -0.5f, 0.0f, 0.0f,
 
-	////Face 2 (left outside):
-	//-10.0f, -10.0f,  0.3f,  0.0f, 0.0f,
-	// 10.0f, -10.0f,  0.3f,  1.0f, 0.0f,
-	// 10.0f,  10.0f,  0.3f,  1.0f, 1.0f,
-	// 10.0f,  10.0f,  0.3f,  1.0f, 1.0f,
-	//-10.0f,  10.0f,  0.3f,  0.0f, 1.0f,
-	//-10.0f, -10.0f,  0.3f,  0.0f, 0.0f,
-
-	////Face 3 (back) :
-	//-0.5f,  10.0f,  0.3f,  1.0f, 0.0f,
-	//-0.5f,  10.0f, -0.3f,  1.0f, 1.0f,
-	//-0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
-	//-0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
-	//-0.5f, -10.0f,  0.3f,  0.0f, 0.0f,
-	//-0.5f,  10.0f,  0.3f,  1.0f, 0.0f,
-
-	////Face 4 ():
-	// 0.5f,  10.0f,  0.3f,  1.0f, 0.0f,
-	// 0.5f,  10.0f, -0.3f,  1.0f, 1.0f,
-	// 0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
-	// 0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
-	// 0.5f, -10.0f,  0.3f,  0.0f, 0.0f,
-	// 0.5f,  10.0f,  0.3f,  1.0f, 0.0f,
-
-	// //Face 1 (bottom):
-	//-0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
-	// 0.5f, -10.0f, -0.3f,  1.0f, 1.0f,
-	// 0.5f, -10.0f,  0.3f,  1.0f, 0.0f,
-	// 0.5f, -10.0f,  0.3f,  1.0f, 0.0f,
-	//-0.5f, -10.0f,  0.3f,  0.0f, 0.0f,
-	//-0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
-
-	////Face 6 (top):
-	//-10.0f,  10.0f, -0.3f,  0.0f, 1.0f,
-	// 10.0f,  10.0f, -0.3f,  1.0f, 1.0f,
-	// 10.0f,  10.0f,  0.3f,  1.0f, 0.0f,
-	// 10.0f,  10.0f,  0.3f,  1.0f, 0.0f,
-	//-10.0f,  10.0f,  0.3f,  0.0f, 0.0f,
-	//-10.0f,  10.0f, -0.3f,  0.0f, 1.0f
-	};
+	// Back face
+    -2.0f, -0.5f,  0.5f, 0.0f, 0.0f,
+     2.0f, -0.5f,  0.5f, 1.0f, 0.0f,
+     2.0f,  0.5f,  0.5f, 1.0f, 1.0f,
+     2.0f,  0.5f,  0.5f, 1.0f, 1.0f,
+    -2.0f,  0.5f,  0.5f, 0.0f, 1.0f,
+    -2.0f, -0.5f,  0.5f, 0.0f, 0.0f,
+    
+    // Left face
+    -2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -2.0f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -2.0f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+    
+    // Right face
+    2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+    2.0f,  0.5f, -0.5f,  1.0f, 1.0f,
+    2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+    2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+    2.0f, -0.5f,  0.5f,  0.0f, 0.0f,
+    2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+    
+    // Bottom face
+    -2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+     2.0f, -0.5f, -0.5f,  1.0f, 1.0f,
+     2.0f, -0.5f,  0.5f,  1.0f, 0.0f,
+     2.0f, -0.5f,  0.5f,  1.0f, 0.0f,
+    -2.0f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+    
+    // Top face
+    -2.0f,  0.5f, -0.5f,  0.0f, 1.0f,
+     2.0f,  0.5f, -0.5f,  1.0f, 1.0f,
+     2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+     2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -2.0f,  0.5f,  0.5f,  0.0f, 0.0f,
+    -2.0f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
 
 	std::vector<glm::vec3> cubePos = spawnObstacles(40);
-	glm::vec3 leftBoundaryPos = spawnBoundary(4, -5.5f, 2.3f);
+	glm::vec3 leftBoundaryPos = spawnBoundary(-5.0f, 5.0f, 2.3f);
 
 	/*unsigned indices[] = {
 		0, 1, 3,
@@ -229,8 +229,13 @@ int main(int argc, char* args[]) {
 		processInput(window, deltaTime, camera);
 
 		for( int i = 0; i < cubePos.size(); ++i )
-			if( checkCollision(/*playerCubePos */ camera.Position, cubePos[ i ]) )
+			if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
 				std::cout << "Collision detected between the player cube and cube " << i << std::endl;
+
+		if( checkCollision(leftBoundaryPos, camera.Position) )
+		{
+			std::cout << "Collision detected between the player cube and cube ssad" << std::endl;
+		}
 
 		renderer.Clear();
 
@@ -256,7 +261,7 @@ int main(int argc, char* args[]) {
 		vao2.Bind();
 		shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
 		reallocateLeftBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-							camera, shader, renderer);
+							   camera, shader, renderer);
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);

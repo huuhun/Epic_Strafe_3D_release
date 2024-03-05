@@ -13,7 +13,7 @@
 
 std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount);
 
-glm::vec3 spawnBoundary(const unsigned& posAmount, const float& x, const float& y);
+glm::vec3 spawnBoundary(const float& x, const float& y, const float& z);
 
 void moveCameraHitbox(Camera& camera, Shader& shader);
 
