@@ -160,10 +160,8 @@ int main(int argc, char* args[]) {
 	-0.5f,  0.5f, -0.3f,  0.0f, 1.0f
 	};
 
-	//glm::vec3 playerCubePos{ 0.0f, 0.0f, 3.0f };
-
 	std::vector<glm::vec3> cubePos = spawnObstacles(40);
-	std::vector<glm::vec3> boundaryPos = spawnObstacles(30);
+	std::vector<glm::vec3> boundaryPos = spawnObstacles(4);
 
 	/*unsigned indices[] = {
 		0, 1, 3,
