@@ -13,6 +13,10 @@
 
 std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount);
 
+glm::vec3 spawnBoundary(const unsigned& posAmount, const float& x, const float& y);
+
 void moveCameraHitbox(Camera& camera, Shader& shader);
 
 void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer);
+
+void reallocateLeftBoundary(glm::vec3& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer);

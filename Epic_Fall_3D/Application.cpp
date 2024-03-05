@@ -111,57 +111,57 @@ int main(int argc, char* args[]) {
 	};
 
 	float boundaryVertices[] = {
-	//Face 5 (left side):
-	-0.5f, -0.5f, -0.3f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.3f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.3f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.3f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.3f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.3f,  0.0f, 0.0f,
+	//Face 5 (right inside):
+	-10.0f, -10.0f, -0.3f,  0.0f, 0.0f,
+	 10.0f, -10.0f, -0.3f,  1.0f, 0.0f,
+	 10.0f,  10.0f, -0.3f,  1.0f, 1.0f,
+	 10.0f,  10.0f, -0.3f,  1.0f, 1.0f,
+	-10.0f,  10.0f, -0.3f,  0.0f, 1.0f,
+	-10.0f, -10.0f, -0.3f,  0.0f, 0.0f,
 
-	//Face 2 (right side):
-	-0.5f, -0.5f,  0.3f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.3f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.3f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.3f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.3f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.3f,  0.0f, 0.0f,
+	////Face 2 (left outside):
+	//-10.0f, -10.0f,  0.3f,  0.0f, 0.0f,
+	// 10.0f, -10.0f,  0.3f,  1.0f, 0.0f,
+	// 10.0f,  10.0f,  0.3f,  1.0f, 1.0f,
+	// 10.0f,  10.0f,  0.3f,  1.0f, 1.0f,
+	//-10.0f,  10.0f,  0.3f,  0.0f, 1.0f,
+	//-10.0f, -10.0f,  0.3f,  0.0f, 0.0f,
 
-	//Face 3 (bottom) :
-	-0.5f,  0.5f,  0.3f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.3f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.3f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.3f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.3f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.3f,  1.0f, 0.0f,
+	////Face 3 (back) :
+	//-0.5f,  10.0f,  0.3f,  1.0f, 0.0f,
+	//-0.5f,  10.0f, -0.3f,  1.0f, 1.0f,
+	//-0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
+	//-0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
+	//-0.5f, -10.0f,  0.3f,  0.0f, 0.0f,
+	//-0.5f,  10.0f,  0.3f,  1.0f, 0.0f,
 
-	//Face 4 (top):
-	 0.5f,  0.5f,  0.3f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.3f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.3f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.3f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.3f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.3f,  1.0f, 0.0f,
+	////Face 4 ():
+	// 0.5f,  10.0f,  0.3f,  1.0f, 0.0f,
+	// 0.5f,  10.0f, -0.3f,  1.0f, 1.0f,
+	// 0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
+	// 0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
+	// 0.5f, -10.0f,  0.3f,  0.0f, 0.0f,
+	// 0.5f,  10.0f,  0.3f,  1.0f, 0.0f,
 
-	 //Face 1 (back):
-	-0.5f, -0.5f, -0.3f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.3f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.3f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.3f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.3f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.3f,  0.0f, 1.0f,
+	// //Face 1 (bottom):
+	//-0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
+	// 0.5f, -10.0f, -0.3f,  1.0f, 1.0f,
+	// 0.5f, -10.0f,  0.3f,  1.0f, 0.0f,
+	// 0.5f, -10.0f,  0.3f,  1.0f, 0.0f,
+	//-0.5f, -10.0f,  0.3f,  0.0f, 0.0f,
+	//-0.5f, -10.0f, -0.3f,  0.0f, 1.0f,
 
-	//Face 6 (front):
-	-0.5f,  0.5f, -0.3f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.3f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.3f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.3f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.3f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.3f,  0.0f, 1.0f
+	////Face 6 (top):
+	//-10.0f,  10.0f, -0.3f,  0.0f, 1.0f,
+	// 10.0f,  10.0f, -0.3f,  1.0f, 1.0f,
+	// 10.0f,  10.0f,  0.3f,  1.0f, 0.0f,
+	// 10.0f,  10.0f,  0.3f,  1.0f, 0.0f,
+	//-10.0f,  10.0f,  0.3f,  0.0f, 0.0f,
+	//-10.0f,  10.0f, -0.3f,  0.0f, 1.0f
 	};
 
 	std::vector<glm::vec3> cubePos = spawnObstacles(40);
-	std::vector<glm::vec3> boundaryPos = spawnObstacles(4);
+	glm::vec3 leftBoundaryPos = spawnBoundary(4, -5.5f, 2.3f);
 
 	/*unsigned indices[] = {
 		0, 1, 3,
@@ -255,7 +255,7 @@ int main(int argc, char* args[]) {
 
 		vao2.Bind();
 		shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
-		reallocateObstacles(boundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+		reallocateLeftBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 							camera, shader, renderer);
 
 		glfwPollEvents();
