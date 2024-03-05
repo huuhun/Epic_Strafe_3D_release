@@ -26,6 +26,8 @@ void spawnObstacles(glm::vec3 cubePos[], const unsigned& cubePosAmount, const un
 		else
 		{
 			cubePos[ i ].z += -40.0f;
+			cubePos[ i ].x = getRandomNum(-5.0f, 5.0f);
+			cubePos[ i ].y = getRandomNum(-5.0f, 5.0f);
 		}
 	}
 

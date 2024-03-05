@@ -166,6 +166,7 @@
     <ClCompile Include="Transform.cpp" />
     <ClInclude Include="utils\CustomFuncs.h" />
     <ClInclude Include="utils\Calculator.h" />
+    <ClCompile Include="utils\Calculator.cpp" />
     <ClCompile Include="utils\Collision.cpp" />
     <ClCompile Include="utils\Controller.cpp" />
     <ClCompile Include="utils\Debugger.cpp" />

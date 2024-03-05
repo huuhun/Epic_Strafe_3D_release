@@ -16,6 +16,7 @@ bool checkCollision(const glm::vec3& pos1, const glm::vec3& pos2)
     bool collisionY = min1.y < max2.y && max1.y > min2.y;
     bool collisionZ = min1.z < max2.z && max1.z > min2.z;
 
+
     // Check if there is a collision in all three axes
     return collisionX && collisionY && collisionZ;
 }

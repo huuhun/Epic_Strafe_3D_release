@@ -179,7 +179,7 @@ int main(int argc, char* args[]) {
 		lastFrame = currentFrame;
 
 		processInput(window, deltaTime, camera);
-		std::cout << camera.Position.z << "\n";
+		//std::cout << camera.Position.z << "\n";
 
 		for( int i = 0; i < sizeof(cubePos) / sizeof(cubePos[ 0 ]); ++i )
 			if( checkCollision(/*playerCubePos * */camera.Position, cubePos[ i ]) )
@@ -202,7 +202,7 @@ int main(int argc, char* args[]) {
 
 		moveCameraHitbox(camera, shader);
 		spawnObstacles(cubePos, sizeof(cubePos) / sizeof(cubePos[ 0 ]), 
-			cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5), camera, shader, renderer);
+			calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5), camera, shader, renderer);
 
 		vao.Unbind();
 
