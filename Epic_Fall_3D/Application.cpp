@@ -66,7 +66,7 @@ int main(int argc, char* args[]) {
 	//  -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
 	//};
 
-	float vertices[] = {
+	float cubeVertices[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
 	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -110,37 +110,67 @@ int main(int argc, char* args[]) {
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
-	//glm::vec3 playerCubePos{ 0.8f,  0.5f,  0.0f }; //ur cube
-	glm::vec3 playerCubePos{ 0.0f, 0.0f, 3.0f };
-	// world space positions of our cubes
-	/*glm::vec3 cubePos[] = {
-		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(0.0f,  0.0f,  1.0f),
-		glm::vec3(1.5f,  0.2f, -1.5f),
-		glm::vec3(-1.3f,  1.0f, -1.5f),
-		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f,  2.0f, -2.5f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f,  3.0f, -7.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.0f,  5.0f, -15.0f),
-	};*/
+	float boundaryVertices[] = {
+	-0.3f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 0.3f, -0.5f, -0.5f,  1.0f, 0.0f,
+	 0.3f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.3f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.3f,  0.5f, -0.5f,  0.0f, 1.0f,
+	-0.3f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	-0.3f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.3f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.3f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.3f,  0.5f,  0.5f,  1.0f, 1.0f,
+	-0.3f,  0.5f,  0.5f,  0.0f, 1.0f,
+	-0.3f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	-0.3f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.3f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.3f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.3f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.3f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.3f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 0.3f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.3f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.3f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.3f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.3f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.3f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	-0.3f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.3f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 0.3f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.3f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.3f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.3f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	-0.3f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 0.3f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.3f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.3f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.3f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-0.3f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
+
+	//glm::vec3 playerCubePos{ 0.0f, 0.0f, 3.0f };
+
 	std::vector<glm::vec3> cubePos = spawnObstacles(40);
+	std::vector<glm::vec3> boundaryPos = spawnObstacles(4);
 
 	/*unsigned indices[] = {
 		0, 1, 3,
 		1, 2, 3
 	};*/
 
-	VertexArray vao;
-	VertexBuffer vbo;
+	VertexArray vao1, vao2;
+	VertexBuffer vbo1, vbo2;
 	//IndexBuffer ebo;
 
-	vao.Bind();
-
-	vbo.Bind();
-	vbo.BufferData(vertices, sizeof(vertices) / sizeof(vertices[ 0 ]));
+	vao1.Bind();
+	vbo1.Bind();
+	vbo1.BufferData(cubeVertices, sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]));
 
 	// position attribute
 	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
@@ -154,8 +184,18 @@ int main(int argc, char* args[]) {
 	//ebo.Bind();
 	//ebo.BufferData(indices, sizeof(indices) / sizeof(indices[ 0 ]));
 
-	vbo.Unbind();
-	vao.Unbind();
+	vbo1.Unbind();
+	vao1.Unbind();
+
+	vao2.Bind();
+	vbo2.Bind();
+
+	vbo2.BufferData(boundaryVertices, sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]));
+	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
+	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
+
+	vbo2.Unbind();
+	vao2.Unbind();
 
 	enableGLDebugContext();
 
@@ -163,10 +203,12 @@ int main(int argc, char* args[]) {
 
 	Texture brickWallTexture("res/textures/brick-wall.png");
 	Texture faceTexture("res/textures/face.png");
+	Texture boundaryTexture("res/textures/boundary.png");
 
 	shader.Use();
 	shader.setInt("brickWallTexture", 0);
 	shader.setInt("faceTexture", 1);
+	shader.setInt("boundaryTexture", 2);
 
 	Renderer renderer;
 	renderer.setClearColor();
@@ -181,32 +223,36 @@ int main(int argc, char* args[]) {
 		lastFrame = currentFrame;
 
 		processInput(window, deltaTime, camera);
-		//std::cout << camera.Position.z << "\n";
 
-		for( int i = 0; i < sizeof(cubePos) / sizeof(cubePos[ 0 ]); ++i )
-			if( checkCollision(/*playerCubePos * */camera.Position, cubePos[ i ]) )
+		for( int i = 0; i < cubePos.size(); ++i )
+			if( checkCollision(/*playerCubePos */ camera.Position, cubePos[ i ]) )
 				std::cout << "Collision detected between the player cube and cube " << i << std::endl;
 
 		renderer.Clear();
 
 		brickWallTexture.ActiveTexture(GL_TEXTURE0);
 		faceTexture.ActiveTexture(GL_TEXTURE1);
+		boundaryTexture.ActiveTexture(GL_TEXTURE2);
 
 		shader.Use();
 		transformation.setProjection(camera.Zoom,
-			(float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 50.0f);	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+									 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 50.0f);
 		shader.setMat4("projection", transformation.getProjection());
 		// create transformations
 		transformation.setCameraView(camera.GetViewMatrix());
 		shader.setMat4("view", transformation.getView());
 
-		vao.Bind();
-
+		vao1.Bind();
+		shader.setInt("renderBoundary", 0);//set flag to 0 to render cube
 		moveCameraHitbox(camera, shader);
-		reallocateObstacles(cubePos, calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5),
-			camera, shader, renderer);
+		reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+							camera, shader, renderer);
+		vao1.Unbind();
 
-		vao.Unbind();
+		vao2.Bind();
+		shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
+		reallocateObstacles(boundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							camera, shader, renderer);
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
