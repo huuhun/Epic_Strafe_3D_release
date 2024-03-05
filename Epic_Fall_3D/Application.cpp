@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <glad/glad.h>
 #include <glfw3.h>
 
@@ -112,7 +113,7 @@ int main(int argc, char* args[]) {
 	//glm::vec3 playerCubePos{ 0.8f,  0.5f,  0.0f }; //ur cube
 	glm::vec3 playerCubePos{ 0.0f, 0.0f, 3.0f };
 	// world space positions of our cubes
-	glm::vec3 cubePos[] = {
+	/*glm::vec3 cubePos[] = {
 		glm::vec3(0.0f,  0.0f,  0.0f),
 		glm::vec3(0.0f,  0.0f,  1.0f),
 		glm::vec3(1.5f,  0.2f, -1.5f),
@@ -124,7 +125,8 @@ int main(int argc, char* args[]) {
 		glm::vec3(-1.7f,  3.0f, -7.5f),
 		glm::vec3(-3.8f, -2.0f, -12.3f),
 		glm::vec3(2.0f,  5.0f, -15.0f),
-	};
+	};*/
+	std::vector<glm::vec3> cubePos;
 
 	/*unsigned indices[] = {
 		0, 1, 3,

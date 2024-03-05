@@ -10,9 +10,9 @@ void moveCameraHitbox(Camera& camera, Shader& shader)
 	//renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
 }
 
-void spawnObstacles(glm::vec3 cubePos[], const unsigned& cubePosAmount, const unsigned& verticesAmount ,Camera& camera, Shader& shader, Renderer& renderer)
+void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& verticesAmount ,Camera& camera, Shader& shader, Renderer& renderer)
 {
-	for( unsigned i = 0; i < ( cubePosAmount ); i++ )
+	for( unsigned i = 0; i < cubePos.size(); i++ )
 	{
 		if( camera.Position.z > cubePos[ i ].z - 5.0f )
 		{
