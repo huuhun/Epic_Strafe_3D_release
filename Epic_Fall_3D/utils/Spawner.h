@@ -11,7 +11,7 @@
 #include "../Shader.h"
 #include "../Renderer.h"
 
-void spawnObstacles();
+std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount);
 
 void moveCameraHitbox(Camera& camera, Shader& shader);
 

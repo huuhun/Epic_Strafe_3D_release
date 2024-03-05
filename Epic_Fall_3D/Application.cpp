@@ -126,7 +126,7 @@ int main(int argc, char* args[]) {
 		glm::vec3(-3.8f, -2.0f, -12.3f),
 		glm::vec3(2.0f,  5.0f, -15.0f),
 	};*/
-	std::vector<glm::vec3> cubePos;
+	std::vector<glm::vec3> cubePos = spawnObstacles(40);
 
 	/*unsigned indices[] = {
 		0, 1, 3,
@@ -194,7 +194,7 @@ int main(int argc, char* args[]) {
 
 		shader.Use();
 		transformation.setProjection(camera.Zoom,
-			(float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+			(float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 50.0f);	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 		shader.setMat4("projection", transformation.getProjection());
 		// create transformations
 		transformation.setCameraView(camera.GetViewMatrix());
@@ -203,8 +203,8 @@ int main(int argc, char* args[]) {
 		vao.Bind();
 
 		moveCameraHitbox(camera, shader);
-		spawnObstacles(cubePos, sizeof(cubePos) / sizeof(cubePos[ 0 ]), 
-			calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5), camera, shader, renderer);
+		reallocateObstacles(cubePos, calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5),
+			camera, shader, renderer);
 
 		vao.Unbind();
 
