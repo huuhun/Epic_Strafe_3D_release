@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "Collision.h"
 bool checkCollision(const glm::vec3& pos1, const glm::vec3& pos2)
 {
@@ -16,43 +17,59 @@ bool checkCollision(const glm::vec3& pos1, const glm::vec3& pos2)
 	bool collisionY = min1.y < max2.y && max1.y > min2.y;
 	bool collisionZ = min1.z < max2.z && max1.z > min2.z;
 
-
 	// Check if there is a collision in all three axes
 	return collisionX && collisionY && collisionZ;
 }
 
-bool isCollidingWithPlane(const float cubeVertices[], int numVertices, float planeConstant) {
-	// Assuming cubeVertices format is: x, y, z, textureX, textureY
-	const int vertexSize = 5; // Assuming 5 values per vertex
+bool checkBoundaryCollision(const glm::vec3& cameraPosition, const float boundaryVertices[]) {
+    for( int i = 0; i < 36; i += 18 ) {
+        float minX = boundaryVertices[ i ];
+        float maxX = boundaryVertices[ i ];
+        float minY = boundaryVertices[ i + 1 ];
+        float maxY = boundaryVertices[ i + 1 ];
+        float minZ = boundaryVertices[ i + 2 ];
+        float maxZ = boundaryVertices[ i + 2 ];
 
-	// Calculate the center of the cube
-	float centerX = 0.0f, centerY = 0.0f, centerZ = 0.0f;
-	for( int i = 0; i < numVertices; i += vertexSize ) {
-		centerX += cubeVertices[ i ];
-		centerY += cubeVertices[ i + 1 ];
-		centerZ += cubeVertices[ i + 2 ];
-	}
-	centerX /= ( numVertices / vertexSize );
-	centerY /= ( numVertices / vertexSize );
-	centerZ /= ( numVertices / vertexSize );
+        // Calculate the bounding box for each face
+        for( int j = i + 3; j < i + 18; j += 3 ) {
+            float x = boundaryVertices[ j ];
+            float y = boundaryVertices[ j + 1 ];
+            float z = boundaryVertices[ j + 2 ];
 
-	// Check each vertex against the plane
-	for( int i = 0; i < numVertices; i += vertexSize ) {
-		float x = cubeVertices[ i ];
-		float y = cubeVertices[ i + 1 ];
-		float z = cubeVertices[ i + 2 ];
+            minX = std::min(minX, x);
+            maxX = std::max(maxX, x);
+            minY = std::min(minY, y);
+            maxY = std::max(maxY, y);
+            minZ = std::min(minZ, z);
+            maxZ = std::max(maxZ, z);
+        }
 
-		// Calculate the signed distance from the plane
-		float distance = x + y + planeConstant;
+        // Check if the camera position is inside the bounding box of the current face
+        if( cameraPosition.x >= minX && cameraPosition.x <= maxX &&
+           cameraPosition.y >= minY && cameraPosition.y <= maxY &&
+           cameraPosition.z >= minZ && cameraPosition.z <= maxZ ) {
+            std::cout << "Camera inside the boundary." << std::endl;
+            return true;
+        }
+    }
 
-		// Check if the cube is on the opposite side of the plane from its center
-		if( ( distance > 0.0f && centerZ <= planeConstant ) || ( distance < 0.0f && centerZ >= planeConstant ) ) {
-			std::cout << "Collision detected!" << std::endl;
-			return true;
-		}
-	}
-
-	// No collision detected
-	std::cout << "No collision." << std::endl;
-	return false;
+    std::cout << "Camera outside the boundary." << std::endl;
+    return false;
 }
+
+// Function to check if the camera is colliding with any of the cubes
+bool isCameraColliding(const glm::vec3& cameraPosition, const std::vector<glm::vec3>& cubePositions, const glm::vec3& cubeSize) {
+    for( const auto& cubePos : cubePositions ) {
+        if( cameraPosition.x >= cubePos.x - cubeSize.x && cameraPosition.x <= cubePos.x + cubeSize.x &&
+           cameraPosition.y >= cubePos.y - cubeSize.y && cameraPosition.y <= cubePos.y + cubeSize.y &&
+           cameraPosition.z >= cubePos.z - cubeSize.z && cameraPosition.z <= cubePos.z + cubeSize.z ) {
+            std::cout << "Camera colliding with cube at (" << cubePos.x << ", " << cubePos.y << ", " << cubePos.z << ")\n";
+            return true;
+        }
+    }
+
+    std::cout << "Camera not colliding with any cubes.\n";
+    return false;
+}
+
+

@@ -23,3 +23,22 @@ float getRandomNum(const float& max, const float& min)
 
     return randomNumber;
 }
+
+glm::vec3 calculateCubeSize(const float boundaryVertices[])
+{
+    glm::vec3 minCoords(boundaryVertices[ 0 ], boundaryVertices[ 1 ], boundaryVertices[ 2 ]);
+    glm::vec3 maxCoords(boundaryVertices[ 0 ], boundaryVertices[ 1 ], boundaryVertices[ 2 ]);
+
+    // Iterate through all vertices to find minimum and maximum coordinates
+    for( int i = 3; i < 36; i += 3 ) {
+        glm::vec3 vertex(boundaryVertices[ i ], boundaryVertices[ i + 1 ], boundaryVertices[ i + 2 ]);
+
+        minCoords = glm::min(minCoords, vertex);
+        maxCoords = glm::max(maxCoords, vertex);
+    }
+
+    // Calculate the size of the cube
+    glm::vec3 cubeSize = maxCoords - minCoords;
+
+    return cubeSize;
+}

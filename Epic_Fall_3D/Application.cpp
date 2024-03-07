@@ -120,45 +120,45 @@ int main(int argc, char* args[]) {
 	-2.0f, -0.5f, -0.5f, 0.0f, 0.0f,
 
 	// Back face
-    -2.0f, -0.5f,  0.5f, 0.0f, 0.0f,
-     2.0f, -0.5f,  0.5f, 1.0f, 0.0f,
-     2.0f,  0.5f,  0.5f, 1.0f, 1.0f,
-     2.0f,  0.5f,  0.5f, 1.0f, 1.0f,
-    -2.0f,  0.5f,  0.5f, 0.0f, 1.0f,
-    -2.0f, -0.5f,  0.5f, 0.0f, 0.0f,
-    
-    // Left face
-    -2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -2.0f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -2.0f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
-    
-    // Right face
-    2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
-    2.0f,  0.5f, -0.5f,  1.0f, 1.0f,
-    2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
-    2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
-    2.0f, -0.5f,  0.5f,  0.0f, 0.0f,
-    2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
-    
-    // Bottom face
-    -2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
-     2.0f, -0.5f, -0.5f,  1.0f, 1.0f,
-     2.0f, -0.5f,  0.5f,  1.0f, 0.0f,
-     2.0f, -0.5f,  0.5f,  1.0f, 0.0f,
-    -2.0f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
-    
-    // Top face
-    -2.0f,  0.5f, -0.5f,  0.0f, 1.0f,
-     2.0f,  0.5f, -0.5f,  1.0f, 1.0f,
-     2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
-     2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -2.0f,  0.5f,  0.5f,  0.0f, 0.0f,
-    -2.0f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
+	-2.0f, -0.5f,  0.5f, 0.0f, 0.0f,
+	 2.0f, -0.5f,  0.5f, 1.0f, 0.0f,
+	 2.0f,  0.5f,  0.5f, 1.0f, 1.0f,
+	 2.0f,  0.5f,  0.5f, 1.0f, 1.0f,
+	-2.0f,  0.5f,  0.5f, 0.0f, 1.0f,
+	-2.0f, -0.5f,  0.5f, 0.0f, 0.0f,
+
+	// Left face
+	-2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-2.0f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-2.0f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	// Right face
+	2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+	2.0f,  0.5f, -0.5f,  1.0f, 1.0f,
+	2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+	2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+	2.0f, -0.5f,  0.5f,  0.0f, 0.0f,
+	2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	// Bottom face
+	-2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 2.0f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 2.0f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 2.0f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-2.0f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-2.0f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	// Top face
+	-2.0f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 2.0f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 2.0f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-2.0f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-2.0f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
 
 	std::vector<glm::vec3> cubePos = spawnObstacles(40);
 	glm::vec3 leftBoundaryPos = spawnBoundary(-5.0f, 5.0f, 2.3f);
@@ -228,13 +228,11 @@ int main(int argc, char* args[]) {
 
 		processInput(window, deltaTime, camera);
 
-		for( int i = 0; i < cubePos.size(); ++i )
-			if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
-				std::cout << "Collision detected between the player cube and cube " << i << std::endl;
+		isCameraColliding(camera.Position, cubePos, calculateCubeSize(boundaryVertices));
 
-		if( checkCollision(leftBoundaryPos, camera.Position) )
-		{
-			std::cout << "Collision detected between the player cube and cube ssad" << std::endl;
+		for( int i = 0; i < cubePos.size(); ++i ) {
+			if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
+				std::cout << "Collision detected between the camera and cube " << i << std::endl;
 		}
 
 		renderer.Clear();
