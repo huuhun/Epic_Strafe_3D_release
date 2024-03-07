@@ -42,3 +42,4 @@ glm::vec3 calculateCubeSize(const float boundaryVertices[])
 
     return cubeSize;
 }
+
