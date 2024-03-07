@@ -19,8 +19,8 @@ std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount)
 }
 
 void spawnBoundariesVector(std::vector<glm::vec3>& leftBoundaryPos,
-						   std::vector<glm::vec3>& rightBoundaryPos, 
-						   std::vector<glm::vec3>& topBoundaryPos, 
+						   std::vector<glm::vec3>& rightBoundaryPos,
+						   std::vector<glm::vec3>& topBoundaryPos,
 						   std::vector<glm::vec3>& bottomBoundaryPos) {
 
 	for( int i = 0; i < MAX_BOUNDARIES; i++ )
@@ -34,8 +34,9 @@ void spawnBoundariesVector(std::vector<glm::vec3>& leftBoundaryPos,
 		}
 		else
 		{
-			leftBoundaryPos.push_back(spawnBoundary(-5.0f, 5.0f,
-													leftBoundaryPos.at(i - 1).z + 2.3f));
+			leftBoundaryPos.push_back(spawnBoundary(leftBoundaryPos.at(i - 1).x + 2.8f,
+													leftBoundaryPos.at(i - 1).y,
+													leftBoundaryPos.at(i - 1).z - 40.0f));
 
 			rightBoundaryPos.push_back(spawnBoundary(75.0f, 5.0f,
 													 rightBoundaryPos.at(i - 1).z + 7.5f));
@@ -80,29 +81,62 @@ void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& vertic
 			shader.setMat4("model", cubeModel.getModel());
 			renderer.DrawArrays(verticesAmount);
 		}
-		else
+		/*else
 		{
 			cubePos.at(i).z += -60.0f;
 			cubePos.at(i).x = getRandomNum(-5.0f, 5.0f);
 			cubePos.at(i).y = getRandomNum(-5.0f, 5.0f);
-		}
+		}*/
 	}
 
 }
 
-void reallocateBoundary(glm::vec3& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer)
+//if( camera.Position.z > cubePos.z - 5.0f )
+//{
+//	Model cubeModel;
+//	cubeModel.setTranslation(cubePos);
+//	float angle{ 94.0f };
+//	cubeModel.setFixedModelRotation(angle, glm::vec3(0.0f, -1.0f, 0.0f));
+//	shader.setMat4("model", cubeModel.getModel());
+//	renderer.DrawArrays(verticesAmount);
+//}
+//else
+//cubePos.z += -60.0f;
+
+void reallocateBoundary(std::vector<glm::vec3>& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer)
 {
+	glm::vec3 cubeWithLowestZPos{ getLowestZValue(cubePos) };
 
-	if( camera.Position.z > cubePos.z - 5.0f )
+	for( int i = 0; i < cubePos.size(); i++ )
 	{
-		Model cubeModel;
-		cubeModel.setTranslation(cubePos);
-		float angle{ 94.0f };
-		cubeModel.setFixedModelRotation(angle, glm::vec3(0.0f, -1.0f, 0.0f));
-		shader.setMat4("model", cubeModel.getModel());
-		renderer.DrawArrays(verticesAmount);
+		if( camera.Position.z > cubePos.at(i).z - 100.0f ) //render only
+		{
+			Model cubeModel;
+			cubeModel.setTranslation(cubePos.at(i));
+			float angle{ 94.0f };
+			cubeModel.setFixedModelRotation(angle, glm::vec3(0.0f, -1.0f, 0.0f));
+			shader.setMat4("model", cubeModel.getModel());
+			renderer.DrawArrays(verticesAmount);
+		}
+		//else // move the cube way further
+		//{
+		//	cubePos.at(i).z -= 60.f + cubeWithLowestZPos.z;
+		//	std::cout << 60.f + cubeWithLowestZPos.z << "\n";
+		//}
 	}
-	else
-		cubePos.z += -60.0f;
 
+
+}
+
+glm::vec3 getLowestZValue(std::vector<glm::vec3>& cubePos) {
+	float currentLowestZ{ 0.0f };
+	glm::vec3 cubeWithLowestZValue;
+
+	for( int i = 0; i < cubePos.size(); i++ )
+		if( cubePos.at(i).z < currentLowestZ ){
+			currentLowestZ = cubePos.at(i).z;
+			cubeWithLowestZValue = cubePos.at(i);
+		}
+	
+	return cubeWithLowestZValue;
 }

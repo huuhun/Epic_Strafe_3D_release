@@ -13,12 +13,12 @@ float getRandomNum(const float& max, const float& min)
 
     // If the random number is an integer or has one decimal place
     if( std::floor(randomNumber) == randomNumber || std::floor(randomNumber * 10) == ( randomNumber * 10 ) ) {
-        std::cout << "Random number: " << std::fixed << std::setprecision(1) << randomNumber << std::endl;
+        //std::cout << "Random number: " << std::fixed << std::setprecision(1) << randomNumber << std::endl;
     }
     else {
         // Retry if not an integer or has one decimal place
         randomNumber = dis(gen);
-        std::cout << "Random number: " << std::fixed << std::setprecision(1) << randomNumber << std::endl;
+        //std::cout << "Random number: " << std::fixed << std::setprecision(1) << randomNumber << std::endl;
     }
 
     return randomNumber;
