@@ -156,7 +156,10 @@ int main(int argc, char* args[]) {
 	};
 
 	std::vector<glm::vec3> cubePos = spawnObstacles(40);
-	glm::vec3 leftBoundaryPos = spawnBoundary(-5.0f, 5.0f, 2.3f);
+	glm::vec3 leftBoundaryPos   = spawnBoundary(-5.0f, 5.0f, 2.3f);
+	glm::vec3 rightBoundaryPos  = spawnBoundary( 75.0f, 5.0f, 7.5f);
+	glm::vec3 topBoundaryPos    = spawnBoundary( 36.0f, 44.0f, 5.5f);
+	glm::vec3 bottomBoundaryPos = spawnBoundary( 36.0f, -35.0f, 5.5f);
 
 	/*unsigned indices[] = {
 		0, 1, 3,
@@ -254,8 +257,14 @@ int main(int argc, char* args[]) {
 
 		vao2.Bind();
 		shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
-		reallocateLeftBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+		reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 							   camera, shader, renderer);
+		reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+		reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+						   camera, shader, renderer);
+		reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+						   camera, shader, renderer);
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
