@@ -156,32 +156,9 @@ int main(int argc, char* args[]) {
 	};
 
 	std::vector<glm::vec3> cubePos = spawnObstacles(40);
-	std::vector<glm::vec3> leftBoundaryPos;
-	std::vector<glm::vec3> rightBoundaryPos;
-	std::vector<glm::vec3> topBoundaryPos;
-	std::vector<glm::vec3> bottomBoundaryPos;
-	for( int i = 0; i < MAX_BOUNDARIES; i++ )
-	{
-		if( i == 0 )
-		{
-			leftBoundaryPos.push_back(spawnBoundary(-5.0f, 5.0f, 2.3f));
-			rightBoundaryPos.push_back(spawnBoundary(75.0f, 5.0f, 7.5f));
-			topBoundaryPos.push_back(spawnBoundary(75.0f, 5.0f, 7.5f));
-			bottomBoundaryPos.push_back(spawnBoundary(75.0f, 5.0f, 7.5f));
-		}
-		else
-		{
-			leftBoundaryPos.push_back(spawnBoundary( -5.0f, 5.0f,
-													leftBoundaryPos.at(i - 1).z + 2.3f) );
-
-			rightBoundaryPos.push_back(spawnBoundary(75.0f, 5.0f,
-													rightBoundaryPos.at(i - 1).z + 7.5f) );
-
-			
-		}
-		
-	}
-
+	std::vector<glm::vec3> leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos;
+	spawnBoundariesVector(leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos);
+	
 	/*unsigned indices[] = {
 		0, 1, 3,
 		1, 2, 3
@@ -247,8 +224,8 @@ int main(int argc, char* args[]) {
 
 		processInput(window, deltaTime, camera);
 
-		if (checkCollision(camera.Position, leftBoundaryPos, 2.8f))
-			std::cout << "Collision detected between the camera and cube " << std::endl;
+		/*if (checkCollision(camera.Position, leftBoundaryPos, 2.8f))
+			std::cout << "Collision detected between the camera and cube " << std::endl;*/
 
 		for( int i = 0; i < cubePos.size(); ++i ) {
 			if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
@@ -280,12 +257,12 @@ int main(int argc, char* args[]) {
 		shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
 		reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 							   camera, shader, renderer);
-		reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+		/*reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 							   camera, shader, renderer);
 		reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 						   camera, shader, renderer);
 		reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-						   camera, shader, renderer);
+						   camera, shader, renderer);*/
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);

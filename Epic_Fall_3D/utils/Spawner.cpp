@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Settings.h"
 #include "Spawner.h"
 
 std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount)
@@ -15,6 +16,38 @@ std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount)
 		cubePos.push_back(glm::vec3(x, y, z));
 	}
 	return cubePos;
+}
+
+void spawnBoundariesVector(std::vector<glm::vec3>& leftBoundaryPos,
+						   std::vector<glm::vec3>& rightBoundaryPos, 
+						   std::vector<glm::vec3>& topBoundaryPos, 
+						   std::vector<glm::vec3>& bottomBoundaryPos) {
+
+	for( int i = 0; i < MAX_BOUNDARIES; i++ )
+	{
+		if( i == 0 )
+		{
+			leftBoundaryPos.push_back(spawnBoundary(-5.0f, 5.0f, 2.3f));
+			rightBoundaryPos.push_back(spawnBoundary(75.0f, 5.0f, 7.5f));
+			topBoundaryPos.push_back(spawnBoundary(36.0f, 44.0f, 5.5f));
+			bottomBoundaryPos.push_back(spawnBoundary(36.0f, -35.0f, 5.5f));
+		}
+		else
+		{
+			leftBoundaryPos.push_back(spawnBoundary(-5.0f, 5.0f,
+													leftBoundaryPos.at(i - 1).z + 2.3f));
+
+			rightBoundaryPos.push_back(spawnBoundary(75.0f, 5.0f,
+													 rightBoundaryPos.at(i - 1).z + 7.5f));
+
+			topBoundaryPos.push_back(spawnBoundary(36.0f, 44.0f,
+												   rightBoundaryPos.at(i - 1).z + 5.5f));
+
+			bottomBoundaryPos.push_back(spawnBoundary(36.0f, -35.0f,
+													  bottomBoundaryPos.at(i - 1).z + 5.5f));
+		}
+
+	}
 }
 
 glm::vec3 spawnBoundary(const float& x, const float& y, const float& z)
