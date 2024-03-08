@@ -43,3 +43,9 @@ glm::vec3 calculateCubeSize(const float boundaryVertices[])
     return cubeSize;
 }
 
+bool areEqual(float a, float b, float epsilon)
+{
+    return std::fabs(a - b) < epsilon;
+}
+
+

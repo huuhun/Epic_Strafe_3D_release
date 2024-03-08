@@ -1,7 +1,10 @@
 #pragma once
 
+#include <variant>
+
 #include <vector>
 #include <glm/glm.hpp>
+
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Calculator.h"
@@ -24,3 +27,7 @@ void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& vertic
 void reallocateBoundary(std::vector<glm::vec3>& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer);
 
 glm::vec3  getLowestZValue(std::vector<glm::vec3>& cubePos);
+
+glm::vec3 getHighestZValue(std::vector<glm::vec3>& cubePos);
+
+void changeZValueIfItMatch(std::vector<glm::vec3>& vec3Vector, const glm::vec3& minZVec3, const float& newZValue);
