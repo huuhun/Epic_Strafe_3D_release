@@ -1,4 +1,5 @@
 #include <iostream>
+#include <print>
 #include "Settings.h"
 #include "Spawner.h"
 
@@ -111,7 +112,7 @@ void reallocateBoundary(std::vector<glm::vec3>& cubePos, const unsigned& vertice
 
 	for( int i = 0; i < cubePos.size(); i++ )
 	{
-		if( camera.Position.z > cubePos.at(i).z - 30.0f ) //render only
+		if( camera.Position.z > cubePos.at(i).z - 20.0f ) //render only
 		{
 			Model cubeModel;
 			cubeModel.setTranslation(cubePos.at(i));
@@ -122,12 +123,12 @@ void reallocateBoundary(std::vector<glm::vec3>& cubePos, const unsigned& vertice
 		}
 		else // move the cube way further
 		{
-			/*cubePos.at(i) = cubeWithHighestZPos;
-			cubePos.at(i).z += cubeWithLowestZPos.z -2.0f;
-			cubePos.at(i).x += 8.2f;
-			std::cout << cubeWithLowestZPos.z << "\n";*/
-			//glm::vec3 cubeWithHighestZPos{ getHighestZValue(cubePos) };
-			changeZValueIfItMatch(cubePos, cubeWithHighestZPos, cubeWithHighestZPos.z + 30.0f);
+			//cubePos.at(i) = cubeWithHighestZPos;
+			cubePos.at(i).z += cubeWithLowestZPos.z - 0.5f;
+			cubePos.at(i).x = 8.2f;
+			std::cout << cubeWithLowestZPos.z << "\n";
+			/*glm::vec3 cubeWithHighestZPos{ getHighestZValue(cubePos) };
+			changeZValueIfItMatch(cubePos, cubeWithHighestZPos, cubeWithHighestZPos.z + 10.0f);*/
 		}
 	}
 
@@ -136,7 +137,7 @@ void reallocateBoundary(std::vector<glm::vec3>& cubePos, const unsigned& vertice
 
 glm::vec3 getLowestZValue(std::vector<glm::vec3>& cubePos) {
 	float currentLowestZ{ cubePos[0].z};
-	glm::vec3 cubeWithLowestZValue;
+	glm::vec3 cubeWithLowestZValue(0, 0, 0);
 
 	for( int i = 0; i < cubePos.size(); i++ )
 		if( cubePos.at(i).z < currentLowestZ ){
@@ -149,25 +150,29 @@ glm::vec3 getLowestZValue(std::vector<glm::vec3>& cubePos) {
 
 glm::vec3 getHighestZValue(std::vector<glm::vec3>& cubePos) {
 	float currentHighestZ{ cubePos[ 0 ].z };
-	glm::vec3 cubeWithHighestZValue;
+	glm::vec3 cubeWithHighestZValue(0,0,0);
 
-	for( int i = 0; i > cubePos.size(); i++ )
+	for( int i = 0; i < cubePos.size(); i++ ) {
 		if( cubePos.at(i).z < currentHighestZ ) {
 			currentHighestZ = cubePos.at(i).z;
 			cubeWithHighestZValue = cubePos.at(i);
 		}
+	}
 
 	return cubeWithHighestZValue;
 }
 void changeZValueIfItMatch(std::vector<glm::vec3>& cubePos, const glm::vec3& highestZVec3, const float& newZValue) {
 	for( auto& vec3 : cubePos ) {
-		std::cout << "Hey y" << "\n";
 
 		if( areEqual(vec3.z, highestZVec3.z) ) {
 			
 			vec3.z = newZValue;
 			std::cout << vec3.z << "\n";
 		}
+		/*else
+		{
+			std::print("Why?\n");
+		}*/
 
 		//break;
 	}
