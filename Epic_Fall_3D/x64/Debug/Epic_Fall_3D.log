@@ -10,12 +10,11 @@ D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(45,38): warnin
 D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(48,39): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
 D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(115,38): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
 D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(118,40): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(127,15): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(128,15): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(143,18): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(144,32): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(145,38): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(156,18): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(157,33): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
-D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(158,39): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(134,15): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(151,18): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(152,32): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(153,38): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(164,18): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(165,33): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\utils\Spawner.cpp(166,39): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
   Epic_Fall_3D.vcxproj -> D:\projects\epic_fall\Epic_Fall_3D\x64\Debug\Epic_Fall_3D.exe
