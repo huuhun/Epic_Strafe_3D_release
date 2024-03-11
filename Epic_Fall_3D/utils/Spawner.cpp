@@ -27,10 +27,10 @@ void spawnBoundariesVector(std::vector<glm::vec3>& leftBoundaryPos,
 	{
 		if( i == 0 )
 		{
-			leftBoundaryPos.push_back(spawnBoundary(-5.0f, 5.0f, 2.3f));
-			rightBoundaryPos.push_back(spawnBoundary(75.0f, 5.0f, 2.3f));
-			topBoundaryPos.push_back(spawnBoundary(36.0f, 44.0f, 5.5f));
-			bottomBoundaryPos.push_back(spawnBoundary(36.0f, -35.0f, 5.5f));
+			leftBoundaryPos.push_back(spawnBoundary(-40.0f, 5.0f, 2.3f));
+			rightBoundaryPos.push_back(spawnBoundary(40.0f, 5.0f, 2.3f));
+			topBoundaryPos.push_back(spawnBoundary(0.0f, 44.0f, 5.5f));
+			bottomBoundaryPos.push_back(spawnBoundary(0.0f, -35.0f, 5.5f));
 		}
 		else
 		{
@@ -58,7 +58,6 @@ glm::vec3 spawnBoundary(const float& x, const float& y, const float& z)
 {
 	glm::vec3 cubePos = { glm::vec3(x, y, z), };
 	return cubePos;
-
 }
 
 void moveCameraHitbox(Camera& camera, Shader& shader)
