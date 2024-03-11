@@ -155,7 +155,7 @@ int main(int argc, char* args[]) {
 	-20.5f,  20.5f, -20.5f,  0.0f, 1.0f
 	};
 
-	std::vector<glm::vec3> cubePos = spawnObstacles(40);
+	std::vector<glm::vec3> cubePos = spawnObstacles(290);
 	std::vector<glm::vec3> leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos;
 	spawnBoundariesVector(leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos);
 	
@@ -224,8 +224,10 @@ int main(int argc, char* args[]) {
 
 		processInput(window, deltaTime, camera);
 
-		/*if (checkCollision(camera.Position, leftBoundaryPos, 2.8f))
-			std::cout << "Collision detected between the camera and cube " << std::endl;*/
+		for( int i = 0; i < leftBoundaryPos.size(); ++i ) {
+		if (checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) )
+			std::cout << "Collision detected between the camera and cube " << std::endl;
+		}
 
 		for( int i = 0; i < cubePos.size(); ++i ) {
 			if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
@@ -240,7 +242,7 @@ int main(int argc, char* args[]) {
 
 		shader.Use();
 		transformation.setProjection(camera.Zoom,
-									 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);
+									 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
 		shader.setMat4("projection", transformation.getProjection());
 		// create transformations
 		transformation.setCameraView(camera.GetViewMatrix());

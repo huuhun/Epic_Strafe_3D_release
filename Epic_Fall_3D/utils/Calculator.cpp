@@ -18,7 +18,7 @@ float getRandomNum(const float& max, const float& min)
     else {
         // Retry if not an integer or has one decimal place
         randomNumber = dis(gen);
-        //std::cout << "Random number: " << std::fixed << std::setprecision(1) << randomNumber << std::endl;
+        std::cout << "Random number: " << std::fixed << std::setprecision(1) << randomNumber << std::endl;
     }
 
     return randomNumber;

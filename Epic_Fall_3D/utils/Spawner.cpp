@@ -9,9 +9,9 @@ std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount)
 
 	for( int i = 0; i < posAmount; i++ )
 	{
-		float x = getRandomNum(-5.0f, 5.0f);
-		float y = getRandomNum(-5.0f, 5.0f);
-		float rangeBetween = getRandomNum(1.0f, 3.0f);
+		float x = getRandomNum(-18.0f, 18.0f);
+		float y = getRandomNum(-18.0f, 18.0f);
+		float rangeBetween = getRandomNum(1.0f, 8.0f);
 		float z = getRandomNum(cubePos.at(i).z - rangeBetween, cubePos.at(i).z);
 		cubePos.push_back(glm::vec3(x, y, z));
 	}
@@ -29,7 +29,7 @@ void spawnBoundariesVector(std::vector<glm::vec3>& leftBoundaryPos,
 		{
 			leftBoundaryPos.push_back(spawnBoundary(-40.0f, 5.0f, 2.3f));
 			rightBoundaryPos.push_back(spawnBoundary(40.0f, 5.0f, 2.3f));
-			topBoundaryPos.push_back(spawnBoundary(0.0f, 44.0f, 5.5f));
+			topBoundaryPos.push_back(spawnBoundary(0.0f, 40.0f, 5.5f));
 			bottomBoundaryPos.push_back(spawnBoundary(0.0f, -35.0f, 5.5f));
 		}
 		else
@@ -86,8 +86,8 @@ void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& vertic
 		else
 		{
 			cubePos.at(i).z += -30.0f;
-			cubePos.at(i).x = getRandomNum(-5.0f, 5.0f);
-			cubePos.at(i).y = getRandomNum(-5.0f, 5.0f);
+			cubePos.at(i).x = getRandomNum(-18.0f, 18.0f);
+			cubePos.at(i).y = getRandomNum(-18.0f, 18.0f);
 		}
 	}
 
