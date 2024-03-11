@@ -83,8 +83,8 @@ void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& vertic
 		}
 		else
 		{
-			cubePos.at(i).z += -60.0f;
-			cubePos.at(i).x = getRandomNum(-5.0f, 5.0f);
+			cubePos.at(i).z += -30.0f;
+			cubePos.at(i).x = getRandomNum(-5.0f, 5.0f) - 0.3f;
 			cubePos.at(i).y = getRandomNum(-5.0f, 5.0f);
 		}
 	}
@@ -124,8 +124,8 @@ void reallocateBoundary(std::vector<glm::vec3>& cubePos, const unsigned& vertice
 		else // move the cube way further
 		{
 			//cubePos.at(i) = cubeWithHighestZPos;
-			cubePos.at(i).z += cubeWithLowestZPos.z - 0.5f;
-			cubePos.at(i).x = 8.2f;
+			cubePos.at(i).z += /*cubeWithLowestZPos.z*/ - 120.0f;
+			cubePos.at(i).x += 8.0f;
 			std::cout << cubeWithLowestZPos.z << "\n";
 			/*glm::vec3 cubeWithHighestZPos{ getHighestZValue(cubePos) };
 			changeZValueIfItMatch(cubePos, cubeWithHighestZPos, cubeWithHighestZPos.z + 10.0f);*/

@@ -240,7 +240,7 @@ int main(int argc, char* args[]) {
 
 		shader.Use();
 		transformation.setProjection(camera.Zoom,
-									 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 50.0f);
+									 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);
 		shader.setMat4("projection", transformation.getProjection());
 		// create transformations
 		transformation.setCameraView(camera.GetViewMatrix());
