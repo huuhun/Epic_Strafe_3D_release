@@ -257,12 +257,12 @@ int main(int argc, char* args[]) {
 		shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
 		reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 							   camera, shader, renderer);
-		/*reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+		reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 							   camera, shader, renderer);
 		reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 						   camera, shader, renderer);
 		reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-						   camera, shader, renderer);*/
+						   camera, shader, renderer);
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
