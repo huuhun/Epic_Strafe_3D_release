@@ -23,7 +23,9 @@ public:
 	inline void resetModel() { m_Model = glm::mat4(1.0f); }
 
 	inline glm::mat4 getModel() { return m_Model; };
+	inline void setAxis(const glm::vec3& axis) { m_Axis = axis; }
 
 private:
 	glm::mat4 m_Model;
+	glm::vec3 m_Axis;
 };

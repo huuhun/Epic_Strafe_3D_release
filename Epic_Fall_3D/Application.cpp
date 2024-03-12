@@ -1,5 +1,9 @@
 #include <iostream>
 #include <vector>
+#include <array>
+#include <thread>
+#include <functional>
+
 #include <glad/glad.h>
 #include <glfw3.h>
 
@@ -118,35 +122,35 @@ int main(int argc, char* args[]) {
 	 20.5f,  20.5f, -20.5f,  1.0f, 1.0f,
 	-20.5f,  20.5f, -20.5f,  0.0f, 1.0f,
 	-20.5f, -20.5f, -20.5f,  0.0f, 0.0f,
-	 		 		 
+
 	-20.5f, -20.5f,  20.5f,  0.0f, 0.0f,
 	 20.5f, -20.5f,  20.5f,  1.0f, 0.0f,
 	 20.5f,  20.5f,  20.5f,  1.0f, 1.0f,
 	 20.5f,  20.5f,  20.5f,  1.0f, 1.0f,
 	-20.5f,  20.5f,  20.5f,  0.0f, 1.0f,
 	-20.5f, -20.5f,  20.5f,  0.0f, 0.0f,
-	 		 		 
+
 	-20.5f,  20.5f,  20.5f,  1.0f, 0.0f,
 	-20.5f,  20.5f, -20.5f,  1.0f, 1.0f,
 	-20.5f, -20.5f, -20.5f,  0.0f, 1.0f,
 	-20.5f, -20.5f, -20.5f,  0.0f, 1.0f,
 	-20.5f, -20.5f,  20.5f,  0.0f, 0.0f,
 	-20.5f,  20.5f,  20.5f,  1.0f, 0.0f,
-	 		 		 
+
 	 20.5f,  20.5f,  20.5f,  1.0f, 0.0f,
 	 20.5f,  20.5f, -20.5f,  1.0f, 1.0f,
 	 20.5f, -20.5f, -20.5f,  0.0f, 1.0f,
 	 20.5f, -20.5f, -20.5f,  0.0f, 1.0f,
 	 20.5f, -20.5f,  20.5f,  0.0f, 0.0f,
 	 20.5f,  20.5f,  20.5f,  1.0f, 0.0f,
-	 		 		 
+
 	-20.5f, -20.5f, -20.5f,  0.0f, 1.0f,
 	 20.5f, -20.5f, -20.5f,  1.0f, 1.0f,
 	 20.5f, -20.5f,  20.5f,  1.0f, 0.0f,
 	 20.5f, -20.5f,  20.5f,  1.0f, 0.0f,
 	-20.5f, -20.5f,  20.5f,  0.0f, 0.0f,
 	-20.5f, -20.5f, -20.5f,  0.0f, 1.0f,
-	 		 		 
+
 	-20.5f,  20.5f, -20.5f,  0.0f, 1.0f,
 	 20.5f,  20.5f, -20.5f,  1.0f, 1.0f,
 	 20.5f,  20.5f,  20.5f,  1.0f, 0.0f,
@@ -155,11 +159,31 @@ int main(int argc, char* args[]) {
 	-20.5f,  20.5f, -20.5f,  0.0f, 1.0f
 	};
 
-	std::vector<glm::vec3> cubePos = spawnObstacles(260);
-	std::vector<glm::vec3> spinCubePos = spawnObstacles(100, true);
+	std::vector<glm::vec3> cubePos;
+	std::thread spawnObstaclesPosThread([&]() {
+		cubePos = spawnObstacles(OBSTACLES_NUM);
+										});
+
+	std::vector<glm::vec3> spinCubePos;
+	std::thread spawnSpinObstaclesPosThread([&]() {
+		std::vector<glm::vec3> spinCubePos = spawnObstacles(SPIN_OBSTACLES_NUM, true);
+											});
+
+	std::array<glm::vec3, SPIN_OBSTACLES_NUM> spinCubeAxis;
+	std::thread spawnSpinObstaclesAxisThread([&]() {
+		spinCubeAxis = spawnAxis(SPIN_OBSTACLES_NUM);
+											 });
+
 	std::vector<glm::vec3> leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos;
-	spawnBoundariesVector(leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos);
-	
+	std::thread spawnBoundariesPosThread([&]() {
+		spawnBoundariesVector(leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos);
+										 });
+
+	spawnObstaclesPosThread.join();
+	spawnSpinObstaclesPosThread.join();
+	spawnSpinObstaclesAxisThread.join();
+	spawnBoundariesPosThread.join();
+
 	/*unsigned indices[] = {
 		0, 1, 3,
 		1, 2, 3
@@ -216,6 +240,7 @@ int main(int argc, char* args[]) {
 
 	Transform transformation;
 
+	//glm::vec3 axis(getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f));
 	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
 		// --------------------
@@ -226,12 +251,12 @@ int main(int argc, char* args[]) {
 		processInput(window, deltaTime, camera);
 
 		for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
-		if ( checkCollision(camera.Position, leftBoundaryPos.at(i)  ,  21.0f) ||
-			 checkCollision(camera.Position, rightBoundaryPos.at(i) ,  21.0f) || 
-			 checkCollision(camera.Position, topBoundaryPos.at(i)   ,  21.0f) || 
-			 checkCollision(camera.Position, bottomBoundaryPos.at(i),  21.0f)    )
+			if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
+			   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
+			   checkCollision(camera.Position, topBoundaryPos.at(i), 21.0f) ||
+			   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
 
-			std::cout << "Collision detected between the camera and cube " << std::endl;
+				std::cout << "Collision detected between the camera and cube " << std::endl;
 		}
 
 		for( int i = 0; i < cubePos.size(); ++i ) {
@@ -258,18 +283,17 @@ int main(int argc, char* args[]) {
 		moveCameraHitbox(camera, shader);
 		reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
 							camera, shader, renderer);
-
 		reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
-						   camera, shader, renderer);
+									camera, shader, renderer/*, axis*/);
 
 		vao1.Unbind();
 
 		vao2.Bind();
 		shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
 		reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-							   camera, shader, renderer);
+						   camera, shader, renderer);
 		reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-							   camera, shader, renderer);
+						   camera, shader, renderer);
 		reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 						   camera, shader, renderer);
 		reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),

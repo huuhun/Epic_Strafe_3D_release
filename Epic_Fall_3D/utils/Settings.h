@@ -7,3 +7,5 @@ namespace WindowSettings {
 }
 
 const unsigned MAX_BOUNDARIES = 4;
+const unsigned OBSTACLES_NUM = 260;
+const unsigned SPIN_OBSTACLES_NUM = 100;

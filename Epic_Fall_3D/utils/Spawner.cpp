@@ -34,6 +34,20 @@ std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount, const bool& spi
 	return cubePos;
 }
 
+std::array<glm::vec3, SPIN_OBSTACLES_NUM> spawnAxis(const unsigned& axisAmount)
+{
+	std::array<glm::vec3, SPIN_OBSTACLES_NUM> cubePos = { glm::vec3(getRandomNum(-10.0f,10.0f), getRandomNum(-10.0f,10.0f),  0.0f), };
+
+	for( unsigned i = 0; i < axisAmount; i++ )
+	{
+		float x = getRandomNum(-0.5f, 0.05f);
+		float y = getRandomNum(-0.5f, 0.05f);
+		float z = getRandomNum(-0.5f, 0.05f);
+		cubePos.at(i) = (glm::vec3(x, y, z));
+	}
+	return cubePos;
+}
+
 void spawnBoundariesVector(std::vector<glm::vec3>& leftBoundaryPos,
 						   std::vector<glm::vec3>& rightBoundaryPos,
 						   std::vector<glm::vec3>& topBoundaryPos,
@@ -109,15 +123,17 @@ void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& vertic
 
 }
 
-void reallocateSpinningObstacles(std::vector<glm::vec3>& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer)
+void reallocateSpinningObstacles(std::vector<glm::vec3>& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer/*, const glm::vec3& axis*/)
 {
+	//glm::vec3 axis(getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f));
+
 	for( unsigned i = 0; i < cubePos.size(); i++ )
 	{
 		if( camera.Position.z > cubePos.at(i).z - 5.0f )
 		{
 			Model cubeModel;
 			cubeModel.setTranslation(cubePos.at(i));
-			float angle{ (float)glfwGetTime() * 50.0f };
+			float angle{ (float)glfwGetTime() * 10.0f };
 			cubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
 			shader.setMat4("model", cubeModel.getModel());
 			renderer.DrawArrays(verticesAmount);
