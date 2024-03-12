@@ -239,6 +239,7 @@ int main(int argc, char* args[]) {
 	renderer.setClearColor();
 
 	Transform transformation;
+	bool playing = false;
 
 	//glm::vec3 axis(getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f));
 	while( !glfwWindowShouldClose(window) ) {
@@ -250,6 +251,8 @@ int main(int argc, char* args[]) {
 
 		processInput(window, deltaTime, camera);
 
+		if( playing )
+		{
 		for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
 			if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
 			   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
@@ -264,15 +267,24 @@ int main(int argc, char* args[]) {
 				std::cout << "Collision detected between the camera and cube " << i << std::endl;
 		}
 
+		for( int i = 0; i < spinCubePos.size(); ++i ) {
+			if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) )
+				std::cout << "Collision detected between the camera and cube " << i << std::endl;
+		}
 		renderer.Clear();
+
+		}
 
 		brickWallTexture.ActiveTexture(GL_TEXTURE0);
 		faceTexture.ActiveTexture(GL_TEXTURE1);
+		renderer.Clear();
+
 		boundaryTexture.ActiveTexture(GL_TEXTURE2);
 
 		shader.Use();
 		transformation.setProjection(camera.Zoom,
 									 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
+		
 		shader.setMat4("projection", transformation.getProjection());
 		// create transformations
 		transformation.setCameraView(camera.GetViewMatrix());
