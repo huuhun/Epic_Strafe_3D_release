@@ -253,30 +253,61 @@ int main(int argc, char* args[]) {
 
 		if( playing )
 		{
-		for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
-			if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
-			   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
-			   checkCollision(camera.Position, topBoundaryPos.at(i), 21.0f) ||
-			   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
+			for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
+				if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
+				   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
+				   checkCollision(camera.Position, topBoundaryPos.at(i), 21.0f) ||
+				   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
 
-				std::cout << "Collision detected between the camera and cube " << std::endl;
+					std::cout << "Collision detected between the camera and cube " << std::endl;
+			}
+
+			for( int i = 0; i < cubePos.size(); ++i ) {
+				if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
+					std::cout << "Collision detected between the camera and cube " << i << std::endl;
+			}
+
+			for( int i = 0; i < spinCubePos.size(); ++i ) {
+				if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) )
+					std::cout << "Collision detected between the camera and cube " << i << std::endl;
+			}
+			renderer.Clear();
+
+			boundaryTexture.ActiveTexture(GL_TEXTURE2);
+			brickWallTexture.ActiveTexture(GL_TEXTURE0);
+			faceTexture.ActiveTexture(GL_TEXTURE1);
+
+			shader.Use();
+			transformation.setProjection(camera.Zoom,
+										 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
+
+			shader.setMat4("projection", transformation.getProjection());
+			// create transformations
+			transformation.setCameraView(camera.GetViewMatrix());
+			shader.setMat4("view", transformation.getView());
+
+			vao1.Bind();
+			shader.setInt("renderBoundary", 0);//set flag to 0 to render cube
+			moveCameraHitbox(camera, shader);
+			reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+								camera, shader, renderer);
+			reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+										camera, shader, renderer, spinCubeAxes);
+
+			vao1.Unbind();
+
+			vao2.Bind();
+			shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
+			reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+			reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+			reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+			reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+
 		}
-
-		for( int i = 0; i < cubePos.size(); ++i ) {
-			if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
-				std::cout << "Collision detected between the camera and cube " << i << std::endl;
-		}
-
-		for( int i = 0; i < spinCubePos.size(); ++i ) {
-			if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) )
-				std::cout << "Collision detected between the camera and cube " << i << std::endl;
-		}
-		renderer.Clear();
-
-		}
-
-		brickWallTexture.ActiveTexture(GL_TEXTURE0);
-		faceTexture.ActiveTexture(GL_TEXTURE1);
 		renderer.Clear();
 
 		boundaryTexture.ActiveTexture(GL_TEXTURE2);
@@ -284,21 +315,11 @@ int main(int argc, char* args[]) {
 		shader.Use();
 		transformation.setProjection(camera.Zoom,
 									 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
-		
+
 		shader.setMat4("projection", transformation.getProjection());
 		// create transformations
 		transformation.setCameraView(camera.GetViewMatrix());
 		shader.setMat4("view", transformation.getView());
-
-		vao1.Bind();
-		shader.setInt("renderBoundary", 0);//set flag to 0 to render cube
-		moveCameraHitbox(camera, shader);
-		reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
-							camera, shader, renderer);
-		reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
-									camera, shader, renderer, spinCubeAxes);
-
-		vao1.Unbind();
 
 		vao2.Bind();
 		shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
