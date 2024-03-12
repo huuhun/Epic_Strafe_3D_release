@@ -1,5 +1,6 @@
 #include <iostream>
-#include <print>
+#include <glad/glad.h>
+#include <glfw3.h>
 #include "Settings.h"
 #include "Spawner.h"
 
@@ -7,7 +8,22 @@ std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount)
 {
 	std::vector<glm::vec3> cubePos = { glm::vec3(0.0f,  0.0f,  0.0f), };
 
-	for( int i = 0; i < posAmount; i++ )
+	for( unsigned i = 0; i < posAmount; i++ )
+	{
+		float x = getRandomNum(-18.0f, 18.0f);
+		float y = getRandomNum(-18.0f, 18.0f);
+		float rangeBetween = getRandomNum(1.0f, 8.0f);
+		float z = getRandomNum(cubePos.at(i).z - rangeBetween, cubePos.at(i).z);
+		cubePos.push_back(glm::vec3(x, y, z));
+	}
+	return cubePos;
+}
+
+std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount, const bool& spinning)
+{
+	std::vector<glm::vec3> cubePos = { glm::vec3( getRandomNum(-10.0f,10.0f), getRandomNum(-10.0f,10.0f),  0.0f), };
+
+	for( unsigned i = 0; i < posAmount; i++ )
 	{
 		float x = getRandomNum(-18.0f, 18.0f);
 		float y = getRandomNum(-18.0f, 18.0f);
@@ -85,7 +101,30 @@ void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& vertic
 		}
 		else
 		{
-			cubePos.at(i).z += -30.0f;
+			cubePos.at(i).z += -70.0f;
+			cubePos.at(i).x = getRandomNum(-18.0f, 18.0f);
+			cubePos.at(i).y = getRandomNum(-18.0f, 18.0f);
+		}
+	}
+
+}
+
+void reallocateSpinningObstacles(std::vector<glm::vec3>& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer)
+{
+	for( unsigned i = 0; i < cubePos.size(); i++ )
+	{
+		if( camera.Position.z > cubePos.at(i).z - 5.0f )
+		{
+			Model cubeModel;
+			cubeModel.setTranslation(cubePos.at(i));
+			float angle{ (float)glfwGetTime() * 50.0f };
+			cubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
+			shader.setMat4("model", cubeModel.getModel());
+			renderer.DrawArrays(verticesAmount);
+		}
+		else
+		{
+			cubePos.at(i).z += -70.0f;
 			cubePos.at(i).x = getRandomNum(-18.0f, 18.0f);
 			cubePos.at(i).y = getRandomNum(-18.0f, 18.0f);
 		}

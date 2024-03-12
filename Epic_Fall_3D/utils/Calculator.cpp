@@ -1,12 +1,12 @@
 #include <iostream>
 #include "Calculator.h"
-float getRandomNum(const float& max, const float& min)
+float getRandomNum(const float& min, const float& max)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
 
     // Define the range for the random number (integer and floating-point)
-    std::uniform_real_distribution<float> dis(max, min);
+    std::uniform_real_distribution<float> dis(min, max);
 
     // Generate a random number
     float randomNumber = dis(gen);

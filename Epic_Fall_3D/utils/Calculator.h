@@ -12,7 +12,7 @@ inline constexpr unsigned calVertexAmount(const unsigned& element_amount,
 	return element_amount / elements_of_each_vertex;
 }
 
-float getRandomNum(const float& min, const float& max);
+float getRandomNum(const float& max, const float& min);
 
 glm::vec3 calculateCubeSize(const float boundaryVertices[]);
 

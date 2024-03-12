@@ -155,7 +155,8 @@ int main(int argc, char* args[]) {
 	-20.5f,  20.5f, -20.5f,  0.0f, 1.0f
 	};
 
-	std::vector<glm::vec3> cubePos = spawnObstacles(290);
+	std::vector<glm::vec3> cubePos = spawnObstacles(260);
+	std::vector<glm::vec3> spinCubePos = spawnObstacles(100, true);
 	std::vector<glm::vec3> leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos;
 	spawnBoundariesVector(leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos);
 	
@@ -224,8 +225,12 @@ int main(int argc, char* args[]) {
 
 		processInput(window, deltaTime, camera);
 
-		for( int i = 0; i < leftBoundaryPos.size(); ++i ) {
-		if (checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) )
+		for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
+		if ( checkCollision(camera.Position, leftBoundaryPos.at(i)  ,  21.0f) ||
+			 checkCollision(camera.Position, rightBoundaryPos.at(i) ,  21.0f) || 
+			 checkCollision(camera.Position, topBoundaryPos.at(i)   ,  21.0f) || 
+			 checkCollision(camera.Position, bottomBoundaryPos.at(i),  21.0f)    )
+
 			std::cout << "Collision detected between the camera and cube " << std::endl;
 		}
 
@@ -253,6 +258,10 @@ int main(int argc, char* args[]) {
 		moveCameraHitbox(camera, shader);
 		reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
 							camera, shader, renderer);
+
+		reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+						   camera, shader, renderer);
+
 		vao1.Unbind();
 
 		vao2.Bind();
