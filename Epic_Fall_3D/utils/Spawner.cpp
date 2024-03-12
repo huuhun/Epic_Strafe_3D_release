@@ -23,7 +23,7 @@ std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount, const bool& spi
 {
 	std::vector<glm::vec3> cubePos = { glm::vec3( getRandomNum(-10.0f,10.0f), getRandomNum(-10.0f,10.0f),  0.0f), };
 
-	for( unsigned i = 0; i < posAmount; i++ )
+	for( unsigned i = 0; i < posAmount - 1; i++ ) // -1 to avoid posAmount > SPIN_OBSTACLES_NUM by 1
 	{
 		float x = getRandomNum(-18.0f, 18.0f);
 		float y = getRandomNum(-18.0f, 18.0f);
@@ -34,18 +34,18 @@ std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount, const bool& spi
 	return cubePos;
 }
 
-std::array<glm::vec3, SPIN_OBSTACLES_NUM> spawnAxis(const unsigned& axisAmount)
+std::vector<glm::vec3> spawnAxes(const unsigned& axisAmount)
 {
-	std::array<glm::vec3, SPIN_OBSTACLES_NUM> cubePos = { glm::vec3(getRandomNum(-10.0f,10.0f), getRandomNum(-10.0f,10.0f),  0.0f), };
+	std::vector<glm::vec3> axes;
 
 	for( unsigned i = 0; i < axisAmount; i++ )
 	{
-		float x = getRandomNum(-0.5f, 0.05f);
-		float y = getRandomNum(-0.5f, 0.05f);
-		float z = getRandomNum(-0.5f, 0.05f);
-		cubePos.at(i) = (glm::vec3(x, y, z));
+		float x = getRandomNum(-0.5f, 0.5f);
+		float y = getRandomNum(-0.5f, 0.5f);
+		float z = getRandomNum(-0.5f, 0.5f);
+		axes.push_back(glm::vec3(x, y, z));
 	}
-	return cubePos;
+	return axes;
 }
 
 void spawnBoundariesVector(std::vector<glm::vec3>& leftBoundaryPos,
@@ -123,7 +123,7 @@ void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& vertic
 
 }
 
-void reallocateSpinningObstacles(std::vector<glm::vec3>& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer/*, const glm::vec3& axis*/)
+void reallocateSpinningObstacles(std::vector<glm::vec3>& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer, const std::vector<glm::vec3>& axes)
 {
 	//glm::vec3 axis(getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f));
 
@@ -133,8 +133,8 @@ void reallocateSpinningObstacles(std::vector<glm::vec3>& cubePos, const unsigned
 		{
 			Model cubeModel;
 			cubeModel.setTranslation(cubePos.at(i));
-			float angle{ (float)glfwGetTime() * 10.0f };
-			cubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
+			float angle{ (float)glfwGetTime() * 50.0f };
+			cubeModel.setFixedModelRotation(angle, axes.at(i));
 			shader.setMat4("model", cubeModel.getModel());
 			renderer.DrawArrays(verticesAmount);
 		}

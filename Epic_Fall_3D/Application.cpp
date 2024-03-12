@@ -166,12 +166,12 @@ int main(int argc, char* args[]) {
 
 	std::vector<glm::vec3> spinCubePos;
 	std::thread spawnSpinObstaclesPosThread([&]() {
-		std::vector<glm::vec3> spinCubePos = spawnObstacles(SPIN_OBSTACLES_NUM, true);
+		spinCubePos = spawnObstacles(SPIN_OBSTACLES_NUM, true);
 											});
 
-	std::array<glm::vec3, SPIN_OBSTACLES_NUM> spinCubeAxis;
-	std::thread spawnSpinObstaclesAxisThread([&]() {
-		spinCubeAxis = spawnAxis(SPIN_OBSTACLES_NUM);
+	std::vector<glm::vec3> spinCubeAxes;
+	std::thread spawnSpinObstaclesAxesThread([&]() {
+		spinCubeAxes = spawnAxes(SPIN_OBSTACLES_NUM);
 											 });
 
 	std::vector<glm::vec3> leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos;
@@ -181,7 +181,7 @@ int main(int argc, char* args[]) {
 
 	spawnObstaclesPosThread.join();
 	spawnSpinObstaclesPosThread.join();
-	spawnSpinObstaclesAxisThread.join();
+	spawnSpinObstaclesAxesThread.join();
 	spawnBoundariesPosThread.join();
 
 	/*unsigned indices[] = {
@@ -284,7 +284,7 @@ int main(int argc, char* args[]) {
 		reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
 							camera, shader, renderer);
 		reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
-									camera, shader, renderer/*, axis*/);
+									camera, shader, renderer, spinCubeAxes);
 
 		vao1.Unbind();
 
