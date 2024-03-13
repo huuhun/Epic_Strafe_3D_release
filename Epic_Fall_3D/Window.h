@@ -8,6 +8,7 @@ public:
 	static void createGLContext(GLFWwindow* window);
 	static bool loadGLFunctionPointers();
 	static void setGLVersion(const int& version);
+	static void setGLGlobalState(GLFWwindow* window);
 
 	// Get OpenGL version information
 	static void getGLVersion();

@@ -54,6 +54,13 @@ void Window::setGLVersion(const int& version)
 #endif
 }
 
+void Window::setGLGlobalState(GLFWwindow* window)
+{
+	glEnable(GL_DEPTH_TEST); // REMOVE THIS IF DRAW 2D ONLY
+	// tell GLFW to capture our mouse
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //disable mouse here
+}
+
 void Window::getGLVersion() {
 	const GLubyte* version = glGetString(GL_VERSION);
 

@@ -52,13 +52,10 @@ int main(int argc, char* args[]) {
 	Window::loadGLFunctionPointers();
 	Window::setGLVersion(4);
 	Window::getGLVersion();
+	Window::setGLGlobalState(window);
 
-	// configure global opengl state
-	// -----------------------------
-	glEnable(GL_DEPTH_TEST); // REMOVE THIS IF DRAW 2D ONLY
+	//Callbacks
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	// tell GLFW to capture our mouse
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //disable mouse here
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 

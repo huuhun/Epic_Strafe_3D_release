@@ -177,11 +177,6 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SDL2.dll" />
-    <None Include="SDL2_mixer.dll" />
-    <None Include="SDL2_ttf.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Shader.h" />
     <ClInclude Include="utils\Settings.h" />
     <ClInclude Include="VertexBuffer.h" />
