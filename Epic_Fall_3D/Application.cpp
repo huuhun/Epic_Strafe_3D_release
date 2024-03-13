@@ -11,8 +11,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stb_image/stb_image.h>
-#include <ft2build.h>
-#include FT_FREETYPE_H
 
 #include "Settings.h"
 #include "Calculator.h"
@@ -55,9 +53,7 @@ int main(int argc, char* args[]) {
 	Window::setGLVersion(4);
 	Window::getGLVersion();
 	Window::setGLGlobalState(window);
-	FT_Library ft;
-	FT_Face face;
-	Window::initFreeType("res/fonts/VCR_OSD_MONO_1.001.ttf", ft, face);
+	Window::initSDL_TTF();
 
 	//Callbacks
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);

@@ -1,12 +1,11 @@
 #pragma once
 #include <glfw3.h>
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include <SDL_ttf.h>
 class Window
 {
 public:
 	static bool initGLFW();
-	static void initFreeType(const std::string& path, FT_Library& ft, FT_Face& face);
+	static bool initSDL_TTF();
 	static GLFWwindow* createGLWindow(const std::string& windowName, const int& w, const int& h);
 	static void createGLContext(GLFWwindow* window);
 	static bool loadGLFunctionPointers();
