@@ -6,11 +6,27 @@ bool Window::initGLFW()
 {
 	// Initialize SDL
 	if( !glfwInit() ) {
-		std::cerr << "glfw could not initialize! SDL_Error: %s\n" << glfwGetError(nullptr) << "\n";
+		std::cerr << "glfw could not initialize! SDL_Error: " << glfwGetError(nullptr) << "\n";
 		return false;
 	}
 
 	return true;
+}
+
+void Window::initFreeType(const std::string& path,  FT_Library& ft, FT_Face& face)
+{
+	if( FT_Init_FreeType(&ft) ) {
+		std::cerr<< "Error initializing FreeType\n";
+		exit(EXIT_FAILURE);
+	}
+
+	if( FT_New_Face(ft, path.c_str(), 0, &face) ) {
+		std::cerr << "Error loading font\n";
+		FT_Done_FreeType(ft);
+		exit(EXIT_FAILURE);
+	}
+
+	FT_Set_Pixel_Sizes(face, 0, 48); // Set font size
 }
 
 GLFWwindow* Window::createGLWindow(const std::string& windowName, const int& w, const int& h)
