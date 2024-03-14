@@ -29,6 +29,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Collision.h"
+#include "Text.h"
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -237,9 +238,8 @@ int main(int argc, char* args[]) {
 	renderer.setClearColor();
 
 	Transform transformation;
-	bool playing = true;
+	bool playing = false;
 
-	//glm::vec3 axis(getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f));
 	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
 		// --------------------
