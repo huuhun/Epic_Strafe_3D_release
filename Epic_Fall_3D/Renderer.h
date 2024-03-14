@@ -12,7 +12,7 @@ public:
 	//Call setClearColor first
 	void Clear();
 
-	void DrawArrays(const GLuint& elementsAmount) const;
+	void DrawArrays(const GLenum& mode, const GLuint& elementsAmount) const;
 
 	void DrawElements(const GLint& indicesAmount);
 

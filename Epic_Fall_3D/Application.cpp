@@ -38,15 +38,16 @@ GLuint createTexturedQuadVBO() {
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
 	// Define the vertices of the quad
-	std::vector<float> vertices = {
-		-1.0f, -1.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, 0.0f, 1.0f
+	std::vector<float> verticesAndTexCoords = {
+		// Vertex positions     // Texture coordinates
+		-1.0f, -1.0f, 0.0f,     0.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,      1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,       1.0f, 1.0f,
+		-1.0f, 1.0f, 0.0f,      0.0f, 1.0f
 	};
 
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	/*glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);*/
 
 	return vbo;
 }
@@ -180,10 +181,11 @@ int main(int argc, char* args[]) {
 	};
 
 	float textVertices[] = {
-		-1.0f, -1.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, 0.0f, 1.0f
+		// Vertex positions     // Texture coordinates
+		-1.0f, -1.0f, -0.7f,     0.0f, 0.0f,
+		1.0f, -1.0f,  -0.7f,      1.0f, 0.0f,
+		1.0f, 1.0f,  -0.7f,       1.0f, 1.0f,
+		-1.0f, 1.0f, -0.7f,      0.0f, 1.0f
 	};
 
 	std::vector<glm::vec3> cubePos;
@@ -216,8 +218,8 @@ int main(int argc, char* args[]) {
 		1, 2, 3
 	};*/
 
-	VertexArray cubeVao, boundaryVao;
-	VertexBuffer cubeVbo, boundaryVbo;
+	VertexArray cubeVao, boundaryVao, textVao;
+	VertexBuffer cubeVbo, boundaryVbo, textVbo;
 	//IndexBuffer ebo;
 
 	cubeVao.Bind();
@@ -247,7 +249,19 @@ int main(int argc, char* args[]) {
 	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
 
 	boundaryVbo.Unbind();
-	boundaryVao.Unbind();
+		boundaryVao.Unbind();
+
+		textVao.Bind();
+		textVbo.Bind();
+
+	textVbo.BufferData(textVertices, sizeof(textVertices) / sizeof(textVertices[ 0 ]));
+	// Position attribute (2 components, GL_FLOAT)
+	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
+	// Texture coordinate attribute (2 components, GL_FLOAT)
+	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
+
+	textVbo.Unbind();
+	textVao.Unbind();
 
 	enableGLDebugContext();
 
@@ -341,6 +355,10 @@ int main(int argc, char* args[]) {
 							   camera, shader, renderer);
 
 			boundaryVao.Unbind();
+
+			textVao.Bind();
+			renderer.DrawArrays(GL_QUADS, 4);
+			textVao.Unbind();
 
 		}
 		else

@@ -111,7 +111,7 @@ void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& vertic
 			float angle{ 20.0f * (float)i };
 			cubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
 			shader.setMat4("model", cubeModel.getModel());
-			renderer.DrawArrays(verticesAmount);
+			renderer.DrawArrays(GL_TRIANGLES, verticesAmount);
 		}
 		else
 		{
@@ -136,7 +136,7 @@ void reallocateSpinningObstacles(std::vector<glm::vec3>& cubePos, const unsigned
 			float angle{ (float)glfwGetTime() * 50.0f };
 			cubeModel.setFixedModelRotation(angle, axes.at(i));
 			shader.setMat4("model", cubeModel.getModel());
-			renderer.DrawArrays(verticesAmount);
+			renderer.DrawArrays(GL_TRIANGLES, verticesAmount);
 		}
 		else
 		{
@@ -170,7 +170,7 @@ void reallocateBoundary(std::vector<glm::vec3>& cubePos, const unsigned& vertice
 			cubeModel.setFixedModelRotation(angle, glm::vec3(0.0f, -1.0f, 0.0f));*/
 
 			shader.setMat4("model", cubeModel.getModel());
-			renderer.DrawArrays(verticesAmount);
+			renderer.DrawArrays(GL_TRIANGLES, verticesAmount);
 		}
 		else // move the cube way further
 		{

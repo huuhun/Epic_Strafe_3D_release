@@ -15,7 +15,7 @@ void Renderer::Clear()
 
 }
 
-void Renderer::DrawArrays(const GLuint& elementsAmount) const {
+void Renderer::DrawArrays(const GLenum& mode, const GLuint& elementsAmount) const {
 
 	//shader.Bind(); //giving instructions to GPU as to whatever we're trying to draw what we draw
 
