@@ -48,8 +48,10 @@ Texture::Texture(SDL_Surface* textSurface)
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textSurface->w, textSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, textSurface->pixels);
 
-	if( textSurface != nullptr ) SDL_FreeSurface(textSurface); // Free the surface as we no longer need it
-
+	if( textSurface != nullptr ) {
+		std::cout << "I'M FREED ONCE ALREADY\n";
+		SDL_FreeSurface(textSurface); // Free the surface as we no longer need it
+	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 

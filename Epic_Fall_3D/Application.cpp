@@ -216,13 +216,13 @@ int main(int argc, char* args[]) {
 		1, 2, 3
 	};*/
 
-	VertexArray vao1, vao2;
-	VertexBuffer vbo1, vbo2;
+	VertexArray cubeVao, boundaryVao;
+	VertexBuffer cubeVbo, boundaryVbo;
 	//IndexBuffer ebo;
 
-	vao1.Bind();
-	vbo1.Bind();
-	vbo1.BufferData(cubeVertices, sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]));
+	cubeVao.Bind();
+	cubeVbo.Bind();
+	cubeVbo.BufferData(cubeVertices, sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]));
 
 	// position attribute
 	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
@@ -236,18 +236,18 @@ int main(int argc, char* args[]) {
 	//ebo.Bind();
 	//ebo.BufferData(indices, sizeof(indices) / sizeof(indices[ 0 ]));
 
-	vbo1.Unbind();
-	vao1.Unbind();
+	cubeVbo.Unbind();
+	cubeVao.Unbind();
 
-	vao2.Bind();
-	vbo2.Bind();
+	boundaryVao.Bind();
+	boundaryVbo.Bind();
 
-	vbo2.BufferData(boundaryVertices, sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]));
+	boundaryVbo.BufferData(boundaryVertices, sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]));
 	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
 	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
 
-	vbo2.Unbind();
-	vao2.Unbind();
+	boundaryVbo.Unbind();
+	boundaryVao.Unbind();
 
 	enableGLDebugContext();
 
@@ -269,8 +269,8 @@ int main(int argc, char* args[]) {
 
 	Text testText;
 	testText.loadFont("res/fonts/VCR_OSD_MONO_1.001.ttf", 30);
-	testText.setText("Hello");
 	testText.setTextColor(0, 0, 255, 255);
+	testText.setText("Hello");
 	Texture testTextTexture(testText.getTextSurface());
 
 	bool playing = true;
@@ -319,7 +319,7 @@ int main(int argc, char* args[]) {
 			transformation.setCameraView(camera.GetViewMatrix());
 			shader.setMat4("view", transformation.getView());
 
-			vao1.Bind();
+			cubeVao.Bind();
 			shader.setInt("renderBoundary", 0);//set flag to 0 to render cube
 			moveCameraHitbox(camera, shader);
 			reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
@@ -327,9 +327,9 @@ int main(int argc, char* args[]) {
 			reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
 										camera, shader, renderer, spinCubeAxes);
 
-			vao1.Unbind();
+			cubeVao.Unbind();
 
-			vao2.Bind();
+			boundaryVao.Bind();
 			shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
 			reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 							   camera, shader, renderer);
@@ -339,6 +339,8 @@ int main(int argc, char* args[]) {
 							   camera, shader, renderer);
 			reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 							   camera, shader, renderer);
+
+			boundaryVao.Unbind();
 
 		}
 		else
@@ -356,7 +358,7 @@ int main(int argc, char* args[]) {
 			transformation.setCameraView(camera.GetViewMatrix());
 			shader.setMat4("view", transformation.getView());
 
-			vao2.Bind();
+			boundaryVao.Bind();
 			shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
 			reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 							   camera, shader, renderer);
@@ -366,6 +368,7 @@ int main(int argc, char* args[]) {
 							   camera, shader, renderer);
 			reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 							   camera, shader, renderer);
+			boundaryVao.Unbind();
 		}
 		
 		glfwPollEvents();

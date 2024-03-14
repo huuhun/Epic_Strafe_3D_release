@@ -191,7 +191,7 @@ glm::vec3 getLowestZValue(std::vector<glm::vec3>& cubePos) {
 	float currentLowestZ{ cubePos[0].z};
 	glm::vec3 cubeWithLowestZValue(0, 0, 0);
 
-	for( int i = 0; i < cubePos.size(); i++ )
+	for( unsigned i = 0; i < cubePos.size(); i++ )
 		if( cubePos.at(i).z < currentLowestZ ){
 			currentLowestZ = cubePos.at(i).z;
 			cubeWithLowestZValue = cubePos.at(i);
