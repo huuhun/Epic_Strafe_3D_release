@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <SDL.h>
 class Texture
 {
 private:
@@ -9,6 +10,7 @@ private:
 	//int m_Width, m_Height, m_BPP; //Bytes per pixel
 public:
 	Texture(const std::string& path);
+	Texture(SDL_Surface* textSurface);
 	~Texture();
 
 	void Bind();

@@ -238,8 +238,14 @@ int main(int argc, char* args[]) {
 	renderer.setClearColor();
 
 	Transform transformation;
-	bool playing = false;
 
+	Text testText;
+	testText.loadFont("res/fonts/VCR_OSD_MONO_1.001.ttf", 30);
+	testText.setText("Hello");
+	testText.setTextColor(0, 0, 255, 255);
+	Texture testTextTexture(testText.getTextSurface());
+
+	bool playing = true;
 	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
 		// --------------------
