@@ -237,7 +237,7 @@ int main(int argc, char* args[]) {
 	renderer.setClearColor();
 
 	Transform transformation;
-	bool playing = false;
+	bool playing = true;
 
 	//glm::vec3 axis(getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f), getRandomNum(-0.5f, 0.5f));
 	while( !glfwWindowShouldClose(window) ) {
@@ -306,30 +306,33 @@ int main(int argc, char* args[]) {
 							   camera, shader, renderer);
 
 		}
-		renderer.Clear();
+		else
+		{
+			renderer.Clear();
 
-		boundaryTexture.ActiveTexture(GL_TEXTURE2);
+			boundaryTexture.ActiveTexture(GL_TEXTURE2);
 
-		shader.Use();
-		transformation.setProjection(camera.Zoom,
-									 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
+			shader.Use();
+			transformation.setProjection(camera.Zoom,
+										 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
 
-		shader.setMat4("projection", transformation.getProjection());
-		// create transformations
-		transformation.setCameraView(camera.GetViewMatrix());
-		shader.setMat4("view", transformation.getView());
+			shader.setMat4("projection", transformation.getProjection());
+			// create transformations
+			transformation.setCameraView(camera.GetViewMatrix());
+			shader.setMat4("view", transformation.getView());
 
-		vao2.Bind();
-		shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
-		reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-						   camera, shader, renderer);
-		reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-						   camera, shader, renderer);
-		reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-						   camera, shader, renderer);
-		reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-						   camera, shader, renderer);
-
+			vao2.Bind();
+			shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
+			reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+			reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+			reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+			reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+		}
+		
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
