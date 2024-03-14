@@ -21,7 +21,7 @@ Texture::Texture(const std::string& path)
 	{
 		//add this line to check if the image source have an alpha channel
 		GLint internalFormat = ( static_cast<GLenum>( nrChannels == 4 ) ) ? GL_RGBA : GL_RGB;
-		GLenum format = static_cast<GLenum>( nrChannels == 4 ? GL_RGBA : GL_RGB );	
+		GLenum format = static_cast<GLenum>( nrChannels == 4 ? GL_RGBA : GL_RGB );
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
@@ -37,13 +37,6 @@ Texture::Texture(const std::string& path)
 Texture::Texture(SDL_Surface* textSurface)
 	:m_ID(0)
 {
-	// Create a texture from the surface
-	GLuint texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textSurface->w, textSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, textSurface->pixels);
-	SDL_FreeSurface(textSurface); // Free the surface as we no longer need it
-
 	glGenTextures(1, &m_ID);
 	glBindTexture(GL_TEXTURE_2D, m_ID); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
 	// set the texture wrapping parameters
@@ -54,7 +47,8 @@ Texture::Texture(SDL_Surface* textSurface)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textSurface->w, textSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, textSurface->pixels);
-	SDL_FreeSurface(textSurface); // Free the surface as we no longer need it
+
+	if( textSurface != nullptr ) SDL_FreeSurface(textSurface); // Free the surface as we no longer need it
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

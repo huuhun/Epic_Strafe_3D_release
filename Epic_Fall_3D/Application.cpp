@@ -31,6 +31,27 @@
 #include "Collision.h"
 #include "Text.h"
 
+// Function to create a VBO for a textured quad
+GLuint createTexturedQuadVBO() {
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+	// Define the vertices of the quad
+	std::vector<float> vertices = {
+		-1.0f, -1.0f, 0.0f, 0.0f,
+		1.0f, -1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 0.0f, 1.0f
+	};
+
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	return vbo;
+}
+
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -158,6 +179,13 @@ int main(int argc, char* args[]) {
 	-20.5f,  20.5f, -20.5f,  0.0f, 1.0f
 	};
 
+	float textVertices[] = {
+		-1.0f, -1.0f, 0.0f, 0.0f,
+		1.0f, -1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 0.0f, 1.0f
+	};
+
 	std::vector<glm::vec3> cubePos;
 	std::thread spawnObstaclesPosThread([&]() {
 		cubePos = spawnObstacles(OBSTACLES_NUM);
@@ -277,9 +305,10 @@ int main(int argc, char* args[]) {
 			}
 			renderer.Clear();
 
-			boundaryTexture.ActiveTexture(GL_TEXTURE2);
 			brickWallTexture.ActiveTexture(GL_TEXTURE0);
 			faceTexture.ActiveTexture(GL_TEXTURE1);
+			boundaryTexture.ActiveTexture(GL_TEXTURE2);
+			testTextTexture.ActiveTexture(GL_TEXTURE3);
 
 			shader.Use();
 			transformation.setProjection(camera.Zoom,

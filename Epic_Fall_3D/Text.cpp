@@ -23,3 +23,4 @@ void Text::setText(const std::string& text)
 {
     m_TextSurface = TTF_RenderText_Solid(m_Font, "Hello, GLFW and OpenGL!", m_TextColor);
 }
+
