@@ -15,6 +15,8 @@ public:
 	// Get OpenGL version information
 	static void getGLVersion();
 
+	static void closeSDL(TTF_Font* font);
+
 	static void destroyWindow();
 
 private:

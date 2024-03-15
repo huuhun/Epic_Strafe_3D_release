@@ -14,13 +14,17 @@ bool Text::loadFont(const std::string& path, int fontSize)
 }
 
 void Text::setTextColor(const unsigned char& red, const unsigned char& green,
-                        const unsigned char& blue, const unsigned char& alpha)
+                        const unsigned char& blue)
 {
-    m_TextColor = { red, green, blue, alpha };
+    m_TextColor = { red, green, blue };
 }
 
 void Text::setText(const std::string& text)
 {
-    m_TextSurface = TTF_RenderText_Solid(m_Font, "Hello, GLFW and OpenGL!", m_TextColor);
+    m_TextSurface = TTF_RenderText_Blended(m_Font, "Hello, GLFW and OpenGL!", m_TextColor);
+    if( !m_TextSurface )
+    {
+        std::cerr << "Error set text\n";
+    }
 }
 

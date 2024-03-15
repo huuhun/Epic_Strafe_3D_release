@@ -80,6 +80,15 @@ void Window::getGLVersion() {
 
 }
 
+void Window::closeSDL(TTF_Font* font) {
+	TTF_CloseFont(font);
+	if( font != nullptr )
+	{
+		font = nullptr;
+	}
+	TTF_Quit();
+}
+
 void Window::destroyWindow()
 {
 	glfwTerminate();

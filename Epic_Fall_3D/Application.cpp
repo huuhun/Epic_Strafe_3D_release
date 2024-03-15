@@ -183,8 +183,8 @@ int main(int argc, char* args[]) {
 	float textVertices[] = {
 		// Vertex positions     // Texture coordinates
 		-1.0f, -1.0f, -0.7f,     0.0f, 0.0f,
-		1.0f, -1.0f,  -0.7f,      1.0f, 0.0f,
-		1.0f, 1.0f,  -0.7f,       1.0f, 1.0f,
+		1.0f, -1.0f,  -0.7f,     1.0f, 0.0f,
+		1.0f, 1.0f,  -0.7f,      1.0f, 1.0f,
 		-1.0f, 1.0f, -0.7f,      0.0f, 1.0f
 	};
 
@@ -249,19 +249,17 @@ int main(int argc, char* args[]) {
 	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
 
 	boundaryVbo.Unbind();
-		boundaryVao.Unbind();
+	boundaryVao.Unbind();
 
-		textVao.Bind();
-		textVbo.Bind();
+	/*textVao.Bind();
+	textVbo.Bind();
 
 	textVbo.BufferData(textVertices, sizeof(textVertices) / sizeof(textVertices[ 0 ]));
-	// Position attribute (2 components, GL_FLOAT)
 	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
-	// Texture coordinate attribute (2 components, GL_FLOAT)
 	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
 
 	textVbo.Unbind();
-	textVao.Unbind();
+	textVao.Unbind();*/
 
 	enableGLDebugContext();
 
@@ -283,9 +281,10 @@ int main(int argc, char* args[]) {
 
 	Text testText;
 	testText.loadFont("res/fonts/VCR_OSD_MONO_1.001.ttf", 30);
-	testText.setTextColor(0, 0, 255, 255);
+	testText.setTextColor(0, 0, 255);
 	testText.setText("Hello");
 	Texture testTextTexture(testText.getTextSurface());
+	shader.setInt("testTextTexture", 3);
 
 	bool playing = true;
 	while( !glfwWindowShouldClose(window) ) {
@@ -356,10 +355,9 @@ int main(int argc, char* args[]) {
 
 			boundaryVao.Unbind();
 
-			textVao.Bind();
+			/*textVao.Bind();
 			renderer.DrawArrays(GL_QUADS, 4);
-			textVao.Unbind();
-
+			textVao.Unbind();*/
 		}
 		else
 		{
@@ -388,12 +386,13 @@ int main(int argc, char* args[]) {
 							   camera, shader, renderer);
 			boundaryVao.Unbind();
 		}
-		
+
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
 
 	//cleanup:
+	Window::closeSDL(testText.getFont());
 	Window::destroyWindow();
 
 	return 0;

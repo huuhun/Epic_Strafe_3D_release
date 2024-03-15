@@ -11,6 +11,7 @@ flat in int RenderType;  // Uniform indicating the type of cube to render
 uniform sampler2D brickWallTexture;
 uniform sampler2D faceTexture;
 uniform sampler2D boundaryTexture;
+uniform sampler2D testTextTexture;
 
 void main()
 {
@@ -20,6 +21,7 @@ void main()
     }
     else if (RenderType == 0)
     {
-	    FragColor = mix(texture(brickWallTexture, TexCoord), texture(faceTexture, TexCoord), 0.4);
+	    //FragColor = mix(texture(brickWallTexture, TexCoord), texture(faceTexture, TexCoord), 0.4);
+	    FragColor = mix( mix(texture(brickWallTexture, TexCoord), texture(faceTexture, TexCoord), 0.4), texture(testTextTexture, TexCoord), 0.5 );
     }
 }
