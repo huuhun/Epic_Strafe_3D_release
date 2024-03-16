@@ -16,7 +16,7 @@ bool Text::loadFont(const std::string& path, int fontSize)
 void Text::setTextColor(const unsigned char& red, const unsigned char& green,
                         const unsigned char& blue)
 {
-    m_TextColor = { red, green, blue };
+    m_TextColor = { blue, green, red };
 }
 
 void Text::setText(const std::string& text)

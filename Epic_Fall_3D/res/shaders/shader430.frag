@@ -21,7 +21,8 @@ void main()
     }
     else if (RenderType == 0)
     {
-	    //FragColor = mix(texture(brickWallTexture, TexCoord), texture(faceTexture, TexCoord), 0.4);
-	    FragColor = mix( mix(texture(brickWallTexture, TexCoord), texture(faceTexture, TexCoord), 0.4), texture(testTextTexture, TexCoord), 0.5 );
+	    //FragColor = mix(texture(brickWallTexture, TexCoord), texture(testTextTexture, TexCoord), 0.4);
+	    //FragColor = mix( mix(texture(brickWallTexture, TexCoord), texture(faceTexture, TexCoord), 0.4), texture(testTextTexture, TexCoord), 0.5 );
+        FragColor = texture(testTextTexture, TexCoord);
     }
 }

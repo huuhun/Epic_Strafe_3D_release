@@ -280,10 +280,10 @@ int main(int argc, char* args[]) {
 	Transform transformation;
 
 	Text testText;
-	testText.loadFont("res/fonts/VCR_OSD_MONO_1.001.ttf", 30);
+	testText.loadFont("res/fonts/VCR_OSD_MONO_1.001.ttf", 25);
 	testText.setTextColor(0, 0, 255);
-	testText.setText("Hello");
-	Texture testTextTexture(testText.getTextSurface());
+	testText.setText("OSIDAOUDSAOIUDAOIDUSAOSDUSAOSDUO");
+	Texture testTextTexture(testText);
 	shader.setInt("testTextTexture", 3);
 
 	bool playing = true;
