@@ -32,3 +32,10 @@ void VertexBuffer::BufferData(const void* data, const GLuint& numElements) const
 	//std::cout << data << " sizeof(vertices): " << numElements * sizeof(data) << " " << sizeof(data) << "\n";
     //Unbind();
 }
+
+void VertexBuffer::BufferData(const void* data, const GLuint& numElements,const GLenum& usagePattern) const {
+	//Bind();
+	glBufferData(GL_ARRAY_BUFFER, numElements * sizeof(data), data, usagePattern);
+	//std::cout << data << " sizeof(vertices): " << numElements * sizeof(data) << " " << sizeof(data) << "\n";
+	//Unbind();
+}

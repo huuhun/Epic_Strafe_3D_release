@@ -3,9 +3,13 @@
 #include <array>
 #include <thread>
 #include <functional>
+#include <map>
 
 #include <glad/glad.h>
 #include <glfw3.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H  
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -31,32 +35,10 @@
 #include "Collision.h"
 #include "Text.h"
 
-// Function to create a VBO for a textured quad
-GLuint createTexturedQuadVBO() {
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-	// Define the vertices of the quad
-	std::vector<float> verticesAndTexCoords = {
-		// Vertex positions     // Texture coordinates
-		-1.0f, -1.0f, 0.0f,     0.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,      1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,       1.0f, 1.0f,
-		-1.0f, 1.0f, 0.0f,      0.0f, 1.0f
-	};
-
-	/*glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);*/
-
-	return vbo;
-}
-
-
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void RenderText(Shader& shader, std::string text, float x, float y, float scale, glm::vec3 color, VertexArray& VAO, VertexBuffer& VBO);
 
 float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
@@ -67,6 +49,15 @@ float lastX = WindowSettings::SCR_WIDTH / 2.0f;
 float lastY = WindowSettings::SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
+struct Character {
+	unsigned int TextureID;  // ID handle of the glyph texture
+	glm::ivec2   Size;       // Size of glyph
+	glm::ivec2   Bearing;    // Offset from baseline to left/top of glyph
+	unsigned int Advance;    // Offset to advance to next glyph
+};
+
+std::map<char, Character> Characters;
+
 int main(int argc, char* args[]) {
 
 	if( !Window::initGLFW() ) return -1;
@@ -76,7 +67,73 @@ int main(int argc, char* args[]) {
 	Window::setGLVersion(4);
 	Window::getGLVersion();
 	Window::setGLGlobalState(window);
-	Window::initFT();
+	enableGLDebugContext();
+
+	FT_Library ft;
+	if( FT_Init_FreeType(&ft) )
+	{
+		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+		return -1;
+	}
+	FT_Face face;
+	std::string font_name = "res/fonts/VCR_OSD_MONO_1.001.ttf";
+	if( FT_New_Face(ft, font_name.c_str(), 0, &face) )
+	{
+		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+		return -1;
+	}
+	else {
+		FT_Set_Pixel_Sizes(face, 0, 48);
+
+		// set size to load glyphs as
+		FT_Set_Pixel_Sizes(face, 0, 48);
+
+		// disable byte-alignment restriction
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+		// load first 128 characters of ASCII set
+		for( unsigned char c = 0; c < 128; c++ )
+		{
+			// Load character glyph 
+			if( FT_Load_Char(face, c, FT_LOAD_RENDER) )
+			{
+				std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+				continue;
+			}
+			// generate texture
+			unsigned int texture;
+			glGenTextures(1, &texture);
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glTexImage2D(
+				GL_TEXTURE_2D,
+				0,
+				GL_RED,
+				face->glyph->bitmap.width,
+				face->glyph->bitmap.rows,
+				0,
+				GL_RED,
+				GL_UNSIGNED_BYTE,
+				face->glyph->bitmap.buffer
+			);
+			// set texture options
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			// now store character for later use
+			Character character = {
+				texture,
+				glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+				glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+				static_cast<unsigned int>( face->glyph->advance.x )
+			};
+			Characters.insert(std::pair<char, Character>(c, character));
+		}
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	// destroy FreeType once we're finished
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
 
 	//Callbacks
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -251,17 +308,13 @@ int main(int argc, char* args[]) {
 	boundaryVbo.Unbind();
 	boundaryVao.Unbind();
 
-	/*textVao.Bind();
+	textVao.Bind();
 	textVbo.Bind();
-
-	textVbo.BufferData(textVertices, sizeof(textVertices) / sizeof(textVertices[ 0 ]));
-	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
-	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
-
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
 	textVbo.Unbind();
-	textVao.Unbind();*/
-
-	enableGLDebugContext();
+	textVao.Unbind();
 
 	Shader shader("res/shaders/shader430.vert", "res/shaders/shader430.frag");
 
@@ -278,13 +331,6 @@ int main(int argc, char* args[]) {
 	renderer.setClearColor();
 
 	Transform transformation;
-
-	/*Text testText;
-	testText.loadFont("res/fonts/VCR_OSD_MONO_1.001.ttf", 25);
-	testText.setTextColor(0, 0, 255);
-	testText.setText("OSIDAOUDSAOIUDAOIDUSAOSDUSAOSDUO");
-	Texture testTextTexture(testText);
-	shader.setInt("testTextTexture", 3);*/
 
 	bool playing = true;
 	while( !glfwWindowShouldClose(window) ) {
@@ -355,9 +401,9 @@ int main(int argc, char* args[]) {
 
 			boundaryVao.Unbind();
 
-			/*textVao.Bind();
-			renderer.DrawArrays(GL_QUADS, 4);
-			textVao.Unbind();*/
+
+			RenderText(shader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.0f, 0.0f, 1.0f), textVao, textVbo);
+			RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.0f, 0.0f, 1.0f), textVao, textVbo);
 		}
 		else
 		{
@@ -432,4 +478,51 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	camera.ProcessMouseScroll(static_cast<float>( yoffset ));
+}
+
+// render line of text
+// -------------------
+void RenderText(Shader& shader, std::string text, float x, float y, float scale, glm::vec3 color, VertexArray& VAO, VertexBuffer& VBO)
+{
+	// activate corresponding render state	
+	shader.Use();
+	glUniform3f(glGetUniformLocation(shader.getID(), "textColor"), color.x, color.y, color.z);
+	glActiveTexture(GL_TEXTURE0);
+	glBindVertexArray(VAO.getId());
+
+	// iterate through all characters
+	std::string::const_iterator c;
+	for( c = text.begin(); c != text.end(); c++ )
+	{
+		Character ch = Characters[ *c ];
+
+		float xpos = x + ch.Bearing.x * scale;
+		float ypos = y - ( ch.Size.y - ch.Bearing.y ) * scale;
+
+		float w = ch.Size.x * scale;
+		float h = ch.Size.y * scale;
+		// update VBO for each character
+		float vertices[ 6 ][ 4 ] = {
+			{ xpos,     ypos + h,   0.0f, 0.0f },
+			{ xpos,     ypos,       0.0f, 1.0f },
+			{ xpos + w, ypos,       1.0f, 1.0f },
+
+			{ xpos,     ypos + h,   0.0f, 0.0f },
+			{ xpos + w, ypos,       1.0f, 1.0f },
+			{ xpos + w, ypos + h,   1.0f, 0.0f }
+		};
+		// render glyph texture over quad
+		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+		// update content of VBO memory
+		glBindBuffer(GL_ARRAY_BUFFER, VBO.m_ID);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // be sure to use glBufferSubData and not glBufferData
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		// render quad
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+		x += ( ch.Advance >> 6 ) * scale; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+	}
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

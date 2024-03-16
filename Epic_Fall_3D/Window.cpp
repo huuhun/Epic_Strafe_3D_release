@@ -13,6 +13,22 @@ bool Window::initGLFW()
 	return true;
 }
 
+GLFWwindow* Window::createGLWindow(const std::string& windowName, const int& w, const int& h)
+{
+	// WARNING: comment this line in a release build! 
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+
+	// Create a window
+	GLFWwindow* window = glfwCreateWindow(w, h, windowName.c_str(), NULL, NULL);
+	if( !window ) {
+		std::cerr << "Window could not be created! SDL_Error: %s\n" << glfwGetError(nullptr) << "\n";
+		//glfwTerminate();
+	}
+
+	return window;
+}
+
+
 void Window::createGLContext(GLFWwindow* window) {
 
 	glfwMakeContextCurrent(window);

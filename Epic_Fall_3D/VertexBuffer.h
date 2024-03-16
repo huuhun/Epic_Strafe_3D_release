@@ -11,5 +11,7 @@ public:
 
 	void BufferData(const void* data, const GLuint& numElements) const;
 
+	void BufferData(const void* data, const GLuint& numElements, const GLenum& usagePattern) const;
+
 	GLuint m_ID;
 };

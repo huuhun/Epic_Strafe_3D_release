@@ -5,6 +5,7 @@
 class Text
 {
 public:
+	static void initFT();
 	void createFTFace(const std::string& fontPath);
 	void setPixelFontSize(const int& size);
 
