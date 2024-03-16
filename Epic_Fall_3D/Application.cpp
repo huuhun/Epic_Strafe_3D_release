@@ -76,7 +76,7 @@ int main(int argc, char* args[]) {
 	Window::setGLVersion(4);
 	Window::getGLVersion();
 	Window::setGLGlobalState(window);
-	Window::initSDL_TTF();
+	Window::initFT();
 
 	//Callbacks
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -279,12 +279,12 @@ int main(int argc, char* args[]) {
 
 	Transform transformation;
 
-	Text testText;
+	/*Text testText;
 	testText.loadFont("res/fonts/VCR_OSD_MONO_1.001.ttf", 25);
 	testText.setTextColor(0, 0, 255);
 	testText.setText("OSIDAOUDSAOIUDAOIDUSAOSDUSAOSDUO");
 	Texture testTextTexture(testText);
-	shader.setInt("testTextTexture", 3);
+	shader.setInt("testTextTexture", 3);*/
 
 	bool playing = true;
 	while( !glfwWindowShouldClose(window) ) {
@@ -321,7 +321,7 @@ int main(int argc, char* args[]) {
 			brickWallTexture.ActiveTexture(GL_TEXTURE0);
 			faceTexture.ActiveTexture(GL_TEXTURE1);
 			boundaryTexture.ActiveTexture(GL_TEXTURE2);
-			testTextTexture.ActiveTexture(GL_TEXTURE3);
+			//testTextTexture.ActiveTexture(GL_TEXTURE3);
 
 			shader.Use();
 			transformation.setProjection(camera.Zoom,
@@ -392,7 +392,7 @@ int main(int argc, char* args[]) {
 	}
 
 	//cleanup:
-	Window::closeSDL(testText.getFont());
+	//Window::closeSDL(testText.getFont());
 	Window::destroyWindow();
 
 	return 0;

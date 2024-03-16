@@ -13,30 +13,6 @@ bool Window::initGLFW()
 	return true;
 }
 
-bool Window::initSDL_TTF()
-{
-	if( TTF_Init() < 0 ) {
-		std::cerr << "Failed to init SDL_ttf: " << TTF_GetError() << "\n";
-		glfwTerminate();
-		return -1;
-	}
-}
-
-GLFWwindow* Window::createGLWindow(const std::string& windowName, const int& w, const int& h)
-{
-	// WARNING: comment this line in a release build! 
-	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
-
-	// Create a window
-	GLFWwindow* window = glfwCreateWindow(w, h, windowName.c_str(), NULL, NULL);
-	if( !window ) {
-		std::cerr << "Window could not be created! SDL_Error: %s\n" << glfwGetError(nullptr) << "\n";
-		//glfwTerminate();
-	}
-
-	return window;
-}
-
 void Window::createGLContext(GLFWwindow* window) {
 
 	glfwMakeContextCurrent(window);
@@ -78,15 +54,6 @@ void Window::getGLVersion() {
 	else
 		std::cerr << "Failed to retrieve OpenGL version information." << std::endl;
 
-}
-
-void Window::closeSDL(TTF_Font* font) {
-	TTF_CloseFont(font);
-	if( font != nullptr )
-	{
-		font = nullptr;
-	}
-	TTF_Quit();
 }
 
 void Window::destroyWindow()
