@@ -1,1 +1,18 @@
-﻿
+﻿  Application.cpp
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(304,71): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(309,75): warning C4365: 'argument': conversion from 'int' to 'const unsigned __int64', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(63,26): warning C4100: 'args': unreferenced formal parameter
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(63,14): warning C4100: 'argc': unreferenced formal parameter
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(397,44): warning C4100: 'window': unreferenced formal parameter
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(404,33): warning C4100: 'window': unreferenced formal parameter
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(426,49): warning C4100: 'xoffset': unreferenced formal parameter
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(426,34): warning C4100: 'window': unreferenced formal parameter
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(466,23): warning C4365: 'argument': conversion from 'unsigned int' to 'GLsizei', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(465,23): warning C4365: 'argument': conversion from 'unsigned int' to 'GLsizei', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(474,22): warning C4365: 'argument': conversion from 'unsigned char' to 'char', signed/unsigned mismatch
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(436,12): warning C4189: 'textureSize': local variable is initialized but not referenced
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(485,10): warning C4189: 'alpha': local variable is initialized but not referenced
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(482,10): warning C4189: 'red': local variable is initialized but not referenced
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(484,10): warning C4189: 'blue': local variable is initialized but not referenced
+D:\projects\epic_fall\Epic_Fall_3D\Epic_Fall_3D\Application.cpp(483,10): warning C4189: 'green': local variable is initialized but not referenced
+  Epic_Fall_3D.vcxproj -> D:\projects\epic_fall\Epic_Fall_3D\x64\Debug\Epic_Fall_3D.exe
