@@ -39,8 +39,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-std::map<char, GLuint> createCharacterTextures(FT_Face& face);
-void renderText(const char* text, float x, float y, float scale, std::map<char, GLuint>& characterTextures, FT_Face& face, VertexBuffer& VBO, VertexArray& VAO);
+void RenderText(Shader& shader, std::string text, float x, float y, float scale, glm::vec3 color, VertexArray& VAO, VertexBuffer& VBO, Transform& transformation);
 
 float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
@@ -84,7 +83,54 @@ int main(int argc, char* args[]) {
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 		return -1;
 	}
-	FT_Set_Pixel_Sizes(face, 0, 42);
+	else {
+		FT_Set_Pixel_Sizes(face, 0, 48);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+		// load first 128 characters of ASCII set
+		for( unsigned char c = 0; c < 128; c++ )
+		{
+			// Load character glyph 
+			if( FT_Load_Char(face, c, FT_LOAD_RENDER) )
+			{
+				std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+				continue;
+			}
+			// generate texture
+			unsigned int texture;
+			glGenTextures(1, &texture);
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glTexImage2D(
+				GL_TEXTURE_2D,
+				0,
+				GL_RED,
+				face->glyph->bitmap.width,
+				face->glyph->bitmap.rows,
+				0,
+				GL_RED,
+				GL_UNSIGNED_BYTE,
+				face->glyph->bitmap.buffer
+			);
+			// set texture options
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			// now store character for later use
+			Character character = {
+				texture,
+				glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+				glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+				static_cast<unsigned int>( face->glyph->advance.x )
+			};
+			Characters.insert(std::pair<char, Character>(c, character));
+		}
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	// destroy FreeType once we're finished
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
 
 
 	//Callbacks
@@ -260,6 +306,14 @@ int main(int argc, char* args[]) {
 	boundaryVbo.Unbind();
 	boundaryVao.Unbind();
 
+	textVao.Bind();
+	textVbo.Bind();
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	textVbo.Unbind();
+	textVao.Unbind();
+
 	Shader shader("res/shaders/shader430.vert", "res/shaders/shader430.frag");
 
 	Texture brickWallTexture("res/textures/brick-wall.png");
@@ -277,8 +331,6 @@ int main(int argc, char* args[]) {
 	Transform transformation;
 	// Load font here
 
-	std::map<char, GLuint> characterTextures = createCharacterTextures(face); // Create character textures
-
 	bool playing = true;
 	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
@@ -291,49 +343,48 @@ int main(int argc, char* args[]) {
 
 		if( playing )
 		{
-			for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
-				if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
-				   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
-				   checkCollision(camera.Position, topBoundaryPos.at(i), 21.0f) ||
-				   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
+			//for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
+			//	if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
+			//	   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
+			//	   checkCollision(camera.Position, topBoundaryPos.at(i), 21.0f) ||
+			//	   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
 
-					std::cout << "Collision detected between the camera and cube " << std::endl;
-			}
+			//		std::cout << "Collision detected between the camera and cube " << std::endl;
+			//}
 
-			for( int i = 0; i < cubePos.size(); ++i ) {
-				if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
-					std::cout << "Collision detected between the camera and cube " << i << std::endl;
-			}
+			//for( int i = 0; i < cubePos.size(); ++i ) {
+			//	if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
+			//		std::cout << "Collision detected between the camera and cube " << i << std::endl;
+			//}
 
-			for( int i = 0; i < spinCubePos.size(); ++i ) {
-				if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) )
-					std::cout << "Collision detected between the camera and cube " << i << std::endl;
-			}
+			//for( int i = 0; i < spinCubePos.size(); ++i ) {
+			//	if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) )
+			//		std::cout << "Collision detected between the camera and cube " << i << std::endl;
+			//}
 			renderer.Clear();
 
 			brickWallTexture.ActiveTexture(GL_TEXTURE0);
 			faceTexture.ActiveTexture(GL_TEXTURE1);
 			boundaryTexture.ActiveTexture(GL_TEXTURE2);
-			//testTextTexture.ActiveTexture(GL_TEXTURE3);
 
 			shader.Use();
 			transformation.setProjection(camera.Zoom,
-										 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
+										 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);
 
 			shader.setMat4("projection", transformation.getProjection());
 			// create transformations
 			transformation.setCameraView(camera.GetViewMatrix());
 			shader.setMat4("view", transformation.getView());
 
-			//cubeVao.Bind();
-			//shader.setInt("renderBoundary", 0);//set flag to 0 to render cube
-			//moveCameraHitbox(camera, shader);
-			//reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
-			//					camera, shader, renderer);
-			//reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
-			//							camera, shader, renderer, spinCubeAxes);
+			cubeVao.Bind();
+			shader.setInt("renderBoundary", 0);//set flag to 0 to render cube
+			moveCameraHitbox(camera, shader);
+			reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+								camera, shader, renderer);
+			reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+										camera, shader, renderer, spinCubeAxes);
 
-			//cubeVao.Unbind();
+			cubeVao.Unbind();
 
 			//boundaryVao.Bind();
 			//shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
@@ -347,11 +398,10 @@ int main(int argc, char* args[]) {
 			//				   camera, shader, renderer);
 
 			//boundaryVao.Unbind();
+
 			shader.setInt("renderBoundary", 2);
-			shader.setVec3("textColor", 1.0f, 0.0f, 0.0f);
-			const float distanceFromCamera = 2.0f;
-			glm::vec3 textPosition = camera.Position + camera.Front * distanceFromCamera;
-			renderText("HELLO", textPosition.x, textPosition.y, textPosition.z, characterTextures, face, textVbo, textVao);
+			RenderText(shader, "HELLO", 1.0f, 1.0f, 1.0f, glm::vec3(0.0f, 0.0f, 1.0f), textVao, textVbo, transformation);
+			//RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f), textVao, textVbo, transformation);
 		}
 		else
 		{
@@ -428,111 +478,62 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	camera.ProcessMouseScroll(static_cast<float>( yoffset ));
 }
 
-// Function to create textures for characters
-std::map<char, GLuint> createCharacterTextures(FT_Face& face) {
-	std::map<char, GLuint> characterTextures;
-
-	// Set the size of the texture
-	const int textureSize = 512;
-
-	// Enable byte-alignment restriction
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	// Generate a texture
-	GLuint texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	// Set texture parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// Generate textures for characters
-	for( unsigned char c = 0; c < 128; ++c ) {
-		// Load glyph
-		if( FT_Load_Char(face, c, FT_LOAD_RENDER) ) {
-			std::cerr << "Failed to load Glyph for character: " << c << std::endl;
-			continue;
-		}
-
-		// Generate texture
-		glTexImage2D(
-			GL_TEXTURE_2D,
-			0,
-			GL_RED,
-			face->glyph->bitmap.width,
-			face->glyph->bitmap.rows,
-			0,
-			GL_RED,
-			GL_UNSIGNED_BYTE,
-			face->glyph->bitmap.buffer
-		);
-
-		// Set texture size and position
-		characterTextures[ c ] = texture;
-	}
-
-	return characterTextures;
-}
-
 // Function to render text using OpenGL
-void renderText(const char* text, float x, float y, float scale, std::map<char, GLuint>& characterTextures, FT_Face& face, VertexBuffer& VBO, VertexArray& VAO) {
-	GLfloat red = 0.0f;
-	GLfloat green = 0.0f;
-	GLfloat blue = 1.0f; // Blue color
-	GLfloat alpha = 1.0f; // Fully opaque
-
-	// Enable blending
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+void RenderText(Shader& shader, std::string text, float x, float y, float scale, glm::vec3 color, VertexArray& VAO, VertexBuffer& VBO, Transform& transformation)
+{
+	// activate corresponding render state
+	shader.Use();
+	shader.setVec3("textColor", glm::vec3(color.x, color.y, color.z));;
+	//glUniform3f(glGetUniformLocation(shader.getID(), "textColor"), color.x, color.y, color.z);
+	//glActiveTexture(GL_TEXTURE3);
 	VAO.Bind();
-	VBO.Bind();
 
-	// Set vertex attribute pointers
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
+	// Iterate through all characters
+	std::string::const_iterator c;
+	for( c = text.begin(); c != text.end(); c++ )
+	{
+		Character ch = Characters[ *c ];
 
-	// Set projection matrix
-	// Set shader program and other necessary setup
+		// Calculate transformed position in NDC
+		glm::vec4 position = transformation.getView() * glm::vec4(x + ch.Bearing.x * scale, y - ( ch.Size.y - ch.Bearing.y ) * scale, 0.0f, 1.0f);
+		position = transformation.getProjection() * position;
 
-	// Iterate through characters in text
-	for( const char* p = text; *p; ++p ) {
-		// Get character texture
-		GLuint texture = characterTextures[ *p ];
+		float xpos = position.x;
+		float ypos = position.y;
 
-		// Calculate character position and size
-		GLfloat xpos = x + face->glyph->bitmap_left * scale;
-		GLfloat ypos = y - ( face->glyph->bitmap.rows - face->glyph->bitmap_top ) * scale;
-		GLfloat w = face->glyph->bitmap.width * scale;
-		GLfloat h = face->glyph->bitmap.rows * scale;
+		/*float w = ch.Size.x * scale;
+		float h = ch.Size.y * scale;*/
 
-		// Update VBO with new character vertices
-		GLfloat vertices[ 6 ][ 4 ] = {
-			{ xpos,     ypos + h,   0.0f, 0.0f },
-			{ xpos,     ypos,       0.0f, 1.0f },
-			{ xpos + w, ypos,       1.0f, 1.0f },
-			{ xpos,     ypos + h,   0.0f, 0.0f },
-			{ xpos + w, ypos,       1.0f, 1.0f },
-			{ xpos + w, ypos + h,   1.0f, 0.0f }
-		};
+		/*float xpos = x + ch.Bearing.x * scale;
+		float ypos = y - ( ch.Size.y - ch.Bearing.y ) * scale;*/
 
-		// Render character
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+		//float xpos = x + ch.Bearing.x * scale;
+		//float ypos = y - ( ch.Size.y - ch.Bearing.y ) * scale;
+
+		float w = ch.Size.x * scale;
+		float h = ch.Size.y * scale;
+
+		// Update VBO for each character
+		float vertices[ 6 ][ 4 ] = {
+			{xpos, ypos + h, 0.0f, 0.0f},
+			{xpos, ypos, 0.0f, 1.0f},
+			{xpos + w, ypos, 1.0f, 1.0f},
+
+			{xpos, ypos + h, 0.0f, 0.0f},
+			{xpos + w, ypos, 1.0f, 1.0f},
+			{xpos + w, ypos + h, 1.0f, 0.0f} };
+		// Render glyph texture over quad
+		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+		// Update content of VBO memory
+		VBO.Bind();
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		// Render quad
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-
-		// Advance cursors for next glyph
-		x += ( face->glyph->advance.x >> 6 ) * scale;
-		y += ( face->glyph->advance.y >> 6 ) * scale;
-
-		// Set up shader program and other necessary setup
-
+		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+		x += ( ch.Advance >> 6 ) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64, divide amount of 1/64th pixels by 64 to get amount of pixels)
 	}
-
-	// Disable blending
-	glDisable(GL_BLEND);
-
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

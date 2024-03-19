@@ -17,7 +17,7 @@ uniform int renderBoundary;  // Set to 0 for the brick wall cube, 1 for the boun
 void main()
 {
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
-	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
+	TexCoord = aTexCoord;
 	RenderType = renderBoundary;
 
 }

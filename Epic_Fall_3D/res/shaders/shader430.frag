@@ -2,7 +2,7 @@
 
 out vec4 FragColor;
 
-in vec3 ourColor;
+//in vec3 textColor;
 in vec2 TexCoord;
 
 flat in int RenderType;  // Uniform indicating the type of cube to render
@@ -12,6 +12,7 @@ uniform sampler2D brickWallTexture;
 uniform sampler2D faceTexture;
 uniform sampler2D boundaryTexture;
 uniform sampler2D textTexture;
+uniform vec3 textColor;
 
 void main()
 {
@@ -25,6 +26,7 @@ void main()
 	    //FragColor = mix( mix(texture(brickWallTexture, TexCoord), texture(faceTexture, TexCoord), 0.4), texture(testTextTexture, TexCoord), 0.5 );
         //FragColor = texture(testTextTexture, TexCoord);
     }else if(RenderType == 2){
-        FragColor = texture(textTexture, TexCoord);
+        vec4 sampled = vec4(1.0, 1.0, 1.0, texture(textTexture, TexCoord).r);
+        FragColor = vec4(textColor, 1.0) * sampled;
     }
 }
