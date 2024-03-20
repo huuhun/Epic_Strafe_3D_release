@@ -400,7 +400,7 @@ int main(int argc, char* args[]) {
 			//boundaryVao.Unbind();
 
 			shader.setInt("renderBoundary", 2);
-			RenderText(shader, "HELLO", 1.0f, 1.0f, 1.0f, glm::vec3(0.0f, 0.0f, 1.0f), textVao, textVbo, transformation);
+			RenderText(shader, "HeLlO", 1.0f, 1.0f, 1.0f, glm::vec3(0.0f, 0.0f, 1.0f), textVao, textVbo, transformation);
 			//RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f), textVao, textVbo, transformation);
 		}
 		else
@@ -495,8 +495,10 @@ void RenderText(Shader& shader, std::string text, float x, float y, float scale,
 		Character ch = Characters[ *c ];
 
 		// Calculate transformed position in NDC
-		glm::vec4 position = transformation.getView() * glm::vec4(x + ch.Bearing.x * scale, y - ( ch.Size.y - ch.Bearing.y ) * scale, 0.0f, 1.0f);
-		position = transformation.getProjection() * position;
+		//glm::vec4 position = transformation.getView() * glm::vec4(x + ch.Bearing.x * scale, y - ( ch.Size.y - ch.Bearing.y ) * scale, 0.0f, 1.0f);
+		//position = transformation.getProjection() * position;
+
+		glm::vec4 position = transformation.getProjection() * transformation.getView() * glm::vec4(x + ch.Bearing.x * scale, y - ch.Size.y * scale + ch.Bearing.y * scale, 0.0f, 1.0f);
 
 		float xpos = position.x;
 		float ypos = position.y;
@@ -527,8 +529,8 @@ void RenderText(Shader& shader, std::string text, float x, float y, float scale,
 		// Update content of VBO memory
 		VBO.Bind();
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
-
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 		// Render quad
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
