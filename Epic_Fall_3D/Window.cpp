@@ -60,7 +60,7 @@ void Window::setGLGlobalState(GLFWwindow* window)
 	glEnable(GL_DEPTH_TEST); // REMOVE THIS IF DRAW 2D ONLY
 	//glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
-	// glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // this line make weird green
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // this line make weird green
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //disable mouse here
 

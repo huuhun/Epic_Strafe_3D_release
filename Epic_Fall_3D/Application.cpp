@@ -77,7 +77,7 @@ int main(int argc, char* args[]) {
 		return -1;
 	}
 	FT_Face face;
-	std::string font_name = "res/fonts/VCR_OSD_MONO_1.001.ttf";
+	std::string font_name = "res/fonts/advanced_pixel-7.ttf";
 	if( FT_New_Face(ft, font_name.c_str(), 0, &face) )
 	{
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
@@ -329,6 +329,7 @@ int main(int argc, char* args[]) {
 	renderer.setClearColor();
 
 	Transform transformation;
+	//Transform textTransformation;
 	// Load font here
 
 	bool playing = true;
@@ -363,9 +364,9 @@ int main(int argc, char* args[]) {
 			//}
 			renderer.Clear();
 
-			brickWallTexture.ActiveTexture(GL_TEXTURE0);
-			faceTexture.ActiveTexture(GL_TEXTURE1);
-			boundaryTexture.ActiveTexture(GL_TEXTURE2);
+			//brickWallTexture.ActiveTexture(GL_TEXTURE0);
+			//faceTexture.ActiveTexture(GL_TEXTURE1);
+			//boundaryTexture.ActiveTexture(GL_TEXTURE2);
 
 			shader.Use();
 			transformation.setProjection(camera.Zoom,
@@ -374,16 +375,18 @@ int main(int argc, char* args[]) {
 			shader.setMat4("projection", transformation.getProjection());
 			// create transformations
 			transformation.setCameraView(camera.GetViewMatrix());
+
 			shader.setMat4("view", transformation.getView());
 
 			cubeVao.Bind();
+			cubeVbo.Bind();
 			shader.setInt("renderBoundary", 0);//set flag to 0 to render cube
 			moveCameraHitbox(camera, shader);
 			reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
 								camera, shader, renderer);
 			reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
 										camera, shader, renderer, spinCubeAxes);
-
+			cubeVbo.Unbind();
 			cubeVao.Unbind();
 
 			//boundaryVao.Bind();
@@ -485,7 +488,7 @@ void RenderText(Shader& shader, std::string text, float x, float y, float scale,
 	shader.Use();
 	shader.setVec3("textColor", glm::vec3(color.x, color.y, color.z));;
 	//glUniform3f(glGetUniformLocation(shader.getID(), "textColor"), color.x, color.y, color.z);
-	//glActiveTexture(GL_TEXTURE3);
+	glActiveTexture(GL_TEXTURE0);
 	VAO.Bind();
 
 	// Iterate through all characters
@@ -498,38 +501,33 @@ void RenderText(Shader& shader, std::string text, float x, float y, float scale,
 		//glm::vec4 position = transformation.getView() * glm::vec4(x + ch.Bearing.x * scale, y - ( ch.Size.y - ch.Bearing.y ) * scale, 0.0f, 1.0f);
 		//position = transformation.getProjection() * position;
 
-		glm::vec4 position = transformation.getProjection() * transformation.getView() * glm::vec4(x + ch.Bearing.x * scale, y - ch.Size.y * scale + ch.Bearing.y * scale, 0.0f, 1.0f);
+		//glm::vec4 position = transformation.getProjection() * transformation.getView() * glm::vec4(x + ch.Bearing.x * scale, y - ch.Size.y * scale + ch.Bearing.y * scale, 0.0f, 1.0f);
 
-		float xpos = position.x;
-		float ypos = position.y;
+		//float xpos = position.x;
+		//float ypos = position.y;
 
-		/*float w = ch.Size.x * scale;
-		float h = ch.Size.y * scale;*/
 
-		/*float xpos = x + ch.Bearing.x * scale;
-		float ypos = y - ( ch.Size.y - ch.Bearing.y ) * scale;*/
-
-		//float xpos = x + ch.Bearing.x * scale;
-		//float ypos = y - ( ch.Size.y - ch.Bearing.y ) * scale;
+		float xpos = x + ch.Bearing.x * scale;
+		float ypos = y - ( ch.Size.y - ch.Bearing.y ) * scale;
 
 		float w = ch.Size.x * scale;
 		float h = ch.Size.y * scale;
 
 		// Update VBO for each character
 		float vertices[ 6 ][ 4 ] = {
-			{xpos, ypos + h, 0.0f, 0.0f},
-			{xpos, ypos, 0.0f, 1.0f},
-			{xpos + w, ypos, 1.0f, 1.0f},
+			{xpos,     ypos + h,     0.0f, 0.0f},
+			{xpos,     ypos,         0.0f, 1.0f},
+			{xpos + w, ypos,         1.0f, 1.0f},
 
-			{xpos, ypos + h, 0.0f, 0.0f},
-			{xpos + w, ypos, 1.0f, 1.0f},
-			{xpos + w, ypos + h, 1.0f, 0.0f} };
+			{xpos,     ypos + h,     0.0f, 0.0f},
+			{xpos + w, ypos,         1.0f, 1.0f},
+			{xpos + w, ypos + h,     1.0f, 0.0f} };
 		// Render glyph texture over quad
 		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
 		// Update content of VBO memory
 		VBO.Bind();
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		VBO.Unbind();
 
 		// Render quad
 		glDrawArrays(GL_TRIANGLES, 0, 6);

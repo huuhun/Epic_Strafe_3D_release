@@ -134,7 +134,7 @@ void reallocateSpinningObstacles(std::vector<glm::vec3>& cubePos, const unsigned
 			Model cubeModel;
 			cubeModel.setTranslation(cubePos.at(i));
 			float angle{ (float)glfwGetTime() * 50.0f };
-			cubeModel.setFixedModelRotation(angle, axes.at(i));
+			cubeModel.setSpinModelRotation(angle, axes.at(i));
 			shader.setMat4("model", cubeModel.getModel());
 			renderer.DrawArrays(GL_TRIANGLES, verticesAmount);
 		}
