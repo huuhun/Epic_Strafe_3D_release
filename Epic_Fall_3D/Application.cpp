@@ -378,15 +378,14 @@ int main(int argc, char* args[]) {
 
 			shader.setMat4("view", transformation.getView());
 
+			shader.setInt("renderTextFlag", 0);
 			cubeVao.Bind();
-			cubeVbo.Bind();
 			shader.setInt("renderBoundary", 0);//set flag to 0 to render cube
 			moveCameraHitbox(camera, shader);
 			reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
 								camera, shader, renderer);
 			reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
 										camera, shader, renderer, spinCubeAxes);
-			cubeVbo.Unbind();
 			cubeVao.Unbind();
 
 			//boundaryVao.Bind();
@@ -401,7 +400,7 @@ int main(int argc, char* args[]) {
 			//				   camera, shader, renderer);
 
 			//boundaryVao.Unbind();
-
+			shader.setInt("renderTextFlag", 1);
 			shader.setInt("renderBoundary", 2);
 			RenderText(shader, "HeLlO", 1.0f, 1.0f, 1.0f, glm::vec3(0.0f, 0.0f, 1.0f), textVao, textVbo, transformation);
 			//RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f), textVao, textVbo, transformation);
