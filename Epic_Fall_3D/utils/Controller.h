@@ -6,5 +6,6 @@
 
 #include "Settings.h"
 #include "../Camera.h"
+#include "States.h"
 
-void processInput(GLFWwindow* window, float& deltaTime,Camera& camera);
+void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayState& state);

@@ -34,6 +34,7 @@
 #include "Camera.h"
 #include "Collision.h"
 #include "Text.h"
+#include "States.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -50,7 +51,7 @@ bool firstMouse = true;
 
 int main(int argc, char* args[]) {
 
-	if (!Window::initGLFW()) return -1;
+	if( !Window::initGLFW() ) return -1;
 	GLFWwindow* window{ Window::createGLWindow("Epic Fall 3D", WindowSettings::SCR_WIDTH, WindowSettings::SCR_HEIGHT) };
 	Window::createGLContext(window);
 	Window::loadGLFunctionPointers();
@@ -117,48 +118,92 @@ int main(int argc, char* args[]) {
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
-	float textVertices[] = {
-	-1.5f, -1.5f, -1.5f,  0.0f, 0.0f,
-	 1.5f, -1.5f, -1.5f,  1.0f, 0.0f,
-	 1.5f,  1.5f, -1.5f,  1.0f, 1.0f,
-	 1.5f,  1.5f, -1.5f,  1.0f, 1.0f,
-	-1.5f,  1.5f, -1.5f,  0.0f, 1.0f,
-	-1.5f, -1.5f, -1.5f,  0.0f, 0.0f,
-	 			   
-	-1.5f, -1.5f,  1.5f,  0.0f, 0.0f,
-	 1.5f, -1.5f,  1.5f,  1.0f, 0.0f,
-	 1.5f,  1.5f,  1.5f,  1.0f, 1.0f,
-	 1.5f,  1.5f,  1.5f,  1.0f, 1.0f,
-	-1.5f,  1.5f,  1.5f,  0.0f, 1.0f,
-	-1.5f, -1.5f,  1.5f,  0.0f, 0.0f,
-	 			   
-	-1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
-	-1.5f,  1.5f, -1.5f,  1.0f, 1.0f,
-	-1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
-	-1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
-	-1.5f, -1.5f,  1.5f,  0.0f, 0.0f,
-	-1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
-	 			   
-	 1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
-	 1.5f,  1.5f, -1.5f,  1.0f, 1.0f,
-	 1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
-	 1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
-	 1.5f, -1.5f,  1.5f,  0.0f, 0.0f,
-	 1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
-	 			   
-	-1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
-	 1.5f, -1.5f, -1.5f,  1.0f, 1.0f,
-	 1.5f, -1.5f,  1.5f,  1.0f, 0.0f,
-	 1.5f, -1.5f,  1.5f,  1.0f, 0.0f,
-	-1.5f, -1.5f,  1.5f,  0.0f, 0.0f,
-	-1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
-	 			   
-	-1.5f,  1.5f, -1.5f,  0.0f, 1.0f,
-	 1.5f,  1.5f, -1.5f,  1.0f, 1.0f,
-	 1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
-	 1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
-	-1.5f,  1.5f,  1.5f,  0.0f, 0.0f,
-	-1.5f,  1.5f, -1.5f,  0.0f, 1.0f
+	float enterTextVertices[] = {
+	-2.0f, -2.0f, -2.0f,  0.0f, 0.0f,
+	 2.0f, -2.0f, -2.0f,  1.0f, 0.0f,
+	 2.0f,  2.0f, -2.0f,  1.0f, 1.0f,
+	 2.0f,  2.0f, -2.0f,  1.0f, 1.0f,
+	-2.0f,  2.0f, -2.0f,  0.0f, 1.0f,
+	-2.0f, -2.0f, -2.0f,  0.0f, 0.0f,
+
+	-2.0f, -2.0f,  2.0f,  0.0f, 0.0f,
+	 2.0f, -2.0f,  2.0f,  1.0f, 0.0f,
+	 2.0f,  2.0f,  2.0f,  1.0f, 1.0f,
+	 2.0f,  2.0f,  2.0f,  1.0f, 1.0f,
+	-2.0f,  2.0f,  2.0f,  0.0f, 1.0f,
+	-2.0f, -2.0f,  2.0f,  0.0f, 0.0f,
+
+	-2.0f,  2.0f,  2.0f,  1.0f, 0.0f,
+	-2.0f,  2.0f, -2.0f,  1.0f, 1.0f,
+	-2.0f, -2.0f, -2.0f,  0.0f, 1.0f,
+	-2.0f, -2.0f, -2.0f,  0.0f, 1.0f,
+	-2.0f, -2.0f,  2.0f,  0.0f, 0.0f,
+	-2.0f,  2.0f,  2.0f,  1.0f, 0.0f,
+
+	 2.0f,  2.0f,  2.0f,  1.0f, 0.0f,
+	 2.0f,  2.0f, -2.0f,  1.0f, 1.0f,
+	 2.0f, -2.0f, -2.0f,  0.0f, 1.0f,
+	 2.0f, -2.0f, -2.0f,  0.0f, 1.0f,
+	 2.0f, -2.0f,  2.0f,  0.0f, 0.0f,
+	 2.0f,  2.0f,  2.0f,  1.0f, 0.0f,
+
+	-2.0f, -2.0f, -2.0f,  0.0f, 1.0f,
+	 2.0f, -2.0f, -2.0f,  1.0f, 1.0f,
+	 2.0f, -2.0f,  2.0f,  1.0f, 0.0f,
+	 2.0f, -2.0f,  2.0f,  1.0f, 0.0f,
+	-2.0f, -2.0f,  2.0f,  0.0f, 0.0f,
+	-2.0f, -2.0f, -2.0f,  0.0f, 1.0f,
+
+	-2.0f,  2.0f, -2.0f,  0.0f, 1.0f,
+	 2.0f,  2.0f, -2.0f,  1.0f, 1.0f,
+	 2.0f,  2.0f,  2.0f,  1.0f, 0.0f,
+	 2.0f,  2.0f,  2.0f,  1.0f, 0.0f,
+	-2.0f,  2.0f,  2.0f,  0.0f, 0.0f,
+	-2.0f,  2.0f, -2.0f,  0.0f, 1.0f
+	};
+
+	float gameOverTextVertices[] = {
+	-2.5f, -2.5f, -2.5f,  0.0f, 0.0f,
+	 2.5f, -2.5f, -2.5f,  1.0f, 0.0f,
+	 2.5f,  2.5f, -2.5f,  1.0f, 1.0f,
+	 2.5f,  2.5f, -2.5f,  1.0f, 1.0f,
+	-2.5f,  2.5f, -2.5f,  0.0f, 1.0f,
+	-2.5f, -2.5f, -2.5f,  0.0f, 0.0f,
+
+	-2.5f, -2.5f,  2.5f,  0.0f, 0.0f,
+	 2.5f, -2.5f,  2.5f,  1.0f, 0.0f,
+	 2.5f,  2.5f,  2.5f,  1.0f, 1.0f,
+	 2.5f,  2.5f,  2.5f,  1.0f, 1.0f,
+	-2.5f,  2.5f,  2.5f,  0.0f, 1.0f,
+	-2.5f, -2.5f,  2.5f,  0.0f, 0.0f,
+
+	-2.5f,  2.5f,  2.5f,  1.0f, 0.0f,
+	-2.5f,  2.5f, -2.5f,  1.0f, 1.0f,
+	-2.5f, -2.5f, -2.5f,  0.0f, 1.0f,
+	-2.5f, -2.5f, -2.5f,  0.0f, 1.0f,
+	-2.5f, -2.5f,  2.5f,  0.0f, 0.0f,
+	-2.5f,  2.5f,  2.5f,  1.0f, 0.0f,
+
+	 2.5f,  2.5f,  2.5f,  1.0f, 0.0f,
+	 2.5f,  2.5f, -2.5f,  1.0f, 1.0f,
+	 2.5f, -2.5f, -2.5f,  0.0f, 1.0f,
+	 2.5f, -2.5f, -2.5f,  0.0f, 1.0f,
+	 2.5f, -2.5f,  2.5f,  0.0f, 0.0f,
+	 2.5f,  2.5f,  2.5f,  1.0f, 0.0f,
+
+	-2.5f, -2.5f, -2.5f,  0.0f, 1.0f,
+	 2.5f, -2.5f, -2.5f,  1.0f, 1.0f,
+	 2.5f, -2.5f,  2.5f,  1.0f, 0.0f,
+	 2.5f, -2.5f,  2.5f,  1.0f, 0.0f,
+	-2.5f, -2.5f,  2.5f,  0.0f, 0.0f,
+	-2.5f, -2.5f, -2.5f,  0.0f, 1.0f,
+
+	-2.5f,  2.5f, -2.5f,  0.0f, 1.0f,
+	 2.5f,  2.5f, -2.5f,  1.0f, 1.0f,
+	 2.5f,  2.5f,  2.5f,  1.0f, 0.0f,
+	 2.5f,  2.5f,  2.5f,  1.0f, 0.0f,
+	-2.5f,  2.5f,  2.5f,  0.0f, 0.0f,
+	-2.5f,  2.5f, -2.5f,  0.0f, 1.0f
 	};
 
 	float boundaryVertices[] = {
@@ -209,24 +254,25 @@ int main(int argc, char* args[]) {
 	std::vector<glm::vec3> cubePos;
 	std::thread spawnObstaclesPosThread([&]() {
 		cubePos = spawnObstacles(OBSTACLES_NUM);
-		});
+										});
 
-	glm::vec3 textCubePos = spawnText(0.0f, 0.0f, 0.0f);
+	glm::vec3 enterTextCubePos = spawnText(0.0f, 0.0f, 0.0f);
+	glm::vec3 gameOverTextCubePos = spawnText(0.0f, 0.0f, 0.0f);
 
 	std::vector<glm::vec3> spinCubePos;
 	std::thread spawnSpinObstaclesPosThread([&]() {
 		spinCubePos = spawnObstacles(SPIN_OBSTACLES_NUM, true);
-		});
+											});
 
 	std::vector<glm::vec3> spinCubeAxes;
 	std::thread spawnSpinObstaclesAxesThread([&]() {
 		spinCubeAxes = spawnAxes(SPIN_OBSTACLES_NUM);
-		});
+											 });
 
 	std::vector<glm::vec3> leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos;
 	std::thread spawnBoundariesPosThread([&]() {
 		spawnBoundariesVector(leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos);
-		});
+										 });
 
 	spawnObstaclesPosThread.join();
 	spawnSpinObstaclesPosThread.join();
@@ -244,7 +290,7 @@ int main(int argc, char* args[]) {
 
 	cubeVao.Bind();
 	cubeVbo.Bind();
-	cubeVbo.BufferData(cubeVertices, sizeof(cubeVertices) / sizeof(cubeVertices[0]));
+	cubeVbo.BufferData(cubeVertices, sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]));
 
 	// position attribute
 	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
@@ -253,7 +299,7 @@ int main(int argc, char* args[]) {
 	// texture coord attribute
 	//VertexArray::LinkAttrib(2, 2, GL_FLOAT, 8 * sizeof(float), (void*)( 6 * sizeof(float) ));
 	// texture coord attribute
-	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
 
 	//ebo.Bind();
 	//ebo.BufferData(indices, sizeof(indices) / sizeof(indices[ 0 ]));
@@ -264,18 +310,18 @@ int main(int argc, char* args[]) {
 	boundaryVao.Bind();
 	boundaryVbo.Bind();
 
-	boundaryVbo.BufferData(boundaryVertices, sizeof(boundaryVertices) / sizeof(boundaryVertices[0]));
+	boundaryVbo.BufferData(boundaryVertices, sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]));
 	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
-	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
 
 	boundaryVbo.Unbind();
 	boundaryVao.Unbind();
 
 	textVao.Bind();
 	textVbo.Bind();
-	textVbo.BufferData(textVertices, sizeof(textVertices) / sizeof(textVertices[0]));
+	textVbo.BufferData(enterTextVertices, sizeof(enterTextVertices) / sizeof(enterTextVertices[ 0 ]));
 	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
-	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
 	textVbo.Unbind();
 	textVao.Unbind();
 
@@ -284,13 +330,15 @@ int main(int argc, char* args[]) {
 	Texture brickWallTexture("res/textures/brick-wall.png");
 	Texture faceTexture("res/textures/face.png");
 	Texture boundaryTexture("res/textures/boundary.png");
-	Texture enterTextTexture("res/textures/grey_background.png");
+	Texture enterTextBackgroundTexture("res/textures/grey_background.png");
+	Texture gameOverTextBackgroundTexture("res/textures/game_over.png");
 
 	shader.Use();
 	shader.setInt("brickWallTexture", 0);
 	shader.setInt("faceTexture", 1);
 	shader.setInt("boundaryTexture", 2);
-	shader.setInt("textTexture", 3);
+	shader.setInt("enterTextBackgroundTexture", 3);
+	shader.setInt("gameOverTextBackgroundTexture", 4);
 
 	Renderer renderer;
 	renderer.setClearColor();
@@ -299,121 +347,145 @@ int main(int argc, char* args[]) {
 	//Transform textTransformation;
 	// Load font here
 
-	bool playing = false;
-	while (!glfwWindowShouldClose(window)) {
+	PlayState state{ PlayState::MENU };
+	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
 		// --------------------
-		float currentFrame = static_cast<float>(glfwGetTime());
+		float currentFrame = static_cast<float>( glfwGetTime() );
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		processInput(window, deltaTime, camera);
+		processInput(window, deltaTime, camera, state);
 
-		if (playing)
+		switch( state )
 		{
-			for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
-				if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
-				   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
-				   checkCollision(camera.Position, topBoundaryPos.at(i), 21.0f) ||
-				   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
+			case PlayState::PLAYING:
 
-					std::cout << "Collision detected between the camera and cube " << std::endl;
-			}
+				for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
+					if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
+					   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
+					   checkCollision(camera.Position, topBoundaryPos.at(i), 21.0f) ||
+					   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
 
-			for( int i = 0; i < cubePos.size(); ++i ) {
-				if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
-					std::cout << "Collision detected between the camera and cube " << i << std::endl;
-			}
+						std::cout << "Collision detected between the camera and cube " << std::endl;
+				}
 
-			for( int i = 0; i < spinCubePos.size(); ++i ) {
-				if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) )
-					std::cout << "Collision detected between the camera and cube " << i << std::endl;
-			}
-			renderer.Clear();
+				for( int i = 0; i < cubePos.size(); ++i ) {
+					if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
+						std::cout << "Collision detected between the camera and cube " << i << std::endl;
+				}
 
-			brickWallTexture.ActiveTexture(GL_TEXTURE0);
-			faceTexture.ActiveTexture(GL_TEXTURE1);
-			boundaryTexture.ActiveTexture(GL_TEXTURE2);
-			enterTextTexture.ActiveTexture(GL_TEXTURE3);
+				for( int i = 0; i < spinCubePos.size(); ++i ) {
+					if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) )
+						std::cout << "Collision detected between the camera and cube " << i << std::endl;
+				}
+				renderer.Clear();
 
-			shader.Use();
-			transformation.setProjection(camera.Zoom,
-				(float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);
+				brickWallTexture.ActiveTexture(GL_TEXTURE0);
+				faceTexture.ActiveTexture(GL_TEXTURE1);
+				boundaryTexture.ActiveTexture(GL_TEXTURE2);
 
-			shader.setMat4("projection", transformation.getProjection());
-			// create transformations
-			transformation.setCameraView(camera.GetViewMatrix());
+				shader.Use();
+				transformation.setProjection(camera.Zoom,
+											 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);
 
-			shader.setMat4("view", transformation.getView());
+				shader.setMat4("projection", transformation.getProjection());
+				// create transformations
+				transformation.setCameraView(camera.GetViewMatrix());
 
-			shader.setInt("renderTextFlag", 0);
-			cubeVao.Bind();
-			shader.setInt("renderFlag", 0);//set flag to 0 to render cube
-			moveCameraHitbox(camera, shader);
-			reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[0]), 5),
-				camera, shader, renderer);
-			reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[0]), 5),
-				camera, shader, renderer, spinCubeAxes);
-			cubeVao.Unbind();
+				shader.setMat4("view", transformation.getView());
 
-			boundaryVao.Bind();
-			shader.setInt("renderFlag", 1);//set flag to 1 to render boundary
-			reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[0]), 5),
-				camera, shader, renderer);
-			reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[0]), 5),
-				camera, shader, renderer);
-			reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[0]), 5),
-				camera, shader, renderer);
-			reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[0]), 5),
-				camera, shader, renderer);
+				shader.setInt("renderTextFlag", static_cast<int>(RenderFlag::RenderCube) );
+				cubeVao.Bind();
+				shader.setInt("renderFlag", 0);//set flag to 0 to render cube
+				moveCameraHitbox(camera, shader);
+				reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+									camera, shader, renderer);
+				reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+											camera, shader, renderer, spinCubeAxes);
+				cubeVao.Unbind();
 
-			boundaryVao.Unbind();
+				boundaryVao.Bind();
+				shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderBoundary ));//set flag to 1 to render boundary
+				reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+								   camera, shader, renderer);
+				reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+								   camera, shader, renderer);
+				reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+								   camera, shader, renderer);
+				reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+								   camera, shader, renderer);
 
-			textVao.Bind();
-			shader.setInt("renderFlag", 2);
-			renderText(textCubePos, calVertexAmount(sizeof(textVertices) / sizeof(textVertices[0]), 5),
-				camera, shader, renderer);
-			
-			textVao.Unbind();
+				boundaryVao.Unbind();
+
+				break;
+
+			case PlayState::MENU:
+
+				renderer.Clear();
+
+				boundaryTexture.ActiveTexture(GL_TEXTURE2);
+				enterTextBackgroundTexture.ActiveTexture(GL_TEXTURE3);
+
+				shader.Use();
+				transformation.setProjection(camera.Zoom,
+											 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
+
+				shader.setMat4("projection", transformation.getProjection());
+				// create transformations
+				transformation.setCameraView(camera.GetViewMatrix());
+				shader.setMat4("view", transformation.getView());
+
+				boundaryVao.Bind();
+				shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderBoundary ));//set flag to 1 to render boundary
+				reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+								   camera, shader, renderer);
+				reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+								   camera, shader, renderer);
+				reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+								   camera, shader, renderer);
+				reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+								   camera, shader, renderer);
+				boundaryVao.Unbind();
+
+				textVao.Bind();
+				shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderEnterText ) );
+				renderText(enterTextCubePos, calVertexAmount(sizeof(enterTextVertices) / sizeof(enterTextVertices[ 0 ]), 5),
+						   camera, shader, renderer);
+
+				textVao.Unbind();
+
+				break;
+
+			case PlayState::GAME_OVER:
+
+				renderer.Clear();
+
+				gameOverTextBackgroundTexture.ActiveTexture(GL_TEXTURE4);
+
+				shader.Use();
+				transformation.setProjection(camera.Zoom,
+											 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
+
+				shader.setMat4("projection", transformation.getProjection());
+				// create transformations
+				transformation.setCameraView(camera.GetViewMatrix());
+				shader.setMat4("view", transformation.getView());
+
+				textVao.Bind();
+				shader.setInt("renderFlag", static_cast<int>(RenderFlag::RenderGameOverText));
+				renderText(enterTextCubePos, calVertexAmount(sizeof(enterTextVertices) / sizeof(enterTextVertices[ 0 ]), 5),
+						   camera, shader, renderer);
+
+				textVao.Unbind();
+
+				break;
+			default:
+				break;
 		}
-		else
-		{
-			renderer.Clear();
 
-			boundaryTexture.ActiveTexture(GL_TEXTURE2);
-			enterTextTexture.ActiveTexture(GL_TEXTURE3);
-
-			shader.Use();
-			transformation.setProjection(camera.Zoom,
-				(float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
-
-			shader.setMat4("projection", transformation.getProjection());
-			// create transformations
-			transformation.setCameraView(camera.GetViewMatrix());
-			shader.setMat4("view", transformation.getView());
-
-			boundaryVao.Bind();
-			shader.setInt("renderFlag", 1);//set flag to 1 to render boundary
-			reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[0]), 5),
-				camera, shader, renderer);
-			reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[0]), 5),
-				camera, shader, renderer);
-			reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[0]), 5),
-				camera, shader, renderer);
-			reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[0]), 5),
-				camera, shader, renderer);
-			boundaryVao.Unbind();
-
-			textVao.Bind();
-			shader.setInt("renderFlag", 2);
-			renderText(textCubePos, calVertexAmount(sizeof(textVertices) / sizeof(textVertices[0]), 5),
-				camera, shader, renderer);
-
-			textVao.Unbind();
-		}
-
-		glfwPollEvents();
-		glfwSwapBuffers(window);
+	glfwPollEvents();
+	glfwSwapBuffers(window);
 	}
 
 	//cleanup:
@@ -434,10 +506,10 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
-	float xpos = static_cast<float>(xposIn);
-	float ypos = static_cast<float>(yposIn);
+	float xpos = static_cast<float>( xposIn );
+	float ypos = static_cast<float>( yposIn );
 
-	if (firstMouse)
+	if( firstMouse )
 	{
 		lastX = xpos;
 		lastY = ypos;
@@ -456,6 +528,6 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	camera.ProcessMouseScroll(static_cast<float>(yoffset));
+	camera.ProcessMouseScroll(static_cast<float>( yoffset ));
 }
 

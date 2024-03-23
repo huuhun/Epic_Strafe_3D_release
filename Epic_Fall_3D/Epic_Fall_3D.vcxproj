@@ -161,6 +161,7 @@
     <ClInclude Include="utils\Collision.h" />
     <ClInclude Include="utils\Controller.h" />
     <ClInclude Include="utils\Debugger.h" />
+    <ClInclude Include="utils\States.h" />
     <ClInclude Include="utils\Spawner.h" />
     <ClInclude Include="VertexArray.h" />
     <ClCompile Include="Text.cpp" />

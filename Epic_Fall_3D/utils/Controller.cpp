@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Controller.h"
-void processInput(GLFWwindow* window, float& deltaTime, Camera& camera)
+void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayState& state)
 {
     if( glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS ) glfwSetWindowShouldClose(window, true);
 
@@ -15,4 +15,7 @@ void processInput(GLFWwindow* window, float& deltaTime, Camera& camera)
         camera.ProcessKeyboard(LEFT, deltaTime);
     if( glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS )
         camera.ProcessKeyboard(RIGHT, deltaTime);
+    if( glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS 
+       && glfwGetKey(window, GLFW_KEY_ENTER) != GLFW_REPEAT )
+        state = PlayState::PLAYING;
 }
