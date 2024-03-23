@@ -235,18 +235,12 @@ int main(int argc, char* args[]) {
 	-20.5f,  20.5f, -20.5f,  0.0f, 1.0f
 	};
 
-	float textVertices[] = {
-		// Vertex positions     // Texture coordinates
-		-1.0f, -1.0f, -0.7f,     0.0f, 0.0f,
-		1.0f, -1.0f,  -0.7f,     1.0f, 0.0f,
-		1.0f, 1.0f,  -0.7f,      1.0f, 1.0f,
-		-1.0f, 1.0f, -0.7f,      0.0f, 1.0f
-	};
-
 	std::vector<glm::vec3> cubePos;
 	std::thread spawnObstaclesPosThread([&]() {
 		cubePos = spawnObstacles(OBSTACLES_NUM);
 										});
+
+	glm::vec3 textCubePos = spawnText(0.0f, 0.0f, 0.0f);
 
 	std::vector<glm::vec3> spinCubePos;
 	std::thread spawnSpinObstaclesPosThread([&]() {
@@ -308,9 +302,9 @@ int main(int argc, char* args[]) {
 
 	textVao.Bind();
 	textVbo.Bind();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	textVbo.BufferData(cubeVertices, sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]));
+	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
+	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
 	textVbo.Unbind();
 	textVao.Unbind();
 
@@ -319,11 +313,13 @@ int main(int argc, char* args[]) {
 	Texture brickWallTexture("res/textures/brick-wall.png");
 	Texture faceTexture("res/textures/face.png");
 	Texture boundaryTexture("res/textures/boundary.png");
+	Texture enterTextTexture("res/fonts/press_enter.png");
 
 	shader.Use();
 	shader.setInt("brickWallTexture", 0);
 	shader.setInt("faceTexture", 1);
 	shader.setInt("boundaryTexture", 2);
+	shader.setInt("textTexture", 3);
 
 	Renderer renderer;
 	renderer.setClearColor();
@@ -364,9 +360,10 @@ int main(int argc, char* args[]) {
 			//}
 			renderer.Clear();
 
-			//brickWallTexture.ActiveTexture(GL_TEXTURE0);
-			//faceTexture.ActiveTexture(GL_TEXTURE1);
-			//boundaryTexture.ActiveTexture(GL_TEXTURE2);
+			brickWallTexture.ActiveTexture(GL_TEXTURE0);
+			faceTexture.ActiveTexture(GL_TEXTURE1);
+			boundaryTexture.ActiveTexture(GL_TEXTURE2);
+			enterTextTexture.ActiveTexture(GL_TEXTURE3);
 
 			shader.Use();
 			transformation.setProjection(camera.Zoom,
@@ -380,7 +377,7 @@ int main(int argc, char* args[]) {
 
 			shader.setInt("renderTextFlag", 0);
 			cubeVao.Bind();
-			shader.setInt("renderBoundary", 0);//set flag to 0 to render cube
+			shader.setInt("renderFlag", 0);//set flag to 0 to render cube
 			moveCameraHitbox(camera, shader);
 			reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
 								camera, shader, renderer);
@@ -388,22 +385,28 @@ int main(int argc, char* args[]) {
 										camera, shader, renderer, spinCubeAxes);
 			cubeVao.Unbind();
 
-			//boundaryVao.Bind();
-			//shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
-			//reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-			//				   camera, shader, renderer);
-			//reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-			//				   camera, shader, renderer);
-			//reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-			//				   camera, shader, renderer);
-			//reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-			//				   camera, shader, renderer);
+			boundaryVao.Bind();
+			shader.setInt("renderFlag", 1);//set flag to 1 to render boundary
+			reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+			reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+			reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
+			reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+							   camera, shader, renderer);
 
-			//boundaryVao.Unbind();
-			shader.setInt("renderTextFlag", 1);
-			shader.setInt("renderBoundary", 2);
-			RenderText(shader, "HeLlO", 1.0f, 1.0f, 1.0f, glm::vec3(0.0f, 0.0f, 1.0f), textVao, textVbo, transformation);
+			boundaryVao.Unbind();
+
+			textVao.Bind();
+			shader.setInt("renderFlag", 2);
+			renderText(textCubePos, calVertexAmount( sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]),5) ,
+					   camera, shader, renderer);
+			//shader.setInt("renderTextFlag", 1);
+			//shader.setInt("renderBoundary", 2);
+			//RenderText(shader, "HeLlO", 1.0f, 1.0f, 1.0f, glm::vec3(0.0f, 0.0f, 1.0f), textVao, textVbo, transformation);
 			//RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f), textVao, textVbo, transformation);
+			textVao.Unbind();
 		}
 		else
 		{
@@ -421,7 +424,7 @@ int main(int argc, char* args[]) {
 			shader.setMat4("view", transformation.getView());
 
 			boundaryVao.Bind();
-			shader.setInt("renderBoundary", 1);//set flag to 1 to render boundary
+			shader.setInt("renderFlag", 1);//set flag to 1 to render boundary
 			reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 							   camera, shader, renderer);
 			reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),

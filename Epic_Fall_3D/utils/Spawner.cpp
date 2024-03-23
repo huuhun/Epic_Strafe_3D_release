@@ -19,9 +19,22 @@ std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount)
 	return cubePos;
 }
 
+glm::vec3 spawnText(const int& x, const int& y, const int& z)
+{
+	glm::vec3 cubePos{ glm::vec3(0.0f,  0.0f,  0.0f) };
+
+	/*float x = getRandomNum(-18.0f, 18.0f);
+	float y = getRandomNum(-18.0f, 18.0f);
+	float rangeBetween = getRandomNum(1.0f, 8.0f);
+	float z = getRandomNum(cubePos.at(i).z - rangeBetween, cubePos.at(i).z);*/
+	cubePos = glm::vec3(x, y, z);
+
+	return cubePos;
+}
+
 std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount, const bool& spinning)
 {
-	std::vector<glm::vec3> cubePos = { glm::vec3( getRandomNum(-10.0f,10.0f), getRandomNum(-10.0f,10.0f),  0.0f), };
+	std::vector<glm::vec3> cubePos = { glm::vec3(getRandomNum(-10.0f,10.0f), getRandomNum(-10.0f,10.0f),  0.0f), };
 
 	for( unsigned i = 0; i < posAmount - 1; i++ ) // -1 to avoid posAmount > SPIN_OBSTACLES_NUM by 1
 	{
@@ -72,7 +85,7 @@ void spawnBoundariesVector(std::vector<glm::vec3>& leftBoundaryPos,
 													 rightBoundaryPos.at(i - 1).y,
 													 rightBoundaryPos.at(i - 1).z - 40.0f));
 
-			topBoundaryPos.push_back(spawnBoundary(topBoundaryPos.at(i - 1).x, 
+			topBoundaryPos.push_back(spawnBoundary(topBoundaryPos.at(i - 1).x,
 												   topBoundaryPos.at(i - 1).y,
 												   topBoundaryPos.at(i - 1).z - 40.0f));
 
@@ -98,6 +111,28 @@ void moveCameraHitbox(Camera& camera, Shader& shader)
 	playerCubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
 	shader.setMat4("model", playerCubeModel.getModel());
 	//renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
+}
+
+void renderText(glm::vec3& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer)
+{
+
+	if( camera.Position.z > cubePos.z - 5.0f )
+	{
+		Model cubeModel;
+		cubeModel.setTranslation(cubePos);
+		float angle{ 20.0f * (float)0 };
+		cubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
+		shader.setMat4("model", cubeModel.getModel());
+		renderer.DrawArrays(GL_TRIANGLES, verticesAmount);
+	}
+	else
+	{
+		cubePos.z += -70.0f;
+		cubePos.x = getRandomNum(-18.0f, 18.0f);
+		cubePos.y = getRandomNum(-18.0f, 18.0f);
+	}
+
+
 }
 
 void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer)
@@ -175,7 +210,7 @@ void reallocateBoundary(std::vector<glm::vec3>& cubePos, const unsigned& vertice
 		else // move the cube way further
 		{
 			//cubePos.at(i) = cubeWithHighestZPos;
-			cubePos.at(i).z += /*cubeWithLowestZPos.z*/ - 155.0f;
+			cubePos.at(i).z += /*cubeWithLowestZPos.z*/ -155.0f;
 			//cubePos.at(i).x += 10.0f;
 			//cubePos.at(i).y += 5.0f;
 			//std::cout << cubeWithLowestZPos.z << "\n";
@@ -188,21 +223,21 @@ void reallocateBoundary(std::vector<glm::vec3>& cubePos, const unsigned& vertice
 }
 
 glm::vec3 getLowestZValue(std::vector<glm::vec3>& cubePos) {
-	float currentLowestZ{ cubePos[0].z};
+	float currentLowestZ{ cubePos[ 0 ].z };
 	glm::vec3 cubeWithLowestZValue(0, 0, 0);
 
 	for( unsigned i = 0; i < cubePos.size(); i++ )
-		if( cubePos.at(i).z < currentLowestZ ){
+		if( cubePos.at(i).z < currentLowestZ ) {
 			currentLowestZ = cubePos.at(i).z;
 			cubeWithLowestZValue = cubePos.at(i);
 		}
-	
+
 	return cubeWithLowestZValue;
 }
 
 glm::vec3 getHighestZValue(std::vector<glm::vec3>& cubePos) {
 	float currentHighestZ{ cubePos[ 0 ].z };
-	glm::vec3 cubeWithHighestZValue(0,0,0);
+	glm::vec3 cubeWithHighestZValue(0, 0, 0);
 
 	for( int i = 0; i < cubePos.size(); i++ ) {
 		if( cubePos.at(i).z < currentHighestZ ) {
@@ -217,7 +252,7 @@ void changeZValueIfItMatch(std::vector<glm::vec3>& cubePos, const glm::vec3& hig
 	for( auto& vec3 : cubePos ) {
 
 		if( areEqual(vec3.z, highestZVec3.z) ) {
-			
+
 			vec3.z = newZValue;
 			std::cout << vec3.z << "\n";
 		}

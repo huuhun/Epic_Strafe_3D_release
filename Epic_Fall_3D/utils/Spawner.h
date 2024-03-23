@@ -15,6 +15,8 @@
 
 std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount);
 
+glm::vec3 spawnText(const int& x, const int& y, const int& z);
+
 std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount, const bool& spinning);
 
 std::vector<glm::vec3> spawnAxes(const unsigned& axisAmount);
@@ -24,6 +26,8 @@ glm::vec3 spawnBoundary(const float& x, const float& y, const float& z);
 void spawnBoundariesVector(std::vector<glm::vec3>& leftBoundaryPos, std::vector<glm::vec3>& rightBoundaryPos, std::vector<glm::vec3>& topBoundaryPos, std::vector<glm::vec3>& bottomBoundaryPos);
 
 void moveCameraHitbox(Camera& camera, Shader& shader);
+
+void renderText(glm::vec3& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer);
 
 void reallocateObstacles(std::vector<glm::vec3>& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer);
 

@@ -76,42 +76,42 @@ void Shader::Use() const
 }
 // utility uniform functions
 // ------------------------------------------------------------------------
-void Shader::setBool(const std::string& shaderVarName, bool layout) const
+void Shader::setBool(const std::string& shaderVarName, bool value) const
 {
-	glUniform1i(glGetUniformLocation(m_ID, shaderVarName.c_str()), (int)layout);
+	glUniform1i(glGetUniformLocation(m_ID, shaderVarName.c_str()), (int)value);
 }
 // ------------------------------------------------------------------------
-void Shader::setInt(const std::string& shaderVarName, int layout) const
+void Shader::setInt(const std::string& shaderVarName, int value) const
 {
-	glUniform1i(glGetUniformLocation(m_ID, shaderVarName.c_str()), layout);
+	glUniform1i(glGetUniformLocation(m_ID, shaderVarName.c_str()), value);
 }
 // ------------------------------------------------------------------------
-void Shader::setFloat(const std::string& shaderVarName, float layout) const
+void Shader::setFloat(const std::string& shaderVarName, float value) const
 {
-	glUniform1f(glGetUniformLocation(m_ID, shaderVarName.c_str()), layout);
+	glUniform1f(glGetUniformLocation(m_ID, shaderVarName.c_str()), value);
 }
 // ------------------------------------------------------------------------
-void Shader::setVec2(const std::string& shaderVarName, const glm::vec2& layout) const
+void Shader::setVec2(const std::string& shaderVarName, const glm::vec2& value) const
 {
-	glUniform2fv(glGetUniformLocation(m_ID, shaderVarName.c_str()), 1, &layout[ 0 ]);
+	glUniform2fv(glGetUniformLocation(m_ID, shaderVarName.c_str()), 1, &value[ 0 ]);
 }
 void Shader::setVec2(const std::string& shaderVarName, float x, float y) const
 {
 	glUniform2f(glGetUniformLocation(m_ID, shaderVarName.c_str()), x, y);
 }
 // ------------------------------------------------------------------------
-void Shader::setVec3(const std::string& shaderVarName, const glm::vec3& layout) const
+void Shader::setVec3(const std::string& shaderVarName, const glm::vec3& value) const
 {
-	glUniform3fv(glGetUniformLocation(m_ID, shaderVarName.c_str()), 1, &layout[ 0 ]);
+	glUniform3fv(glGetUniformLocation(m_ID, shaderVarName.c_str()), 1, &value[ 0 ]);
 }
 void Shader::setVec3(const std::string& shaderVarName, float x, float y, float z) const
 {
 	glUniform3f(glGetUniformLocation(m_ID, shaderVarName.c_str()), x, y, z);
 }
 // ------------------------------------------------------------------------
-void Shader::setVec4(const std::string& shaderVarName, const glm::vec4& layout) const
+void Shader::setVec4(const std::string& shaderVarName, const glm::vec4& value) const
 {
-	glUniform4fv(glGetUniformLocation(m_ID, shaderVarName.c_str()), 1, &layout[ 0 ]);
+	glUniform4fv(glGetUniformLocation(m_ID, shaderVarName.c_str()), 1, &value[ 0 ]);
 }
 void Shader::setVec4(const std::string& shaderVarName, float x, float y, float z, float w) const
 {

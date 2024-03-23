@@ -12,15 +12,15 @@ public:
 	//active the shader
 	void Use() const;
 
-    void setBool(const std::string& shaderVarName, bool layout) const;
-    void setInt(const std::string& shaderVarName, int layout) const;
-    void setFloat(const std::string& shaderVarName, float layout) const;
+    void setBool(const std::string& shaderVarName, bool value) const;
+    void setInt(const std::string& shaderVarName, int value) const;
+    void setFloat(const std::string& shaderVarName, float value) const;
 
-    void setVec2(const std::string& shaderVarName, const glm::vec2& layout) const;
+    void setVec2(const std::string& shaderVarName, const glm::vec2& value) const;
     void setVec2(const std::string& shaderVarName, float x, float y) const;
-    void setVec3(const std::string& shaderVarName, const glm::vec3& layout) const;
+    void setVec3(const std::string& shaderVarName, const glm::vec3& value) const;
     void setVec3(const std::string& shaderVarName, float x, float y, float z) const;
-    void setVec4(const std::string& shaderVarName, const glm::vec4& layout) const;
+    void setVec4(const std::string& shaderVarName, const glm::vec4& value) const;
     void setVec4(const std::string& shaderVarName, float x, float y, float z, float w) const;
 
     void setMat2(const std::string& shaderVarName, const glm::mat2& mat) const;
