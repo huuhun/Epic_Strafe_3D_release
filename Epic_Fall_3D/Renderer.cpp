@@ -5,7 +5,7 @@
 void Renderer::setClearColor()
 {
 	// Set clear color to light green
-	glClearColor(0.5f, 1.0f, 0.5f, 1.0f);
+	glClearColor(83.0f / 255.0f, 84.0f / 255.0f, 120.0f / 255.0f, 1.0f);
 }
 
 void Renderer::Clear()

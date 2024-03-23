@@ -118,48 +118,47 @@ int main(int argc, char* args[]) {
 	};
 
 	float textVertices[] = {
-										// Front face
-	  -14.5f, -14.5f,  14.5f,  0.0f, 0.0f,
-	   14.5f, -14.5f,  14.5f,  1.0f, 0.0f,
-	   14.5f,  14.5f,  14.5f,  1.0f, 1.0f,
-	   14.5f,  14.5f,  14.5f,  1.0f, 1.0f,
-      -14.5f,  14.5f,  14.5f,  0.0f, 1.0f,
-	  -14.5f, -14.5f,  14.5f,  0.0f, 0.0f,
-	  					// Back face
-	  -14.5f, -14.5f, -14.5f,  0.0f, 0.0f,
-	   14.5f, -14.5f, -14.5f,  1.0f, 0.0f,
-	   14.5f,  14.5f, -14.5f,  1.0f, 1.0f,
-	   14.5f,  14.5f, -14.5f,  1.0f, 1.0f,
-	  -14.5f,  14.5f, -14.5f,  0.0f, 1.0f,
-	  -14.5f, -14.5f, -14.5f,  0.0f, 0.0f,
-	   18						// Left face
-	  -14.5f,  14.5f,  14.5f,  1.0f, 0.0f,
-	  -14.5f,  14.5f, -14.5f,  1.0f, 1.0f,
-	  -14.5f, -14.5f, -14.5f,  0.0f, 1.0f,
-	  -14.5f, -14.5f, -14.5f,  0.0f, 1.0f,
-	  -14.5f, -14.5f,  14.5f,  0.0f, 0.0f,
-	  -14.5f,  14.5f,  14.5f,  1.0f, 0.0f,
-	  					//Right face
-	   14.5f,  14.5f,  14.5f,  1.0f, 0.0f,
-	   14.5f,  14.5f, -14.5f,  1.0f, 1.0f,
-	   14.5f, -14.5f, -14.5f,  0.0f, 1.0f,
-	   14.5f, -14.5f, -14.5f,  0.0f, 1.0f,
-	   14.5f, -14.5f,  14.5f,  0.0f, 0.0f,
-	   14.5f,  14.5f,  14.5f,  1.0f, 0.0f,
-	  						//Top face
-	  -14.5f,  14.5f, -14.5f,  0.0f, 1.0f,
-	   14.5f,  14.5f, -14.5f,  1.0f, 1.0f,
-	   14.5f,  14.5f,  14.5f,  1.0f, 0.0f,
-	   14.5f,  14.5f,  14.5f,  1.0f, 0.0f,
-	  -14.5f,  14.5f,  14.5f,  0.0f, 0.0f,
-	  -14.5f,  14.5f, -14.5f,  0.0f, 1.0f,
-	  							// Bottom face
-	  -14.5f, -14.5f, -14.5f,  0.0f, 1.0f,
-	   14.5f, -14.5f, -14.5f,  1.0f, 1.0f,
-	   14.5f, -14.5f,  14.5f,  1.0f, 0.0f,
-	   14.5f, -14.5f,  14.5f,  1.0f, 0.0f,
-	  -14.5f, -14.5f,  14.5f,  0.0f, 0.0f,
-	  -14.5f, -14.5f, -14.5f,  0.0f, 1.0f
+	-1.5f, -1.5f, -1.5f,  0.0f, 0.0f,
+	 1.5f, -1.5f, -1.5f,  1.0f, 0.0f,
+	 1.5f,  1.5f, -1.5f,  1.0f, 1.0f,
+	 1.5f,  1.5f, -1.5f,  1.0f, 1.0f,
+	-1.5f,  1.5f, -1.5f,  0.0f, 1.0f,
+	-1.5f, -1.5f, -1.5f,  0.0f, 0.0f,
+	 			   
+	-1.5f, -1.5f,  1.5f,  0.0f, 0.0f,
+	 1.5f, -1.5f,  1.5f,  1.0f, 0.0f,
+	 1.5f,  1.5f,  1.5f,  1.0f, 1.0f,
+	 1.5f,  1.5f,  1.5f,  1.0f, 1.0f,
+	-1.5f,  1.5f,  1.5f,  0.0f, 1.0f,
+	-1.5f, -1.5f,  1.5f,  0.0f, 0.0f,
+	 			   
+	-1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
+	-1.5f,  1.5f, -1.5f,  1.0f, 1.0f,
+	-1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
+	-1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
+	-1.5f, -1.5f,  1.5f,  0.0f, 0.0f,
+	-1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
+	 			   
+	 1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
+	 1.5f,  1.5f, -1.5f,  1.0f, 1.0f,
+	 1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
+	 1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
+	 1.5f, -1.5f,  1.5f,  0.0f, 0.0f,
+	 1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
+	 			   
+	-1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
+	 1.5f, -1.5f, -1.5f,  1.0f, 1.0f,
+	 1.5f, -1.5f,  1.5f,  1.0f, 0.0f,
+	 1.5f, -1.5f,  1.5f,  1.0f, 0.0f,
+	-1.5f, -1.5f,  1.5f,  0.0f, 0.0f,
+	-1.5f, -1.5f, -1.5f,  0.0f, 1.0f,
+	 			   
+	-1.5f,  1.5f, -1.5f,  0.0f, 1.0f,
+	 1.5f,  1.5f, -1.5f,  1.0f, 1.0f,
+	 1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
+	 1.5f,  1.5f,  1.5f,  1.0f, 0.0f,
+	-1.5f,  1.5f,  1.5f,  0.0f, 0.0f,
+	-1.5f,  1.5f, -1.5f,  0.0f, 1.0f
 	};
 
 	float boundaryVertices[] = {
@@ -285,7 +284,7 @@ int main(int argc, char* args[]) {
 	Texture brickWallTexture("res/textures/brick-wall.png");
 	Texture faceTexture("res/textures/face.png");
 	Texture boundaryTexture("res/textures/boundary.png");
-	Texture enterTextTexture("res/fonts/press_enter.png");
+	Texture enterTextTexture("res/textures/grey_background.png");
 
 	shader.Use();
 	shader.setInt("brickWallTexture", 0);
@@ -300,7 +299,7 @@ int main(int argc, char* args[]) {
 	//Transform textTransformation;
 	// Load font here
 
-	bool playing = true;
+	bool playing = false;
 	while (!glfwWindowShouldClose(window)) {
 		// per-frame time logic
 		// --------------------
@@ -312,24 +311,24 @@ int main(int argc, char* args[]) {
 
 		if (playing)
 		{
-			//for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
-			//	if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
-			//	   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
-			//	   checkCollision(camera.Position, topBoundaryPos.at(i), 21.0f) ||
-			//	   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
+			for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
+				if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
+				   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
+				   checkCollision(camera.Position, topBoundaryPos.at(i), 21.0f) ||
+				   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
 
-			//		std::cout << "Collision detected between the camera and cube " << std::endl;
-			//}
+					std::cout << "Collision detected between the camera and cube " << std::endl;
+			}
 
-			//for( int i = 0; i < cubePos.size(); ++i ) {
-			//	if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
-			//		std::cout << "Collision detected between the camera and cube " << i << std::endl;
-			//}
+			for( int i = 0; i < cubePos.size(); ++i ) {
+				if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
+					std::cout << "Collision detected between the camera and cube " << i << std::endl;
+			}
 
-			//for( int i = 0; i < spinCubePos.size(); ++i ) {
-			//	if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) )
-			//		std::cout << "Collision detected between the camera and cube " << i << std::endl;
-			//}
+			for( int i = 0; i < spinCubePos.size(); ++i ) {
+				if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) )
+					std::cout << "Collision detected between the camera and cube " << i << std::endl;
+			}
 			renderer.Clear();
 
 			brickWallTexture.ActiveTexture(GL_TEXTURE0);
@@ -374,10 +373,7 @@ int main(int argc, char* args[]) {
 			shader.setInt("renderFlag", 2);
 			renderText(textCubePos, calVertexAmount(sizeof(textVertices) / sizeof(textVertices[0]), 5),
 				camera, shader, renderer);
-			//shader.setInt("renderTextFlag", 1);
-			//shader.setInt("renderBoundary", 2);
-			//RenderText(shader, "HeLlO", 1.0f, 1.0f, 1.0f, glm::vec3(0.0f, 0.0f, 1.0f), textVao, textVbo, transformation);
-			//RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f), textVao, textVbo, transformation);
+			
 			textVao.Unbind();
 		}
 		else
@@ -385,6 +381,7 @@ int main(int argc, char* args[]) {
 			renderer.Clear();
 
 			boundaryTexture.ActiveTexture(GL_TEXTURE2);
+			enterTextTexture.ActiveTexture(GL_TEXTURE3);
 
 			shader.Use();
 			transformation.setProjection(camera.Zoom,
@@ -406,6 +403,13 @@ int main(int argc, char* args[]) {
 			reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[0]), 5),
 				camera, shader, renderer);
 			boundaryVao.Unbind();
+
+			textVao.Bind();
+			shader.setInt("renderFlag", 2);
+			renderText(textCubePos, calVertexAmount(sizeof(textVertices) / sizeof(textVertices[0]), 5),
+				camera, shader, renderer);
+
+			textVao.Unbind();
 		}
 
 		glfwPollEvents();
