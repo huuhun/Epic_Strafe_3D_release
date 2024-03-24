@@ -45,9 +45,11 @@ float lastFrame = 0.0f;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX = WindowSettings::SCR_WIDTH / 2.0f;
-float lastY = WindowSettings::SCR_HEIGHT / 2.0f;
+float lastX{ WindowSettings::SCR_WIDTH / 2.0f };
+float lastY{ WindowSettings::SCR_HEIGHT / 2.0f };
 bool firstMouse = true;
+
+PlayState state{ PlayState::MENU };
 
 int main(int argc, char* args[]) {
 
@@ -358,7 +360,6 @@ int main(int argc, char* args[]) {
 	//Transform textTransformation;
 	// Load font here
 
-	PlayState state{ PlayState::MENU };
 	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
 		// --------------------
@@ -379,7 +380,7 @@ int main(int argc, char* args[]) {
 						   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
 						{
 							std::cout << "Collision detected between the camera and boundary " << std::endl;
-							//state = PlayState::GAME_OVER;
+							state = PlayState::GAME_OVER;
 						}
 					}
 
@@ -387,23 +388,22 @@ int main(int argc, char* args[]) {
 						if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
 						{
 							std::cout << "Collision detected between the camera and cube " << i << std::endl;
-							//state = PlayState::GAME_OVER;
+							state = PlayState::GAME_OVER;
 						}
 					}
 
 					for( int i = 0; i < spinCubePos.size(); ++i ) {
 						if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) ) {
 							std::cout << "Collision detected between the camera and cube " << i << std::endl;
-							//state = PlayState::GAME_OVER;
+							state = PlayState::GAME_OVER;
 						}
 
 					}
 					renderer.Clear();
 
-					//brickWallTexture.ActiveTexture(GL_TEXTURE0);
-					//faceTexture.ActiveTexture(GL_TEXTURE1);
+					brickWallTexture.ActiveTexture(GL_TEXTURE0);
+					faceTexture.ActiveTexture(GL_TEXTURE1);
 					boundaryTexture.ActiveTexture(GL_TEXTURE2);
-					gameOverTextBackgroundTexture.ActiveTexture(GL_TEXTURE4);
 
 					shader.Use();
 					transformation.setProjection(camera.Zoom,
@@ -416,14 +416,14 @@ int main(int argc, char* args[]) {
 					shader.setMat4("view", transformation.getView());
 
 					shader.setInt("renderTextFlag", static_cast<int>( RenderFlag::RenderCube ));
-					//cubeVao.Bind();
-					//shader.setInt("renderFlag", 0);//set flag to 0 to render cube
-					//moveCameraHitbox(camera, shader);
-					//reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
-					//					camera, shader, renderer);
-					//reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
-					//							camera, shader, renderer, spinCubeAxes);
-					//cubeVao.Unbind();
+					cubeVao.Bind();
+					shader.setInt("renderFlag", 0);//set flag to 0 to render cube
+					moveCameraHitbox(camera, shader);
+					reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+										camera, shader, renderer);
+					reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+												camera, shader, renderer, spinCubeAxes);
+					cubeVao.Unbind();
 
 					boundaryVao.Bind();
 					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderBoundary ));//set flag to 1 to render boundary
@@ -436,13 +436,6 @@ int main(int argc, char* args[]) {
 					reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
 									   camera, shader, renderer);
 					boundaryVao.Unbind();
-
-					gameOverTextVao.Bind();
-					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderGameOverText ));
-					renderGameOverText(gameOverTextCubePos, calVertexAmount(sizeof(gameOverTextVertices) / sizeof(gameOverTextVertices[ 0 ]), 5),
-									   camera, shader, renderer);
-
-					gameOverTextVao.Unbind();
 
 					break;
 				}
@@ -478,7 +471,7 @@ int main(int argc, char* args[]) {
 					enterTextVao.Bind();
 					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderEnterText ));
 					renderEnterText(enterTextCubePos, calVertexAmount(sizeof(enterTextVertices) / sizeof(enterTextVertices[ 0 ]), 5),
-							   camera, shader, renderer);
+									camera, shader, renderer);
 
 					enterTextVao.Unbind();
 
@@ -514,8 +507,10 @@ int main(int argc, char* args[]) {
 
 					gameOverTextVao.Bind();
 					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderGameOverText ));
+
+					camera.ResetToDefault();
 					renderGameOverText(gameOverTextCubePos, calVertexAmount(sizeof(gameOverTextVertices) / sizeof(gameOverTextVertices[ 0 ]), 5),
-							   camera, shader, renderer);
+									   camera, shader, renderer);
 
 					gameOverTextVao.Unbind();
 
@@ -545,28 +540,34 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
-	float xpos = static_cast<float>( xposIn );
-	float ypos = static_cast<float>( yposIn );
-
-	if( firstMouse )
+	if( state != PlayState::GAME_OVER )
 	{
+		float xpos = static_cast<float>( xposIn );
+		float ypos = static_cast<float>( yposIn );
+
+		if( firstMouse )
+		{
+			lastX = xpos;
+			lastY = ypos;
+			firstMouse = false;
+		}
+
+		float xoffset = xpos - lastX;
+		float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
 		lastX = xpos;
 		lastY = ypos;
-		firstMouse = false;
+
+		camera.ProcessMouseMovement(xoffset, yoffset);
 	}
-
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-	lastX = xpos;
-	lastY = ypos;
-
-	camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	camera.ProcessMouseScroll(static_cast<float>( yoffset ));
+	if( state != PlayState::GAME_OVER )
+	{
+		camera.ProcessMouseScroll(static_cast<float>( yoffset ));
+	}
 }
 

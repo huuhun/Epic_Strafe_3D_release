@@ -128,7 +128,9 @@ void renderEnterText(glm::vec3& cubePos, const unsigned& verticesAmount, Camera&
 
 void renderGameOverText(glm::vec3& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer)
 {
-	cubePos.z = camera.Position.z - 15;
+	cubePos.z = camera.Position.z - 2.5f;
+	cubePos.x = camera.Position.x;
+	cubePos.y = camera.Position.y;
 
 	Model cubeModel;
 	cubeModel.setTranslation(cubePos);

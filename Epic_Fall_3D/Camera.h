@@ -112,6 +112,17 @@ public:
             Zoom = 45.0f;
     }
 
+    void ResetToDefault() {
+        Position = glm::vec3(0.0f, 0.0f, 0.0f);
+        Up = glm::vec3(0.0f, 1.0f, 0.0f);
+        Yaw = YAW;
+        Pitch = PITCH;
+        Front = glm::vec3(0.0f, 0.0f, -1.0f);
+        MovementSpeed = SPEED;
+        MouseSensitivity = SENSITIVITY;
+        Zoom = ZOOM;
+    }
+
 private:
     // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors()
