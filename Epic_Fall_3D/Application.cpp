@@ -35,6 +35,7 @@
 #include "Collision.h"
 #include "Text.h"
 #include "States.h"
+#include "Utils.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -357,9 +358,8 @@ int main(int argc, char* args[]) {
 	renderer.setClearColor();
 
 	Transform transformation;
-	//Transform textTransformation;
-	// Load font here
 
+	bool spawnNewEntitiesFlag{ false };
 	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
 		// --------------------
@@ -367,7 +367,9 @@ int main(int argc, char* args[]) {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		processInput(window, deltaTime, camera, state);
+		processInput(window, deltaTime, camera, state, spawnNewEntitiesFlag);
+
+		if( spawnNewEntitiesFlag ) spawnNewEntities(cubePos, spinCubePos, spinCubeAxes, leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos);
 
 		switch( state )
 		{
@@ -407,7 +409,7 @@ int main(int argc, char* args[]) {
 
 					shader.Use();
 					transformation.setProjection(camera.Zoom,
-												 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);
+												 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 60.0f);
 
 					shader.setMat4("projection", transformation.getProjection());
 					// create transformations
@@ -508,7 +510,9 @@ int main(int argc, char* args[]) {
 					gameOverTextVao.Bind();
 					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderGameOverText ));
 
+					// RESTART GAME
 					camera.ResetToDefault();
+					restart(cubePos, spinCubePos, spinCubeAxes, leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos);
 					renderGameOverText(gameOverTextCubePos, calVertexAmount(sizeof(gameOverTextVertices) / sizeof(gameOverTextVertices[ 0 ]), 5),
 									   camera, shader, renderer);
 

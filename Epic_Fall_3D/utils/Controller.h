@@ -9,3 +9,5 @@
 #include "States.h"
 
 void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayState& state);
+
+void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayState& state, bool& spawnNewEntitiesFlag);

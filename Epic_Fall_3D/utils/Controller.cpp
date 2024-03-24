@@ -1,11 +1,13 @@
 #include <iostream>
 #include "Controller.h"
-void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayState& state)
+#include "Utils.h"
+void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayState& state, bool& spawnNewEntitiesFlag)
 {
 	if( glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS ) glfwSetWindowShouldClose(window, true);
 
 	if( state != PlayState::GAME_OVER )
 	{
+		spawnNewEntitiesFlag = false;
 		//float cameraSpeed = static_cast<float>( 2.5 * deltaTime );
         //float cameraSpeed = static_cast<float>( 2.5 * deltaTime );
 
@@ -21,5 +23,14 @@ void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayStat
 		if( glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS 
 		   && glfwGetKey(window, GLFW_KEY_ENTER) != GLFW_REPEAT )
 			state = PlayState::PLAYING;
+	}
+	if( state == PlayState::GAME_OVER )
+	{
+		if( glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS
+		   && glfwGetKey(window, GLFW_KEY_ENTER) != GLFW_REPEAT ) {
+			state = PlayState::PLAYING;
+			camera.ResetToDefault();
+			spawnNewEntitiesFlag = true;
+		}
 	}
 }

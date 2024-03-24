@@ -6,7 +6,7 @@
 
 std::vector<glm::vec3> spawnObstacles(const unsigned& posAmount)
 {
-	std::vector<glm::vec3> cubePos = { glm::vec3(0.0f,  0.0f,  0.0f), };
+	std::vector<glm::vec3> cubePos = { glm::vec3(3.0f,  3.0f,  3.0f), };
 
 	for (unsigned i = 0; i < posAmount; i++)
 	{
