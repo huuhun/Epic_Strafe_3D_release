@@ -21,8 +21,23 @@ GLFWwindow* Window::createGLWindow(const std::string& windowName, const int& w, 
 	// Create a window
 	GLFWwindow* window = glfwCreateWindow(w, h, windowName.c_str(), NULL, NULL);
 	if( !window ) {
-		std::cerr << "Window could not be created! SDL_Error: %s\n" << glfwGetError(nullptr) << "\n";
-		//glfwTerminate();
+		std::cerr << "Window could not be created! GLFW Error: " << glfwGetError(nullptr) << "\n";
+		glfwTerminate();
+	}
+	else {
+		// Get the monitor handle
+		GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+		if( primaryMonitor != nullptr ) {
+			// Get the video mode of the monitor
+			const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
+			if( mode != nullptr ) {
+				// Calculate the position to center the window
+				int xPos = ( mode->width - w ) / 2;
+				int yPos = ( mode->height - h ) / 2;
+				// Set the position of the window
+				glfwSetWindowPos(window, xPos, yPos);
+			}
+		}
 	}
 
 	return window;
