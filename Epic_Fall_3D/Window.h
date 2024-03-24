@@ -1,4 +1,5 @@
 #pragma once
+
 #include <glfw3.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H  
@@ -14,6 +15,8 @@ public:
 	static bool loadGLFunctionPointers();
 	static void setGLVersion(const int& version);
 	static void setGLGlobalState(GLFWwindow* window);
+
+	static void initSDL_Mixer();
 
 	// Get OpenGL version information
 	static void getGLVersion();

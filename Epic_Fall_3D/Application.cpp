@@ -63,6 +63,8 @@ int main(int argc, char* args[]) {
 	Window::setGLGlobalState(window);
 	enableGLDebugContext();
 
+	Window::initSDL_Mixer();
+
 
 	//Callbacks
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
