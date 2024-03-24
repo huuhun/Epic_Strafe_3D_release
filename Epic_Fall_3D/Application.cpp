@@ -347,6 +347,7 @@ int main(int argc, char* args[]) {
 	shader.setInt("brickWallTexture", 0);
 	shader.setInt("faceTexture", 1);
 	shader.setInt("boundaryTexture", 2);
+	//shader.setInt("gameOverTextBackgroundTexture", 3);
 	shader.setInt("enterTextBackgroundTexture", 3);
 	shader.setInt("gameOverTextBackgroundTexture", 4);
 
@@ -438,8 +439,8 @@ int main(int argc, char* args[]) {
 
 					gameOverTextVao.Bind();
 					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderGameOverText ));
-					renderGameOverText(gameOverTextCubePos, calVertexAmount(sizeof(gameOverTextCubePos) / sizeof(gameOverTextCubePos[ 0 ]), 5),
-							   camera, shader, renderer);
+					renderGameOverText(gameOverTextCubePos, calVertexAmount(sizeof(gameOverTextVertices) / sizeof(gameOverTextVertices[ 0 ]), 5),
+									   camera, shader, renderer);
 
 					gameOverTextVao.Unbind();
 
@@ -451,6 +452,7 @@ int main(int argc, char* args[]) {
 
 					boundaryTexture.ActiveTexture(GL_TEXTURE2);
 					enterTextBackgroundTexture.ActiveTexture(GL_TEXTURE3);
+					//gameOverTextBackgroundTexture.ActiveTexture(GL_TEXTURE3);
 
 					shader.Use();
 					transformation.setProjection(camera.Zoom,
@@ -512,7 +514,7 @@ int main(int argc, char* args[]) {
 
 					gameOverTextVao.Bind();
 					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderGameOverText ));
-					renderGameOverText(gameOverTextCubePos, calVertexAmount(sizeof(gameOverTextCubePos) / sizeof(gameOverTextCubePos[ 0 ]), 5),
+					renderGameOverText(gameOverTextCubePos, calVertexAmount(sizeof(gameOverTextVertices) / sizeof(gameOverTextVertices[ 0 ]), 5),
 							   camera, shader, renderer);
 
 					gameOverTextVao.Unbind();
