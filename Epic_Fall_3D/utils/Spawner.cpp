@@ -113,9 +113,22 @@ void moveCameraHitbox(Camera& camera, Shader& shader)
 	//renderer.DrawArrays(cal::calVertexAmount(sizeof(vertices) / sizeof(vertices[ 0 ]), 5));
 }
 
-void renderText(glm::vec3& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer)
+void renderEnterText(glm::vec3& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer)
 {
 	cubePos.z = camera.Position.z - 10;
+
+	Model cubeModel;
+	cubeModel.setTranslation(cubePos);
+	float angle{ 20.0f * (float)0 };
+	cubeModel.setFixedModelRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
+	shader.setMat4("model", cubeModel.getModel());
+	renderer.DrawArrays(GL_TRIANGLES, verticesAmount);
+
+}
+
+void renderGameOverText(glm::vec3& cubePos, const unsigned& verticesAmount, Camera& camera, Shader& shader, Renderer& renderer)
+{
+	cubePos.z = camera.Position.z - 15;
 
 	Model cubeModel;
 	cubeModel.setTranslation(cubePos);

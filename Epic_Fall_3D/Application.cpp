@@ -284,8 +284,8 @@ int main(int argc, char* args[]) {
 		1, 2, 3
 	};*/
 
-	VertexArray cubeVao, boundaryVao, textVao;
-	VertexBuffer cubeVbo, boundaryVbo, textVbo;
+	VertexArray cubeVao, boundaryVao, enterTextVao, gameOverTextVao;
+	VertexBuffer cubeVbo, boundaryVbo, enterTextVbo, gameOverTextVbo;
 	//IndexBuffer ebo;
 
 	cubeVao.Bind();
@@ -317,13 +317,23 @@ int main(int argc, char* args[]) {
 	boundaryVbo.Unbind();
 	boundaryVao.Unbind();
 
-	textVao.Bind();
-	textVbo.Bind();
-	textVbo.BufferData(enterTextVertices, sizeof(enterTextVertices) / sizeof(enterTextVertices[ 0 ]));
+	enterTextVao.Bind();
+	enterTextVbo.Bind();
+	enterTextVbo.BufferData(enterTextVertices, sizeof(enterTextVertices) / sizeof(enterTextVertices[ 0 ]));
 	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
 	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
-	textVbo.Unbind();
-	textVao.Unbind();
+	enterTextVbo.Unbind();
+	enterTextVao.Unbind();
+
+	gameOverTextVao.Bind();
+	gameOverTextVbo.Bind();
+
+	gameOverTextVbo.BufferData(gameOverTextVertices, sizeof(gameOverTextVertices) / sizeof(gameOverTextVertices[ 0 ]));
+	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
+	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
+
+	gameOverTextVbo.Unbind();
+	gameOverTextVao.Unbind();
 
 	Shader shader("res/shaders/shader430.vert", "res/shaders/shader430.frag");
 
@@ -351,7 +361,7 @@ int main(int argc, char* args[]) {
 	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
 		// --------------------
-		float currentFrame = static_cast<float>( glfwGetTime() );
+		float currentFrame{ static_cast<float>( glfwGetTime() ) };
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
@@ -360,132 +370,159 @@ int main(int argc, char* args[]) {
 		switch( state )
 		{
 			case PlayState::PLAYING:
+				{
+					for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
+						if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
+						   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
+						   checkCollision(camera.Position, topBoundaryPos.at(i), 21.0f) ||
+						   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
+						{
+							std::cout << "Collision detected between the camera and boundary " << std::endl;
+							//state = PlayState::GAME_OVER;
+						}
+					}
 
-				for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
-					if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
-					   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
-					   checkCollision(camera.Position, topBoundaryPos.at(i), 21.0f) ||
-					   checkCollision(camera.Position, bottomBoundaryPos.at(i), 21.0f) )
+					for( int i = 0; i < cubePos.size(); ++i ) {
+						if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
+						{
+							std::cout << "Collision detected between the camera and cube " << i << std::endl;
+							//state = PlayState::GAME_OVER;
+						}
+					}
 
-						std::cout << "Collision detected between the camera and cube " << std::endl;
+					for( int i = 0; i < spinCubePos.size(); ++i ) {
+						if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) ) {
+							std::cout << "Collision detected between the camera and cube " << i << std::endl;
+							//state = PlayState::GAME_OVER;
+						}
+
+					}
+					renderer.Clear();
+
+					//brickWallTexture.ActiveTexture(GL_TEXTURE0);
+					//faceTexture.ActiveTexture(GL_TEXTURE1);
+					boundaryTexture.ActiveTexture(GL_TEXTURE2);
+					gameOverTextBackgroundTexture.ActiveTexture(GL_TEXTURE4);
+
+					shader.Use();
+					transformation.setProjection(camera.Zoom,
+												 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);
+
+					shader.setMat4("projection", transformation.getProjection());
+					// create transformations
+					transformation.setCameraView(camera.GetViewMatrix());
+
+					shader.setMat4("view", transformation.getView());
+
+					shader.setInt("renderTextFlag", static_cast<int>( RenderFlag::RenderCube ));
+					//cubeVao.Bind();
+					//shader.setInt("renderFlag", 0);//set flag to 0 to render cube
+					//moveCameraHitbox(camera, shader);
+					//reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+					//					camera, shader, renderer);
+					//reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
+					//							camera, shader, renderer, spinCubeAxes);
+					//cubeVao.Unbind();
+
+					boundaryVao.Bind();
+					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderBoundary ));//set flag to 1 to render boundary
+					reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					boundaryVao.Unbind();
+
+					gameOverTextVao.Bind();
+					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderGameOverText ));
+					renderGameOverText(gameOverTextCubePos, calVertexAmount(sizeof(gameOverTextCubePos) / sizeof(gameOverTextCubePos[ 0 ]), 5),
+							   camera, shader, renderer);
+
+					gameOverTextVao.Unbind();
+
+					break;
 				}
-
-				for( int i = 0; i < cubePos.size(); ++i ) {
-					if( checkCollision(/*playerCubePos */ camera.Position, cubePos.at(i)) )
-						std::cout << "Collision detected between the camera and cube " << i << std::endl;
-				}
-
-				for( int i = 0; i < spinCubePos.size(); ++i ) {
-					if( checkCollision(/*playerCubePos */ camera.Position, spinCubePos.at(i)) )
-						std::cout << "Collision detected between the camera and cube " << i << std::endl;
-				}
-				renderer.Clear();
-
-				brickWallTexture.ActiveTexture(GL_TEXTURE0);
-				faceTexture.ActiveTexture(GL_TEXTURE1);
-				boundaryTexture.ActiveTexture(GL_TEXTURE2);
-
-				shader.Use();
-				transformation.setProjection(camera.Zoom,
-											 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 100.0f);
-
-				shader.setMat4("projection", transformation.getProjection());
-				// create transformations
-				transformation.setCameraView(camera.GetViewMatrix());
-
-				shader.setMat4("view", transformation.getView());
-
-				shader.setInt("renderTextFlag", static_cast<int>(RenderFlag::RenderCube) );
-				cubeVao.Bind();
-				shader.setInt("renderFlag", 0);//set flag to 0 to render cube
-				moveCameraHitbox(camera, shader);
-				reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
-									camera, shader, renderer);
-				reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
-											camera, shader, renderer, spinCubeAxes);
-				cubeVao.Unbind();
-
-				boundaryVao.Bind();
-				shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderBoundary ));//set flag to 1 to render boundary
-				reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-								   camera, shader, renderer);
-				reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-								   camera, shader, renderer);
-				reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-								   camera, shader, renderer);
-				reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-								   camera, shader, renderer);
-
-				boundaryVao.Unbind();
-
-				break;
-
 			case PlayState::MENU:
+				{
+					renderer.Clear();
 
-				renderer.Clear();
+					boundaryTexture.ActiveTexture(GL_TEXTURE2);
+					enterTextBackgroundTexture.ActiveTexture(GL_TEXTURE3);
 
-				boundaryTexture.ActiveTexture(GL_TEXTURE2);
-				enterTextBackgroundTexture.ActiveTexture(GL_TEXTURE3);
+					shader.Use();
+					transformation.setProjection(camera.Zoom,
+												 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
 
-				shader.Use();
-				transformation.setProjection(camera.Zoom,
-											 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
+					shader.setMat4("projection", transformation.getProjection());
+					// create transformations
+					transformation.setCameraView(camera.GetViewMatrix());
+					shader.setMat4("view", transformation.getView());
 
-				shader.setMat4("projection", transformation.getProjection());
-				// create transformations
-				transformation.setCameraView(camera.GetViewMatrix());
-				shader.setMat4("view", transformation.getView());
+					boundaryVao.Bind();
+					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderBoundary ));//set flag to 1 to render boundary
+					reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					boundaryVao.Unbind();
 
-				boundaryVao.Bind();
-				shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderBoundary ));//set flag to 1 to render boundary
-				reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-								   camera, shader, renderer);
-				reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-								   camera, shader, renderer);
-				reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-								   camera, shader, renderer);
-				reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-								   camera, shader, renderer);
-				boundaryVao.Unbind();
+					enterTextVao.Bind();
+					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderEnterText ));
+					renderEnterText(enterTextCubePos, calVertexAmount(sizeof(enterTextVertices) / sizeof(enterTextVertices[ 0 ]), 5),
+							   camera, shader, renderer);
 
-				textVao.Bind();
-				shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderEnterText ) );
-				renderText(enterTextCubePos, calVertexAmount(sizeof(enterTextVertices) / sizeof(enterTextVertices[ 0 ]), 5),
-						   camera, shader, renderer);
+					enterTextVao.Unbind();
 
-				textVao.Unbind();
-
-				break;
-
+					break;
+				}
 			case PlayState::GAME_OVER:
+				{
+					renderer.Clear();
 
-				renderer.Clear();
+					boundaryTexture.ActiveTexture(GL_TEXTURE2);
+					gameOverTextBackgroundTexture.ActiveTexture(GL_TEXTURE4);
 
-				gameOverTextBackgroundTexture.ActiveTexture(GL_TEXTURE4);
+					shader.Use();
+					transformation.setProjection(camera.Zoom,
+												 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
 
-				shader.Use();
-				transformation.setProjection(camera.Zoom,
-											 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 40.0f);
+					shader.setMat4("projection", transformation.getProjection());
+					// create transformations
+					transformation.setCameraView(camera.GetViewMatrix());
+					shader.setMat4("view", transformation.getView());
 
-				shader.setMat4("projection", transformation.getProjection());
-				// create transformations
-				transformation.setCameraView(camera.GetViewMatrix());
-				shader.setMat4("view", transformation.getView());
+					boundaryVao.Bind();
+					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderBoundary ));//set flag to 1 to render boundary
+					reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
+									   camera, shader, renderer);
+					boundaryVao.Unbind();
 
-				textVao.Bind();
-				shader.setInt("renderFlag", static_cast<int>(RenderFlag::RenderGameOverText));
-				renderText(enterTextCubePos, calVertexAmount(sizeof(enterTextVertices) / sizeof(enterTextVertices[ 0 ]), 5),
-						   camera, shader, renderer);
+					gameOverTextVao.Bind();
+					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderGameOverText ));
+					renderGameOverText(gameOverTextCubePos, calVertexAmount(sizeof(gameOverTextCubePos) / sizeof(gameOverTextCubePos[ 0 ]), 5),
+							   camera, shader, renderer);
 
-				textVao.Unbind();
+					gameOverTextVao.Unbind();
 
-				break;
-			default:
-				break;
+					break;
+				}
 		}
 
-	glfwPollEvents();
-	glfwSwapBuffers(window);
+		glfwPollEvents();
+		glfwSwapBuffers(window);
 	}
 
 	//cleanup:
