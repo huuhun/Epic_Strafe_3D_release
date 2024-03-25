@@ -6,7 +6,7 @@ void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayStat
 {
 	if( glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS ) glfwSetWindowShouldClose(window, true);
 
-	if( state != PlayState::GAME_OVER )
+	if( state != PlayState::GAME_OVER && state != PlayState::MENU )
 	{
 		spawnNewEntitiesFlag = false;
 		//float cameraSpeed = static_cast<float>( 2.5 * deltaTime );
@@ -31,7 +31,7 @@ void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayStat
 			
 		}
 	}
-	if( state == PlayState::GAME_OVER )
+	if( state == PlayState::GAME_OVER || state == PlayState::MENU )
 	{
 		if( glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS
 		   && glfwGetKey(window, GLFW_KEY_ENTER) != GLFW_REPEAT ) {

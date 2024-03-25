@@ -481,7 +481,8 @@ int main(int argc, char* args[]) {
 			case PlayState::MENU:
 				{
 					setSongToPlay(playingMusic, currentSong, SongFlag::MENU, setSongToPlayCallback);
-
+					float velocity{ moventSpeed * deltaTime };
+					camera.Position += camera.Front * velocity;
 					renderer.Clear();
 
 					boundaryTexture.ActiveTexture(GL_TEXTURE3);
@@ -572,7 +573,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
-	if( state != PlayState::GAME_OVER )
+	if( state != PlayState::GAME_OVER && state != PlayState::MENU )
 	{
 		float xpos = static_cast<float>( xposIn );
 		float ypos = static_cast<float>( yposIn );
@@ -597,7 +598,7 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	if( state != PlayState::GAME_OVER )
+	if( state != PlayState::GAME_OVER && state != PlayState::MENU )
 	{
 		camera.ProcessMouseScroll(static_cast<float>( yoffset ));
 	}
