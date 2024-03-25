@@ -383,6 +383,9 @@ int main(int argc, char* args[]) {
 
 	bool spawnNewEntitiesFlag{ false };
 
+	const float SPEED_INCREMENT{ 0.002f };
+	float moventSpeed{ SPEED };
+
 	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
 		// --------------------
@@ -394,12 +397,16 @@ int main(int argc, char* args[]) {
 		//if( songAlreadyStarted ) songAlreadyStarted = false;
 
 		if( spawnNewEntitiesFlag ) spawnNewEntities(cubePos, spinCubePos, spinCubeAxes, leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos);
-
+		
 		switch( state )
 		{
 			case PlayState::PLAYING:
 				{
 					setSongToPlay(playingMusic, currentSong, SongFlag::PLAYING, setSongToPlayCallback);
+					
+					float velocity{ moventSpeed * deltaTime  };
+					camera.Position += camera.Front * velocity ;
+					moventSpeed += SPEED_INCREMENT;
 
 					for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
 						if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
@@ -436,7 +443,7 @@ int main(int argc, char* args[]) {
 
 					shader.Use();
 					transformation.setProjection(camera.Zoom,
-												 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 60.0f);
+												 (float)WindowSettings::SCR_WIDTH / (float)WindowSettings::SCR_HEIGHT, 0.1f, 50.0f);
 
 					shader.setMat4("projection", transformation.getProjection());
 					// create transformations
@@ -517,7 +524,6 @@ int main(int argc, char* args[]) {
 
 					renderer.Clear();
 
-					boundaryTexture.ActiveTexture(GL_TEXTURE3);
 					gameOverTextBackgroundTexture.ActiveTexture(GL_TEXTURE5);
 
 					shader.Use();
@@ -529,24 +535,12 @@ int main(int argc, char* args[]) {
 					transformation.setCameraView(camera.GetViewMatrix());
 					shader.setMat4("view", transformation.getView());
 
-					boundaryVao.Bind();
-					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderBoundary ));//set flag to 1 to render boundary
-					reallocateBoundary(leftBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-									   camera, shader, renderer);
-					reallocateBoundary(topBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-									   camera, shader, renderer);
-					reallocateBoundary(rightBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-									   camera, shader, renderer);
-					reallocateBoundary(bottomBoundaryPos, calVertexAmount(sizeof(boundaryVertices) / sizeof(boundaryVertices[ 0 ]), 5),
-									   camera, shader, renderer);
-					boundaryVao.Unbind();
-
 					gameOverTextVao.Bind();
 					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderGameOverText ));
 
 					// RESTART GAME
 					camera.ResetToDefault();
-					restart(cubePos, spinCubePos, spinCubeAxes, leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos);
+					restart(cubePos, spinCubePos, spinCubeAxes, leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos, moventSpeed);
 					renderGameOverText(gameOverTextCubePos, calVertexAmount(sizeof(gameOverTextVertices) / sizeof(gameOverTextVertices[ 0 ]), 5),
 									   camera, shader, renderer);
 
