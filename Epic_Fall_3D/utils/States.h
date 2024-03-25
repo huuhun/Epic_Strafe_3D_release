@@ -13,4 +13,5 @@ enum class RenderFlag
 	RenderBoundary = 1,
 	RenderEnterText = 2,
 	RenderGameOverText = 3,
+	RenderSpinCube = 4,
 };

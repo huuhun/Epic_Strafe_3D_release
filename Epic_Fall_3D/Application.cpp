@@ -291,8 +291,8 @@ int main(int argc, char* args[]) {
 		1, 2, 3
 	};*/
 
-	VertexArray cubeVao, boundaryVao, enterTextVao, gameOverTextVao;
-	VertexBuffer cubeVbo, boundaryVbo, enterTextVbo, gameOverTextVbo;
+	VertexArray cubeVao, boundaryVao ,enterTextVao, spinCubeVao, gameOverTextVao;
+	VertexBuffer cubeVbo, boundaryVbo, enterTextVbo, spinCubeVbo ,gameOverTextVbo;
 	//IndexBuffer ebo;
 
 	cubeVao.Bind();
@@ -313,6 +313,14 @@ int main(int argc, char* args[]) {
 
 	cubeVbo.Unbind();
 	cubeVao.Unbind();
+
+	spinCubeVao.Bind();
+	spinCubeVbo.Bind();
+	spinCubeVbo.BufferData(cubeVertices, sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]));
+	VertexArray::LinkAttrib(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
+	VertexArray::LinkAttrib(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)( 3 * sizeof(float) ));
+	spinCubeVbo.Unbind();
+	spinCubeVao.Unbind();
 
 	boundaryVao.Bind();
 	boundaryVbo.Bind();
@@ -342,21 +350,25 @@ int main(int argc, char* args[]) {
 	gameOverTextVbo.Unbind();
 	gameOverTextVao.Unbind();
 
+	
+
 	Shader shader("res/shaders/shader430.vert", "res/shaders/shader430.frag");
 
-	Texture brickWallTexture("res/textures/brick-wall.png");
+	Texture stoneWallTexture("res/textures/stone_wall.png");
+	Texture woodWallTexture("res/textures/wood_wall.png");
 	Texture faceTexture("res/textures/face.png");
 	Texture boundaryTexture("res/textures/boundary.png");
 	Texture enterTextBackgroundTexture("res/textures/grey_background.png");
 	Texture gameOverTextBackgroundTexture("res/textures/game_over.png");
 
 	shader.Use();
-	shader.setInt("brickWallTexture", 0);
+	shader.setInt("stoneWallTexture", 0);
 	shader.setInt("faceTexture", 1);
-	shader.setInt("boundaryTexture", 2);
-	//shader.setInt("gameOverTextBackgroundTexture", 3);
-	shader.setInt("enterTextBackgroundTexture", 3);
-	shader.setInt("gameOverTextBackgroundTexture", 4);
+	shader.setInt("woodWallTexture", 2);
+
+	shader.setInt("boundaryTexture", 3);
+	shader.setInt("enterTextBackgroundTexture", 4);
+	shader.setInt("gameOverTextBackgroundTexture", 5);
 
 	Renderer renderer;
 	renderer.setClearColor();
@@ -417,9 +429,10 @@ int main(int argc, char* args[]) {
 					}
 					renderer.Clear();
 
-					brickWallTexture.ActiveTexture(GL_TEXTURE0);
+					stoneWallTexture.ActiveTexture(GL_TEXTURE0);
 					faceTexture.ActiveTexture(GL_TEXTURE1);
-					boundaryTexture.ActiveTexture(GL_TEXTURE2);
+					woodWallTexture.ActiveTexture(GL_TEXTURE2);
+					boundaryTexture.ActiveTexture(GL_TEXTURE3);
 
 					shader.Use();
 					transformation.setProjection(camera.Zoom,
@@ -431,15 +444,18 @@ int main(int argc, char* args[]) {
 
 					shader.setMat4("view", transformation.getView());
 
-					shader.setInt("renderTextFlag", static_cast<int>( RenderFlag::RenderCube ));
+					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderCube ));
 					cubeVao.Bind();
-					shader.setInt("renderFlag", 0);//set flag to 0 to render cube
 					moveCameraHitbox(camera, shader);
 					reallocateObstacles(cubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
 										camera, shader, renderer);
+					cubeVao.Unbind();
+
+					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderSpinCube ));
+					spinCubeVao.Bind();
 					reallocateSpinningObstacles(spinCubePos, calVertexAmount(sizeof(cubeVertices) / sizeof(cubeVertices[ 0 ]), 5),
 												camera, shader, renderer, spinCubeAxes);
-					cubeVao.Unbind();
+					spinCubeVao.Unbind();
 
 					boundaryVao.Bind();
 					shader.setInt("renderFlag", static_cast<int>( RenderFlag::RenderBoundary ));//set flag to 1 to render boundary
@@ -461,8 +477,8 @@ int main(int argc, char* args[]) {
 
 					renderer.Clear();
 
-					boundaryTexture.ActiveTexture(GL_TEXTURE2);
-					enterTextBackgroundTexture.ActiveTexture(GL_TEXTURE3);
+					boundaryTexture.ActiveTexture(GL_TEXTURE3);
+					enterTextBackgroundTexture.ActiveTexture(GL_TEXTURE4);
 					//gameOverTextBackgroundTexture.ActiveTexture(GL_TEXTURE3);
 
 					shader.Use();
@@ -501,8 +517,8 @@ int main(int argc, char* args[]) {
 
 					renderer.Clear();
 
-					boundaryTexture.ActiveTexture(GL_TEXTURE2);
-					gameOverTextBackgroundTexture.ActiveTexture(GL_TEXTURE4);
+					boundaryTexture.ActiveTexture(GL_TEXTURE3);
+					gameOverTextBackgroundTexture.ActiveTexture(GL_TEXTURE5);
 
 					shader.Use();
 					transformation.setProjection(camera.Zoom,
