@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Controller.h"
 #include "Utils.h"
+
 void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayState& state, bool& spawnNewEntitiesFlag)
 {
 	if( glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS ) glfwSetWindowShouldClose(window, true);
@@ -20,9 +21,11 @@ void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayStat
 		if( glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS )
 			camera.ProcessKeyboard(RIGHT, deltaTime);
 
-		if( glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS 
-		   && glfwGetKey(window, GLFW_KEY_ENTER) != GLFW_REPEAT )
+		if( glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS
+		   && glfwGetKey(window, GLFW_KEY_ENTER) != GLFW_REPEAT ) {
 			state = PlayState::PLAYING;
+			
+		}
 	}
 	if( state == PlayState::GAME_OVER )
 	{

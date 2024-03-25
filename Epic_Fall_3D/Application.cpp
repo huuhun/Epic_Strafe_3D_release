@@ -36,6 +36,8 @@
 #include "Text.h"
 #include "States.h"
 #include "Utils.h"
+#include "Music.h"
+#include "SongPlayer.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -361,7 +363,14 @@ int main(int argc, char* args[]) {
 
 	Transform transformation;
 
+	Music menuMusic("res/musics/menu.wav");
+	Music playingMusic("res/musics/playing.wav");
+	Music gameOverMusic("res/musics/game_over.wav");
+	menuMusic.playMusic();
+	SongFlag currentSong{ SongFlag::MENU };
+
 	bool spawnNewEntitiesFlag{ false };
+
 	while( !glfwWindowShouldClose(window) ) {
 		// per-frame time logic
 		// --------------------
@@ -370,6 +379,7 @@ int main(int argc, char* args[]) {
 		lastFrame = currentFrame;
 
 		processInput(window, deltaTime, camera, state, spawnNewEntitiesFlag);
+		//if( songAlreadyStarted ) songAlreadyStarted = false;
 
 		if( spawnNewEntitiesFlag ) spawnNewEntities(cubePos, spinCubePos, spinCubeAxes, leftBoundaryPos, rightBoundaryPos, topBoundaryPos, bottomBoundaryPos);
 
@@ -377,6 +387,8 @@ int main(int argc, char* args[]) {
 		{
 			case PlayState::PLAYING:
 				{
+					setSongToPlay(playingMusic, currentSong, SongFlag::PLAYING, setSongToPlayCallback);
+
 					for( unsigned i = 0; i < leftBoundaryPos.size(); ++i ) {
 						if( checkCollision(camera.Position, leftBoundaryPos.at(i), 21.0f) ||
 						   checkCollision(camera.Position, rightBoundaryPos.at(i), 21.0f) ||
@@ -445,6 +457,8 @@ int main(int argc, char* args[]) {
 				}
 			case PlayState::MENU:
 				{
+					setSongToPlay(playingMusic, currentSong, SongFlag::MENU, setSongToPlayCallback);
+
 					renderer.Clear();
 
 					boundaryTexture.ActiveTexture(GL_TEXTURE2);
@@ -483,6 +497,8 @@ int main(int argc, char* args[]) {
 				}
 			case PlayState::GAME_OVER:
 				{
+					setSongToPlay(gameOverMusic, currentSong, SongFlag::GAME_OVER, setSongToPlayCallback);
+
 					renderer.Clear();
 
 					boundaryTexture.ActiveTexture(GL_TEXTURE2);

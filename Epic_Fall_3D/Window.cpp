@@ -1,5 +1,6 @@
 #include <iostream>
 #include <glad/glad.h>
+#include <SDL.h>
 #include <SDL_mixer.h>
 #include "Window.h"
 
@@ -84,6 +85,9 @@ void Window::setGLGlobalState(GLFWwindow* window)
 
 void Window::initSDL_Mixer()
 {
+	if( SDL_Init(SDL_INIT_AUDIO) < 0 ) {
+		std::cerr << "SDL initialization failed: " << SDL_GetError() << std::endl;
+	}
 	if( Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0 )
 	{
 		std::cout << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << "\n";

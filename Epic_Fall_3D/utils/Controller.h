@@ -7,6 +7,8 @@
 #include "Settings.h"
 #include "../Camera.h"
 #include "States.h"
+#include "../Music.h"
+
 
 void processInput(GLFWwindow* window, float& deltaTime, Camera& camera, PlayState& state);
 

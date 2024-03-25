@@ -149,10 +149,12 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Music.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="Music.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Text.h" />
@@ -161,6 +163,7 @@
     <ClInclude Include="utils\Collision.h" />
     <ClInclude Include="utils\Controller.h" />
     <ClInclude Include="utils\Debugger.h" />
+    <ClInclude Include="utils\SongPlayer.h" />
     <ClInclude Include="utils\States.h" />
     <ClInclude Include="utils\Spawner.h" />
     <ClInclude Include="utils\Utils.h" />
@@ -174,6 +177,7 @@
     <ClCompile Include="utils\Collision.cpp" />
     <ClCompile Include="utils\Controller.cpp" />
     <ClCompile Include="utils\Debugger.cpp" />
+    <ClCompile Include="utils\SongPlayer.cpp" />
     <ClCompile Include="utils\Spawner.cpp" />
     <ClCompile Include="utils\Utils.cpp" />
     <ClCompile Include="vendors\stb_image\stb_image.cpp" />
